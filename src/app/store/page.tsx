@@ -1,5 +1,7 @@
+import PromptStoreView from '@/views/promptStore';
+
 const StorePage = () => {
-  return <></>;
+  return <PromptStoreView />;
 };
 
 export default StorePage;

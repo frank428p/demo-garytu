@@ -13,7 +13,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="sticky top-16 flex h-[calc(100vh-4rem)] w-17 flex-col bg-background">
+    <aside className="sticky top-16 flex h-[calc(100vh-68px)] w-17 flex-col bg-background">
       <nav className="flex flex-1 flex-col overflow-y-auto p-3">
         {mainNav.map((item) => (
           <SidebarNavLink

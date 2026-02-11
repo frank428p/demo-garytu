@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center justify-between bg-background px-4">
+    <header className="sticky top-0 z-50 flex h-17 items-center justify-between bg-background px-4">
       {/* Left: Logo */}
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
@@ -19,7 +19,7 @@ export function Header() {
       </div>
 
       {/* Center: Search */}
-      <div className="mx-4 flex max-w-xl flex-1 items-center">
+      {/* <div className="mx-4 flex max-w-xl flex-1 items-center">
         <div className="relative w-full">
           <IconSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -28,7 +28,7 @@ export function Header() {
             className="h-10 w-full rounded-full border border-input bg-secondary pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Right: Actions */}
       <div className="flex items-center gap-3">

@@ -9,7 +9,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <div className="flex">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto px-3">{children}</main>
       </div>
     </>
   );
