@@ -30,9 +30,9 @@ export const GenerateNav: NavigationType = {
   activeIcon: IconSparkles,
 };
 
-export const EnterpriseNav: NavigationType = {
-  i18nKey: 'Enterprise',
-  url: RouterUrl.Enterprise,
-  icon: IconBuilding,
-  activeIcon: IconBuilding,
-};
+// export const EnterpriseNav: NavigationType = {
+//   i18nKey: 'Enterprise',
+//   url: RouterUrl.Enterprise,
+//   icon: IconBuilding,
+//   activeIcon: IconBuilding,
+// };

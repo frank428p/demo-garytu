@@ -1,7 +1,7 @@
 export const RouterUrl = {
-  Store: '/store',
-  Assets: '/assets',
-  Generate: '/generate',
-  Enterprise: '/enterprise',
-  Checkout: '/checkout',
+  Store: '/toolkit/store',
+  Assets: '/toolkit/assets',
+  Generate: '/toolkit/generate',
+  Business: '/business',
+  Checkout: '/toolkit/checkout',
 };

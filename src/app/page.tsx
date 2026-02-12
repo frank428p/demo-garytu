@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 export default function Home() {
   return (
     <div className="p-6">
-      {/* Category Tabs */}
       <div className="mb-6 flex items-center gap-2 overflow-x-auto">
         {[
           'Trending',
@@ -25,7 +24,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Image Grid (Masonry-like) */}
       <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
         {Array.from({ length: 30 }, (_, i) => ((i * 3 + 5) % 7) + 1).map(
           (n, i) => {
