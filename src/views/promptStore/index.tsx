@@ -4,13 +4,7 @@ import { useState } from 'react';
 import { H2 } from '@/components/ui/typography';
 import { MasonryPhotoAlbum } from 'react-photo-album';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PromptDetailView from '@/views/promptStore/detail';
 import 'react-photo-album/masonry.css';
 
@@ -101,17 +95,12 @@ const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
           if (!open) handleClose();
         }}
       >
-        <DialogContent className="flex max-h-[min(800px,90vh)] max-w-4xl flex-col gap-0 p-0">
-          <ScrollArea className="flex max-h-full flex-col overflow-hidden">
-            <DialogHeader className="contents space-y-0 text-left">
-              <VisuallyHidden>
-                <DialogTitle>Prompt #{selectedId}</DialogTitle>
-              </VisuallyHidden>
-              <div className="p-6">
-                {selectedId && <PromptDetailView id={selectedId} />}
-              </div>
-            </DialogHeader>
-          </ScrollArea>
+        <DialogContent className="p-0 max-w-[80vw]">
+          <VisuallyHidden>
+            <DialogTitle>Prompt #{selectedId}</DialogTitle>
+          </VisuallyHidden>
+
+          {selectedId && <PromptDetailView id={selectedId} />}
         </DialogContent>
       </Dialog>
     </div>

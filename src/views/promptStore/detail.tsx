@@ -18,18 +18,18 @@ const PromptDetailView = ({ id }: PromptDetailViewProps) => {
 
   return (
     <div className="flex flex-col gap-6 md:flex-row">
-      {/* Image */}
-      <div className="flex-1">
+      {/* Image — 高度不超過視窗，寬度填滿剩餘空間，按比例縮放 */}
+      <div className="flex items-center justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt={`Prompt #${id}`}
-          className="w-full rounded-xl object-cover"
+          className="max-h-[calc(100vh-8rem)] w-full rounded-lg object-contain"
         />
       </div>
 
       {/* Info */}
-      <div className="w-full space-y-4 md:w-80">
+      <div className="w-full space-y-4 md:w-80 md:shrink-0">
         <H2>Prompt #{id}</H2>
         <Muted>
           A beautifully crafted AI-generated artwork using advanced prompt
