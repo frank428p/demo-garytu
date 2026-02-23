@@ -100,7 +100,15 @@ const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
             <DialogTitle>Prompt #{selectedId}</DialogTitle>
           </VisuallyHidden>
 
-          {selectedId && <PromptDetailView id={selectedId} />}
+          {selectedId && (
+            <PromptDetailView
+              id={selectedId}
+              aspectRatio={(() => {
+                const photo = photos.find((p) => p.id === selectedId);
+                return photo ? photo.width / photo.height : 1;
+              })()}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>

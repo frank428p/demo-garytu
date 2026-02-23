@@ -29,9 +29,9 @@ export function Header() {
           <Muted>{'Business'}</Muted>
         </Link> */}
         {/* <Separator orientation="vertical" /> */}
-        <Button variant="outline" size="icon">
+        {/* <Button variant="outline" size="icon">
           <IconShoppingCart />
-        </Button>
+        </Button> */}
 
         <Button variant="outline" size="icon">
           <IconWorld />
