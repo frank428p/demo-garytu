@@ -15,7 +15,7 @@ export function Header() {
           <img width={120} src="/images/logo.png" />
         </Link>
 
-        <Link href={RouterUrl.Generate} className="">
+        <Link href={RouterUrl.Store} className="">
           <Muted className="font-bold text-base">{'AI Toolkit'}</Muted>
         </Link>
         <Link href={RouterUrl.Business}>
