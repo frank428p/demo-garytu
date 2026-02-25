@@ -163,6 +163,21 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-inter), var(--font-noto-sans-tc), sans-serif;
+}
+
+/* Radix Dialog 在 modal 模式下會將 body.pointerEvents 設為 none，
+   導致 react-photo-view 的 portal 繼承後箭頭無法點擊，
+   點擊穿透到 dialog backdrop 而觸發關閉。
+   此規則讓 PhotoView portal 恢復可互動狀態。 */
+.PhotoView-Portal {
+  pointer-events: auto;
+}
+
+/* 隱藏原生 video 控制列的「更多選項」三點按鈕與播放速度按鈕 */
+video::-webkit-media-controls-overflow-button,
+video::-webkit-media-controls-playback-speed-button {
+  display: none !important;
 }
 
 body {

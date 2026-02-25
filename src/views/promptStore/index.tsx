@@ -7,29 +7,181 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PromptDetailView from '@/views/promptStore/detail';
 import 'react-photo-album/masonry.css';
+import { AspectRatioType, MediaType } from '@/@core/types';
 
 const photos = [
-  { src: '/images/gallery/1.jpeg', width: 2150, height: 2150, id: '1' },
-  { src: '/images/gallery/2.jpeg', width: 1064, height: 1066, id: '2' },
-  { src: '/images/gallery/3.jpeg', width: 2752, height: 1536, id: '3' },
-  { src: '/images/gallery/4.jpeg', width: 2150, height: 2150, id: '4' },
-  { src: '/images/gallery/5.jpeg', width: 2150, height: 2150, id: '5' },
-  { src: '/images/gallery/6.jpeg', width: 2150, height: 2150, id: '6' },
-  { src: '/images/gallery/7.jpeg', width: 576, height: 617, id: '7' },
-  { src: '/images/gallery/8.jpeg', width: 2048, height: 2048, id: '8' },
-  { src: '/images/gallery/9.jpeg', width: 2150, height: 2150, id: '9' },
-  { src: '/images/gallery/10.jpeg', width: 2048, height: 2048, id: '10' },
-  { src: '/images/gallery/11.jpeg', width: 2048, height: 2048, id: '11' },
-  { src: '/images/gallery/12.jpeg', width: 2150, height: 2150, id: '12' },
-  { src: '/images/gallery/13.jpeg', width: 2752, height: 1536, id: '13' },
-  { src: '/images/gallery/14.jpeg', width: 576, height: 1024, id: '14' },
+  {
+    src: '/images/gallery/1-to-1_1.jpg',
+    width: 1024,
+    height: 1024,
+    id: '1',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_2.jpg',
+    width: 1024,
+    height: 1024,
+    id: '2',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_3.jpg',
+    width: 1024,
+    height: 1024,
+    id: '3',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.jpg',
+    width: 3072,
+    height: 5440,
+    id: '4',
+    aspectRatio: '9:16',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.jpg',
+    width: 5440,
+    height: 3072,
+    id: '5',
+    aspectRatio: '16:9',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/16-to-9_2.jpg',
+    width: 1376,
+    height: 768,
+    id: '6',
+    aspectRatio: '16:9',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_1.mp4',
+    poster: '/images/gallery/1-to-1-cover_1.avif',
+    width: 1440,
+    height: 1440,
+    id: '7',
+    aspectRatio: '1:1',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.jpg',
+    width: 3072,
+    height: 5440,
+    id: '8',
+    aspectRatio: '9:16',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_2.jpg',
+    width: 1024,
+    height: 1024,
+    id: '9',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.mp4',
+    poster: '/images/gallery/16-to-9-cover_1.avif',
+    width: 1344,
+    height: 768,
+    id: '10',
+    aspectRatio: '16:9',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.jpg',
+    width: 5440,
+    height: 3072,
+    id: '11',
+    aspectRatio: '16:9',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_3.jpg',
+    width: 1024,
+    height: 1024,
+    id: '12',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/9-to-16_2.mp4',
+    poster: '/images/gallery/9-to-16-cover_2.avif',
+    width: 1080,
+    height: 1920,
+    id: '13',
+    aspectRatio: '9:16',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.jpg',
+    width: 3072,
+    height: 5440,
+    id: '14',
+    aspectRatio: '9:16',
+    mediaType: 'image',
+  },
 
-  { src: '/images/gallery/9.jpeg', width: 2150, height: 2150, id: '15' },
-  { src: '/images/gallery/7.jpeg', width: 576, height: 617, id: '16' },
-  { src: '/images/gallery/2.jpeg', width: 1064, height: 1066, id: '17' },
-  { src: '/images/gallery/14.jpeg', width: 576, height: 1024, id: '18' },
-  { src: '/images/gallery/10.jpeg', width: 2048, height: 2048, id: '19' },
-  { src: '/images/gallery/6.jpeg', width: 2150, height: 2150, id: '20' },
+  {
+    src: '/images/gallery/1-to-1_1.mp4',
+    poster: '/images/gallery/1-to-1-cover_1.avif',
+    width: 1440,
+    height: 1440,
+    id: '15',
+    aspectRatio: '1:1',
+    mediaType: 'video',
+  },
+
+  {
+    src: '/images/gallery/1-to-1_2.mp4',
+    poster: '/images/gallery/1-to-1-cover_2.avif',
+    width: 1440,
+    height: 1440,
+    id: '16',
+    aspectRatio: '1:1',
+    mediaType: 'video',
+  },
+
+  {
+    src: '/images/gallery/16-to-9_1.mp4',
+    poster: '/images/gallery/16-to-9-cover_1.avif',
+    width: 1344,
+    height: 768,
+    id: '17',
+    aspectRatio: '16:9',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/16-to-9_2.mp4',
+    poster: '/images/gallery/16-to-9-cover_2.avif',
+    width: 1344,
+    height: 768,
+    id: '18',
+    aspectRatio: '16:9',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.mp4',
+    poster: '/images/gallery/9-to-16-cover_1.avif',
+    width: 1080,
+    height: 1920,
+    id: '19',
+    aspectRatio: '9:16',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_2.mp4',
+    poster: '/images/gallery/9-to-16-cover_2.avif',
+    width: 1080,
+    height: 1920,
+    id: '20',
+    aspectRatio: '9:16',
+    mediaType: 'video',
+  },
 ];
 
 type PromptStoreViewProps = {
@@ -64,26 +216,46 @@ const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
         }}
         spacing={8}
         render={{
-          photo: (_props, { photo, index, width, height }) => (
+          photo: (_props, { photo: media, index, width, height }) => (
             <div
               key={index}
-              onClick={() => handleOpen(photo.id)}
+              onClick={() => handleOpen(media.id)}
               style={{ width, height: 'auto' }}
               className="relative group cursor-pointer overflow-hidden rounded-xl border border-border bg-card block"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.src}
-                alt={`AI Artwork ${index + 1}`}
-                width={width}
-                height={height}
-                className="w-full object-cover transition-transform duration-300 group-hover:scale-100"
-              />
+              {media.mediaType === 'image' && (
+                <img
+                  src={media.src}
+                  alt={`AI Artwork ${index + 1}`}
+                  width={width}
+                  height={height}
+                  className="w-full object-cover transition-transform duration-300 group-hover:scale-100"
+                />
+              )}
 
-              <div className="absolute text-xs font-bold top-3 right-3 z-[1] flex items-center h-6 px-2 py-1 rounded bg-black/50 text-white pointer-events-none">
-                {/* <IconPhoto size={16} /> */}
-                Video
-              </div>
+              {media.mediaType === 'video' && (
+                <video
+                  src={media.src}
+                  poster={media.poster}
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full object-cover"
+                  onMouseEnter={(e) => e.currentTarget.play()}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.pause();
+                    e.currentTarget.currentTime = 0;
+                  }}
+                  onPointerDown={(e) => e.stopPropagation()}
+                />
+              )}
+              {media.mediaType === 'video' && (
+                <div className="absolute top-3 right-3 z-[1] flex items-center h-6 px-2 py-1 rounded bg-black/50 text-white text-xs font-bold pointer-events-none">
+                  Video
+                </div>
+              )}
             </div>
           ),
         }}
@@ -103,9 +275,13 @@ const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
           {selectedId && (
             <PromptDetailView
               id={selectedId}
+              mediaType={(() => {
+                const photo = photos.find((p) => p.id === selectedId);
+                return photo?.mediaType as MediaType;
+              })()}
               aspectRatio={(() => {
                 const photo = photos.find((p) => p.id === selectedId);
-                return photo ? photo.width / photo.height : 1;
+                return photo?.aspectRatio as AspectRatioType;
               })()}
             />
           )}

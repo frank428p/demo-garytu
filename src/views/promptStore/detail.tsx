@@ -1,63 +1,229 @@
 'use client';
 
-import { H2, H4, Muted } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
-import { IconShoppingCart } from '@tabler/icons-react';
-import AspectRatioBox from '@/components/AspectRatioBox';
+import {
+  IconShoppingCart,
+  IconShieldCheck,
+  IconDownload,
+} from '@tabler/icons-react';
+import ThumbnailSlider from '@/components/ThumbnailSlider';
+import { MediaType, AspectRatioType } from '@/@core/types';
+import { useMemo } from 'react';
 
 type PromptDetailViewProps = {
   id: string;
-  aspectRatio?: number;
+  mediaType: MediaType;
+  aspectRatio?: AspectRatioType;
 };
 
-const PromptDetailView = ({ id, aspectRatio = 1 }: PromptDetailViewProps) => {
-  const photoIndex = parseInt(id, 10);
-  const src =
-    photoIndex >= 1 && photoIndex <= 14
-      ? `/images/gallery/${photoIndex}.jpeg`
-      : '/images/gallery/1.jpeg';
+const PromptDetailView = ({
+  id,
+  mediaType = 'image',
+  aspectRatio = '1:1',
+}: PromptDetailViewProps) => {
+  const sliderMedia = useMemo(() => {
+    console.log('', mediaType, aspectRatio);
+    if (mediaType === 'image') {
+      switch (aspectRatio) {
+        case '1:1':
+          return [
+            {
+              src: '/images/gallery/1-to-1_1.jpg',
+              thumbnail: '/images/gallery/1-to-1_1.jpg',
+            },
+            {
+              src: '/images/gallery/1-to-1_2.jpg',
+              thumbnail: '/images/gallery/1-to-1_2.jpg',
+            },
+            {
+              src: '/images/gallery/1-to-1_3.jpg',
+              thumbnail: '/images/gallery/1-to-1_3.jpg',
+            },
+          ];
+        case '16:9':
+          return [
+            {
+              src: '/images/gallery/16-to-9_1.jpg',
+              thumbnail: '/images/gallery/16-to-9_1.jpg',
+            },
+            {
+              src: '/images/gallery/16-to-9_2.jpg',
+              thumbnail: '/images/gallery/16-to-9_2.jpg',
+            },
+            {
+              src: '/images/gallery/16-to-9_1.jpg',
+              thumbnail: '/images/gallery/16-to-9_1.jpg',
+            },
+          ];
+        case '9:16':
+          return [
+            {
+              src: '/images/gallery/9-to-16_1.jpg',
+              thumbnail: '/images/gallery/9-to-16_1.jpg',
+            },
+            {
+              src: '/images/gallery/9-to-16_1.jpg',
+              thumbnail: '/images/gallery/9-to-16_1.jpg',
+            },
+            {
+              src: '/images/gallery/9-to-16_1.jpg',
+              thumbnail: '/images/gallery/9-to-16_1.jpg',
+            },
+          ];
+        default:
+          return [];
+      }
+    }
+
+    if (mediaType === 'video') {
+      switch (aspectRatio) {
+        case '1:1':
+          return [
+            {
+              src: '/images/gallery/1-to-1_1.mp4',
+              thumbnail: '/images/gallery/1-to-1-cover_1.avif',
+            },
+            {
+              src: '/images/gallery/1-to-1_2.mp4',
+              thumbnail: '/images/gallery/1-to-1-cover_2.avif',
+            },
+          ];
+        case '16:9':
+          return [
+            {
+              src: '/images/gallery/16-to-9_1.mp4',
+              thumbnail: '/images/gallery/16-to-9-cover_1.avif',
+            },
+            {
+              src: '/images/gallery/16-to-9_2.mp4',
+              thumbnail: '/images/gallery/16-to-9-cover_2.avif',
+            },
+          ];
+        case '9:16':
+          return [
+            {
+              src: '/images/gallery/9-to-16_1.mp4',
+              thumbnail: '/images/gallery/9-to-16-cover_1.avif',
+            },
+            {
+              src: '/images/gallery/9-to-16_2.mp4',
+              thumbnail: '/images/gallery/9-to-16-cover_2.avif',
+            },
+          ];
+        default:
+          return [];
+      }
+    }
+
+    return [];
+  }, [aspectRatio, mediaType]);
 
   return (
-    <div className="flex flex-col gap-6 md:flex-row">
-      {/* Image — aspect-ratio + max-h + max-w 讓瀏覽器自動算出最佳尺寸 */}
+    <div className="flex flex-col gap-6 p-6 md:flex-row">
+      {/* Image slider */}
       <div className="flex min-w-0 flex-1 items-center justify-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt={`Prompt #${id}`}
-          style={{ aspectRatio }}
-          className="max-h-[calc(95vh-6rem)] w-auto max-w-full rounded-lg object-contain"
+        <ThumbnailSlider
+          mediaType={mediaType}
+          slides={sliderMedia}
+          aspectRatio={aspectRatio}
         />
       </div>
 
-      {/* <AspectRatioBox ratio="16:9" /> */}
+      {/* Info panel */}
+      <div className="flex w-full flex-col gap-5 md:w-[380px] md:shrink-0">
+        {/* Category badges */}
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
+            AI Prompt
+          </span>
+          <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+            Instant Download
+          </span>
+        </div>
 
-      {/* Info */}
-      <div className="w-full space-y-4 md:w-[450px] p-[24px] md:shrink-0">
-        <H2>Prompt #{id}</H2>
-        <H4>NT$ 1,500</H4>
-        <Muted>
-          A beautifully crafted AI-generated artwork using advanced prompt
-          engineering techniques.
-        </Muted>
+        {/* Title */}
+        <div>
+          <h2 className="text-xl font-bold leading-snug">
+            Cinematic Portrait Lighting Pack
+          </h2>
+          <p className="mt-1 text-xs text-muted-foreground">#{id}</p>
+        </div>
 
-        <div className="space-y-2"></div>
+        {/* Price */}
+        <div className="flex items-baseline gap-2.5">
+          <span className="text-3xl font-bold tracking-tight">
+            NT$&nbsp;1,500
+          </span>
+          <span className="text-sm text-muted-foreground line-through">
+            NT$&nbsp;2,000
+          </span>
+          <span className="rounded bg-destructive/15 px-1.5 py-0.5 text-xs font-bold text-destructive">
+            -25%
+          </span>
+        </div>
 
-        <div className="flex gap-2">
-          <Button className="w-full">Buy now</Button>
-          <Button variant="secondary" className="w-full">
+        {/* Description */}
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          A professionally engineered AI prompt pack for generating cinematic
+          portrait lighting. Includes 10+ style variations optimized for
+          Firefly, Midjourney, and Stable Diffusion.
+        </p>
+
+        <div className="h-px bg-border" />
+
+        {/* Compatible with */}
+        <div className="space-y-2.5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Compatible with
+          </p>
+          <div className="flex items-center gap-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              width={22}
+              height={22}
+              src="/images/fake/adobe-ai.png"
+              alt="Adobe Illustrator"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              width={22}
+              height={22}
+              src="/images/fake/adobe-ps.png"
+              alt="Adobe Photoshop"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              width={22}
+              height={22}
+              src="/images/fake/adobe-id.png"
+              alt="Adobe InDesign"
+            />
+          </div>
+        </div>
+
+        <div className="h-px bg-border" />
+
+        {/* CTA buttons */}
+        <div className="flex flex-col gap-2.5">
+          <Button size="lg" className="w-full font-semibold">
+            Buy Now
+          </Button>
+          <Button variant="secondary" size="lg" className="w-full">
             <IconShoppingCart className="h-4 w-4" />
             Add to Cart
           </Button>
         </div>
 
-        <div className="space-y-2 rounded-lg border border-border p-4">
-          <p className="text-sm font-medium">Details</p>
-          <div className="text-sm text-muted-foreground">
-            <p>Category: AI Art</p>
-            <p>Type: Video</p>
-            <p>Creator: Creator {((photoIndex - 1) % 5) + 1}</p>
-          </div>
+        {/* Trust indicators */}
+        <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <IconShieldCheck size={14} />
+            Secure checkout
+          </span>
+          <span className="flex items-center gap-1.5">
+            <IconDownload size={14} />
+            Instant access
+          </span>
         </div>
       </div>
     </div>
