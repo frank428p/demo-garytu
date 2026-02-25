@@ -6,7 +6,10 @@ import {
   IconFolder,
   IconFolderFilled,
   IconSparkles,
-  IconBuilding,
+  IconPolaroid,
+  IconPolaroidFilled,
+  IconBrandYoutube,
+  IconBrandYoutubeFilled,
 } from '@tabler/icons-react';
 
 export const StoreNav: NavigationType = {
@@ -28,6 +31,20 @@ export const GenerateNav: NavigationType = {
   url: RouterUrl.Generate,
   icon: IconSparkles,
   activeIcon: IconSparkles,
+};
+
+export const ImageGenerateNav: NavigationType = {
+  i18nKey: 'Image',
+  url: RouterUrl.ImageGenerate,
+  icon: IconPolaroid,
+  activeIcon: IconPolaroidFilled,
+};
+
+export const VideoGenerateNav: NavigationType = {
+  i18nKey: 'Video',
+  url: RouterUrl.VideoGenerate,
+  icon: IconBrandYoutube,
+  activeIcon: IconBrandYoutubeFilled,
 };
 
 // export const EnterpriseNav: NavigationType = {
