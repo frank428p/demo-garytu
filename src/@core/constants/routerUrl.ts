@@ -5,5 +5,6 @@ export const RouterUrl = {
   ImageGenerate: '/toolkit/image-generate',
   VideoGenerate: '/toolkit/video-generate',
   Business: '/business',
+  Cart: '/toolkit/cart',
   Checkout: '/toolkit/checkout',
 };

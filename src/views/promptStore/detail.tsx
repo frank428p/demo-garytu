@@ -9,6 +9,9 @@ import {
 import ThumbnailSlider from '@/components/ThumbnailSlider';
 import { MediaType, AspectRatioType } from '@/@core/types';
 import { useMemo } from 'react';
+import { useCart } from '@/contexts/cartContext';
+import { useRouter } from 'next/navigation';
+import { RouterUrl } from '@/@core/constants/routerUrl';
 
 type PromptDetailViewProps = {
   id: string;
@@ -16,11 +19,18 @@ type PromptDetailViewProps = {
   aspectRatio?: AspectRatioType;
 };
 
+const PRODUCT_NAME = 'Cinematic Portrait Lighting Pack';
+const PRODUCT_PRICE = 1500;
+
 const PromptDetailView = ({
   id,
   mediaType = 'image',
   aspectRatio = '1:1',
 }: PromptDetailViewProps) => {
+  const { addItem, items } = useCart();
+  const router = useRouter();
+  const inCart = items.some((item) => item.id === id);
+
   const sliderMedia = useMemo(() => {
     console.log('', mediaType, aspectRatio);
     if (mediaType === 'image') {
@@ -143,16 +153,14 @@ const PromptDetailView = ({
 
         {/* Title */}
         <div>
-          <h2 className="text-xl font-bold leading-snug">
-            Cinematic Portrait Lighting Pack
-          </h2>
+          <h2 className="text-xl font-bold leading-snug">{PRODUCT_NAME}</h2>
           <p className="mt-1 text-xs text-muted-foreground">#{id}</p>
         </div>
 
         {/* Price */}
         <div className="flex items-baseline gap-2.5">
           <span className="text-3xl font-bold tracking-tight">
-            NT$&nbsp;1,500
+            NT$&nbsp;{PRODUCT_PRICE.toLocaleString()}
           </span>
           <span className="text-sm text-muted-foreground line-through">
             NT$&nbsp;2,000
@@ -205,12 +213,39 @@ const PromptDetailView = ({
 
         {/* CTA buttons */}
         <div className="flex flex-col gap-2.5">
-          <Button size="lg" className="w-full font-semibold">
+          <Button
+            size="lg"
+            className="w-full font-semibold"
+            onClick={() => {
+              addItem({
+                id,
+                name: PRODUCT_NAME,
+                price: PRODUCT_PRICE,
+                mediaType,
+                thumbnail: sliderMedia[0]?.thumbnail ?? '',
+              });
+              router.push(RouterUrl.Cart);
+            }}
+          >
             Buy Now
           </Button>
-          <Button variant="secondary" size="lg" className="w-full">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="w-full"
+            disabled={inCart}
+            onClick={() =>
+              addItem({
+                id,
+                name: PRODUCT_NAME,
+                price: PRODUCT_PRICE,
+                mediaType,
+                thumbnail: sliderMedia[0]?.thumbnail ?? '',
+              })
+            }
+          >
             <IconShoppingCart className="h-4 w-4" />
-            Add to Cart
+            {inCart ? 'Added to Cart' : 'Add to Cart'}
           </Button>
         </div>
 

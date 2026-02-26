@@ -269,7 +269,7 @@ const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
       >
         <DialogContent className="p-0 max-w-[80vw]">
           <VisuallyHidden>
-            <DialogTitle>Prompt #{selectedId}</DialogTitle>
+            <DialogTitle></DialogTitle>
           </VisuallyHidden>
 
           {selectedId && (
