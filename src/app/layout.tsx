@@ -3,6 +3,8 @@ import { Inter, Noto_Sans_TC } from 'next/font/google';
 import './globals.css';
 import { MainLayout } from '@/@layout/MainLayout';
 import { CartProvider } from '@/contexts/cartContext';
+import { AuthProvider } from '@/contexts/authContext';
+import { AuthDialog } from '@/components/AuthDialog';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -30,9 +32,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${notoSansTC.variable} antialiased`}
       >
-        <CartProvider>
-          <MainLayout>{children}</MainLayout>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <MainLayout>{children}</MainLayout>
+            <AuthDialog />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

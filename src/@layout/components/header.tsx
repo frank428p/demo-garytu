@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { RouterUrl } from '@/@core/constants/routerUrl';
 import { Muted } from '@/components/ui/typography';
 import { useCart } from '@/contexts/cartContext';
+import { useAuth } from '@/contexts/authContext';
 
 export function Header() {
   const { items, setIsOpen } = useCart();
+  const { openLogin, openSignup } = useAuth();
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 flex h-17 items-center justify-between bg-background px-4">
@@ -46,10 +48,10 @@ export function Header() {
           )}
         </Button>
 
-        <Button variant="secondary" size="default">
-          Sign in
+        <Button variant="secondary" size="default" onClick={openLogin}>
+          Login
         </Button>
-        <Button variant="default" size="default">
+        <Button variant="default" size="default" onClick={openSignup}>
           Sign up
         </Button>
       </div>
