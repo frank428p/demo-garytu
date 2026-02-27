@@ -37,14 +37,14 @@ export function CartDrawer() {
               )}
             </div>
             <DrawerPrimitive.Close asChild>
-              <button className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors">
+              <button className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
                 <IconX size={18} />
               </button>
             </DrawerPrimitive.Close>
           </div>
 
           {/* Items list */}
-          <div className="flex-1 overflow-y-auto px-5 py-4">
+          <div className="flex-1 overflow-y-auto px-5">
             {items.length === 0 ? (
               <div className="flex flex-col items-center gap-3 py-20 text-center">
                 <IconShoppingCart
@@ -56,18 +56,53 @@ export function CartDrawer() {
                 </p>
               </div>
             ) : (
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col">
                 {items.map((item) => (
+                  // <div
+                  //   key={item.id}
+                  //   className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+                  // >
+                  //   {/* Thumbnail */}
+                  //   {/* eslint-disable-next-line @next/next/no-img-element */}
+                  //   <img
+                  //     src={item.thumbnail}
+                  //     alt={item.name}
+                  //     className="h-14 w-14 shrink-0 rounded-lg object-cover"
+                  //   />
+
+                  //   {/* Info */}
+                  //   <div className="min-w-0 flex-1">
+                  //     <p className="truncate text-sm font-medium">
+                  //       {item.name}
+                  //     </p>
+                  //     <p className="mt-0.5 text-xs text-muted-foreground">
+                  //       #{item.id} ·{' '}
+                  //       {item.mediaType.charAt(0).toUpperCase() +
+                  //         item.mediaType.slice(1)}
+                  //     </p>
+                  //     <p className="mt-1 text-sm font-semibold">
+                  //       NT$&nbsp;{item.price.toLocaleString()}
+                  //     </p>
+                  //   </div>
+
+                  //   {/* Remove */}
+                  //   <button
+                  //     onClick={() => removeItem(item.id)}
+                  //     className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-destructive transition-colors"
+                  //   >
+                  //     <IconTrash size={15} />
+                  //   </button>
+                  // </div>
                   <div
                     key={item.id}
-                    className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+                    className="flex items-center gap-3 py-5 border-b border-border last:border-b-0"
                   >
                     {/* Thumbnail */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.thumbnail}
                       alt={item.name}
-                      className="h-14 w-14 shrink-0 rounded-lg object-cover"
+                      className="h-20 w-20 shrink-0 rounded-lg object-cover"
                     />
 
                     {/* Info */}
@@ -88,7 +123,7 @@ export function CartDrawer() {
                     {/* Remove */}
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-destructive transition-colors"
+                      className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                     >
                       <IconTrash size={15} />
                     </button>
@@ -103,7 +138,9 @@ export function CartDrawer() {
             <div className="border-t border-border px-5 py-4">
               <div className="mb-4 flex items-baseline justify-between">
                 <span className="text-sm text-muted-foreground">
-                  Total ({items.length} {items.length === 1 ? 'item' : 'items'})
+                  Subtotal
+                  {/* ({items.length}{' '}
+                  {items.length === 1 ? 'item' : 'items'}) */}
                 </span>
                 <span className="text-xl font-bold">
                   NT$&nbsp;{total.toLocaleString()}
@@ -111,11 +148,12 @@ export function CartDrawer() {
               </div>
 
               <Button size="lg" className="w-full font-semibold">
-                <IconShieldCheck size={15} />
-                Checkout &nbsp;·&nbsp; NT$&nbsp;{total.toLocaleString()}
+                {/* <IconShieldCheck size={15} /> */}
+                Checkout
+                {/* &nbsp;·&nbsp; NT$&nbsp;{total.toLocaleString()} */}
               </Button>
 
-              <div className="mt-3 flex items-center justify-center gap-5 text-xs text-muted-foreground">
+              {/* <div className="mt-3 flex items-center justify-center gap-5 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <IconShieldCheck size={12} />
                   Secure Payment
@@ -124,7 +162,7 @@ export function CartDrawer() {
                   <IconBolt size={12} />
                   Instant Download
                 </span>
-              </div>
+              </div> */}
             </div>
           )}
         </DrawerPrimitive.Content>
