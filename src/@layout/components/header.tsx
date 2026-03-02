@@ -40,7 +40,7 @@ export function Header() {
   const [isAuth, setIsAuth] = useState(true);
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 flex h-17 items-center justify-between bg-background px-4">
+    <header className="sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center justify-between bg-background px-4">
       {/* Left: Logo */}
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
