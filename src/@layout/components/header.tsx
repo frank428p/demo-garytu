@@ -3,7 +3,7 @@
 import {
   IconWorld,
   IconShoppingBag,
-  IconUserFilled,
+  IconCurrencyEthereum,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -18,8 +18,13 @@ import { RouterUrl } from '@/@core/constants/routerUrl';
 import { Muted } from '@/components/ui/typography';
 import { useCart } from '@/contexts/cartContext';
 import { useAuth } from '@/contexts/authContext';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+
 import { Separator } from '@/components/ui/separator';
+import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
+import { HeaderMenu } from '@/@layout/components/headerMenu';
+import { UserMenu } from '@/@layout/components/userMenu';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 
 const LOCALES = [
   { value: 'en', label: 'English' },
@@ -27,11 +32,12 @@ const LOCALES = [
 ] as const;
 
 export function Header() {
+  const { isMobile, isTablet, isDesktop } = useBreakpoint();
   const { items, setIsOpen } = useCart();
   const { openLogin, openSignup } = useAuth();
   const [locale, setLocale] = useState<'en' | 'zh-TW'>('en');
 
-  const isAuth = false;
+  const [isAuth, setIsAuth] = useState(true);
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 flex h-17 items-center justify-between bg-background px-4">
@@ -41,51 +47,64 @@ export function Header() {
           <img width={120} src="/images/logo.png" />
         </Link>
 
-        <Link href={RouterUrl.Store} className="">
-          <Muted className="font-bold text-base">{'Prompt Store'}</Muted>
-        </Link>
-
-        <Link href={RouterUrl.Store} className="">
-          <Muted className="font-bold text-base">{'AI Toolkit'}</Muted>
-        </Link>
+        {isDesktop && (
+          <>
+            <Link href={RouterUrl.Store} className="">
+              <Muted className="font-bold text-base">{'Prompt Store'}</Muted>
+            </Link>
+            <Link href={RouterUrl.Store} className="">
+              <Muted className="font-bold text-base">{'AI Toolkit'}</Muted>
+            </Link>
+          </>
+        )}
       </div>
 
       {/* Right: Actions */}
       <div className="flex h-5 items-center gap-3">
-        <div className="flex items-center gap-6">
-          <Link href={RouterUrl.Business}>
-            <Muted className="font-bold text-base">{'Enterprise'}</Muted>
-          </Link>
+        <Switch checked={isAuth} onCheckedChange={setIsAuth} />
+        {isDesktop && (
+          <>
+            <div className="flex items-center gap-6">
+              <Link href={RouterUrl.Business}>
+                <Muted className="font-bold text-base">{'Enterprise'}</Muted>
+              </Link>
 
-          <Link href={RouterUrl.Store} className="">
-            <Muted className="font-bold text-base">{'Pricing'}</Muted>
-          </Link>
-        </div>
+              <Link href={RouterUrl.Store} className="">
+                <Muted className="font-bold text-base">{'Pricing'}</Muted>
+              </Link>
+            </div>
+            <Separator orientation="vertical" />
+          </>
+        )}
 
-        <Separator orientation="vertical" />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="p-2">
-              <IconWorld />
-              English
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {LOCALES.map((l) => (
-              <DropdownMenuItem
-                key={l.value}
-                onClick={() => setLocale(l.value)}
-                className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ''}`}
-              >
-                {l.label}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {isDesktop && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="p-2">
+                <IconWorld />
+                English
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {LOCALES.map((l) => (
+                <DropdownMenuItem
+                  key={l.value}
+                  onClick={() => setLocale(l.value)}
+                  className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ''}`}
+                >
+                  {l.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
         {isAuth && (
           <>
+            <Badge className="h-8 flex gap-1 cursor-pointer border-primary">
+              <IconCurrencyEthereum size={18} />
+              <span className="font-bold text-sm">1,000</span>
+            </Badge>
             <Button
               variant="outline"
               size="icon"
@@ -100,29 +119,22 @@ export function Header() {
               )}
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar size="sm">
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    <IconUserFilled size={20} />
-                  </AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end"></DropdownMenuContent>
-            </DropdownMenu>
+            {isDesktop && <UserMenu />}
           </>
         )}
 
         {!isAuth && (
           <>
-            <Button variant="secondary" size="default" onClick={openLogin}>
+            <Button variant="secondary" size="sm" onClick={openLogin}>
               Login
             </Button>
-            <Button variant="default" size="default" onClick={openSignup}>
+            <Button variant="default" size="sm" onClick={openSignup}>
               Sign up
             </Button>
           </>
         )}
+
+        {(isMobile || isTablet) && <HeaderMenu />}
       </div>
     </header>
   );
