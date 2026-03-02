@@ -31,7 +31,7 @@ export function Header() {
   const { openLogin, openSignup } = useAuth();
   const [locale, setLocale] = useState<'en' | 'zh-TW'>('en');
 
-  const isAuth = true;
+  const isAuth = false;
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 flex h-17 items-center justify-between bg-background px-4">
@@ -76,7 +76,7 @@ export function Header() {
               <DropdownMenuItem
                 key={l.value}
                 onClick={() => setLocale(l.value)}
-                className={`font-bold${locale === l.value ? ' text-primary focus:text-primary' : ''}`}
+                className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ''}`}
               >
                 {l.label}
               </DropdownMenuItem>

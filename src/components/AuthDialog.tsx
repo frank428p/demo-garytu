@@ -194,16 +194,16 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
 // ─── Signup ───────────────────────────────────────────────────────────────────
 
 function SignupMethodView({ onNext }: { onNext: (email: string) => void }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
 
   const handleNext = () => {
+    if (!name) return setError('Please enter your name');
     if (!email) return setError('Please enter your email');
     if (password.length < 8)
       return setError('Password must be at least 8 characters');
-    if (password !== confirm) return setError('Passwords do not match');
     setError('');
     onNext(email);
   };
@@ -225,6 +225,12 @@ function SignupMethodView({ onNext }: { onNext: (email: string) => void }) {
 
       <div className="flex flex-col gap-3">
         <Input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <Input
           type="email"
           placeholder="Email"
           value={email}
@@ -234,11 +240,6 @@ function SignupMethodView({ onNext }: { onNext: (email: string) => void }) {
           placeholder="Password (min. 8 characters)"
           value={password}
           onChange={setPassword}
-        />
-        <PasswordInput
-          placeholder="Confirm password"
-          value={confirm}
-          onChange={setConfirm}
         />
       </div>
 
