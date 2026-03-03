@@ -7,6 +7,7 @@ import {
   IconArchive,
   IconLogs,
   IconLogout,
+  IconSettings,
 } from '@tabler/icons-react';
 import {
   DropdownMenu,
@@ -59,6 +60,10 @@ export function UserMenu() {
             <DropdownMenuItem className="cursor-pointer">
               <IconHistory />
               Order History
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              <IconSettings />
+              Manage Account
             </DropdownMenuItem>
           </div>
           <div className="px-2">

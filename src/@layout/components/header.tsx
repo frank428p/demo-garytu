@@ -80,7 +80,7 @@ export function Header() {
         {isDesktop && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="p-2">
+              <Button variant="ghost" className="p-2 text-muted-foreground">
                 <IconWorld />
                 English
               </Button>
