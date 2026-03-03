@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Muted, Small } from '@/components/ui/typography';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { RouterUrl } from '@/@core/constants/routerUrl';
 
 export function UserMenu() {
   return (
@@ -45,25 +46,35 @@ export function UserMenu() {
           </div>
 
           <div className="flex flex-col gap-1 px-1 pb-2">
-            <DropdownMenuItem className="cursor-pointer">
-              <IconCrown />
-              Subscription
+            <DropdownMenuItem asChild>
+              <Link href={RouterUrl.UserSubscription} className="cursor-pointer">
+                <IconCrown />
+                Subscription
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <IconLogs />
-              Credit History
+            <DropdownMenuItem asChild>
+              <Link href={RouterUrl.UserCreditHistory} className="cursor-pointer">
+                <IconLogs />
+                Credit History
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <IconArchive />
-              My Prompt
+            <DropdownMenuItem asChild>
+              <Link href={RouterUrl.UserMyPrompt} className="cursor-pointer">
+                <IconArchive />
+                My Prompt
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <IconHistory />
-              Order History
+            <DropdownMenuItem asChild>
+              <Link href={RouterUrl.UserOrderHistory} className="cursor-pointer">
+                <IconHistory />
+                Order History
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <IconSettings />
-              Manage Account
+            <DropdownMenuItem asChild>
+              <Link href={RouterUrl.UserManageAccount} className="cursor-pointer">
+                <IconSettings />
+                Manage Account
+              </Link>
             </DropdownMenuItem>
           </div>
           <div className="px-2">

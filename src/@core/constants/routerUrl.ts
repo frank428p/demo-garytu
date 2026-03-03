@@ -7,4 +7,9 @@ export const RouterUrl = {
   Business: '/business',
   Cart: '/toolkit/cart',
   Checkout: '/toolkit/checkout',
+  UserSubscription: '/user/subscription',
+  UserCreditHistory: '/user/credit-history',
+  UserMyPrompt: '/user/my-prompt',
+  UserOrderHistory: '/user/order-history',
+  UserManageAccount: '/user/manage-account',
 };
