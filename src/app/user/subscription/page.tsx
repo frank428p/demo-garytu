@@ -2,13 +2,16 @@
 
 import {
   IconCrown,
-  IconCheck,
+  IconInvoice,
   IconCurrencyEthereum,
+  IconLogs,
 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { Large } from '@/components/ui/typography';
+import { Progress } from '@/components/ui/progress';
 
 const plans = [
   {
@@ -50,18 +53,178 @@ const plans = [
   },
 ];
 
+const transactions = [
+  {
+    id: 'TXN-001',
+    type: 'earn',
+    amount: 500,
+    description: 'Monthly Pro plan top-up',
+    date: 'Mar 1, 2026',
+    balance: 1240,
+    expired: 'Mar 12, 2026, 05:22:48',
+  },
+  {
+    id: 'TXN-005',
+    type: 'spend',
+    amount: -40,
+    description: 'Video Generation ',
+    date: 'Feb 20, 2026',
+    balance: 830,
+  },
+  {
+    id: 'TXN-006',
+    type: 'spend',
+    amount: -20,
+    description: 'Image Generation ',
+    date: 'Feb 18, 2026',
+    balance: 630,
+  },
+  {
+    id: 'TXN-007',
+    type: 'earn',
+    amount: 2000,
+    description: 'Sign-up bonus',
+    date: 'Feb 1, 2026',
+    balance: 650,
+  },
+];
+
+const subscription = [
+  {
+    id: 'sb-001',
+    amount: 680,
+    description: 'Monthly Pro plan',
+    date: 'Mar 1, 2026',
+    expired: 'Mar 12, 2026, 05:22:48',
+  },
+];
+
 export default function SubscriptionPage() {
   return (
-    <div className="w-full">
-      <div className="mb-8">
+    <div className="w-full flex flex-col gap-6">
+      {/* <div className="mb-8">
         <h1 className="text-2xl font-bold">Subscription</h1>
         <p className="text-muted-foreground mt-1">
           Manage your plan and billing information.
         </p>
+      </div> */}
+
+      <div className="bg-card p-2 rounded-xl">
+        <p className="text-xs text-muted-foreground font-bold mb-1 px-2 flex items-center gap-1">
+          <IconCrown size={16} className="text-primary" />
+          SUBSCRIPTION
+        </p>
+        <div className="flex bg-secondary p-3 rounded-xl justify-between items-center">
+          {/* <div className="flex bg-primary/20 p-3 rounded-xl justify-between items-center"> */}
+          <div className="flex">
+            <div className="flex flex-col">
+              <Large>Free Plan</Large>
+              <p className="text-xs text-muted-foreground">
+                Renews on Apr 1, 2026
+              </p>
+            </div>
+          </div>
+
+          <Button>Upgrade Plan</Button>
+        </div>
+      </div>
+
+      <div className="bg-card p-2 rounded-xl">
+        <p className="text-xs text-muted-foreground font-bold mb-1 px-2 flex items-center gap-1">
+          <IconCurrencyEthereum size={16} className="text-primary" />
+          CREDITS
+        </p>
+        <div className="flex flex-col bg-secondary p-3 rounded-xl items-center">
+          <div className="flex w-full items-center justify-between mb-3">
+            <div className="flex">
+              <div className="flex flex-col">
+                <p className="text-xs text-muted-foreground">
+                  Monthly credits left
+                </p>
+                <p>
+                  <span className="text-lg font-semibold">450 </span>
+                  <span className="text-lg font-semibold text-muted-foreground">
+                    / 2,000
+                  </span>
+                </p>
+              </div>
+            </div>
+            <Button>Buy Credits</Button>
+          </div>
+          <Progress value={66} id="credits" />
+        </div>
+      </div>
+
+      <div className="bg-card p-2 rounded-xl">
+        <p className="text-xs text-muted-foreground font-bold mb-1 px-2 flex items-center gap-1">
+          <IconInvoice size={16} className="text-primary" />
+          SUBSCRIPTION HISTORY
+        </p>
+
+        <div className="flex bg-secondary p-3 rounded-xl">
+          <div className="flex flex-col gap-4 w-full">
+            {subscription.map((item) => (
+              <div key={item.id} className="flex items-center justify-between">
+                <div className="flex flex-col">
+                  <p className="text-sm font-medium">{item.description}</p>
+                  <p className="text-xs text-muted-foreground">{item.date}</p>
+                </div>
+                <div className="flex flex-col self-start">
+                  <div className="text-sm font-semibold text-right">
+                    {item.amount}
+                  </div>
+                  <p className="text-xs text-muted-foreground text-right">
+                    {item.expired
+                      ? 'Expiration Time: Mar 12, 2026, 05:22:48'
+                      : ''}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-card p-2 rounded-xl mb-6">
+        <p className="text-xs text-muted-foreground font-bold mb-1 px-2 flex items-center gap-1">
+          <IconLogs size={16} className="text-primary" />
+          CREDITS ACTIVITY
+        </p>
+
+        <div className="flex bg-secondary p-3 rounded-xl">
+          <div className="flex flex-col gap-4 w-full">
+            {transactions.map((item) => (
+              <div key={item.id} className="flex items-center justify-between">
+                <div className="flex flex-col">
+                  <p className="text-sm font-medium">{item.description}</p>
+                  <p className="text-xs text-muted-foreground">{item.date}</p>
+                </div>
+                <div className="flex flex-col self-start">
+                  <div
+                    className={cn(
+                      'text-sm font-semibold text-right',
+                      item.type === 'earn'
+                        ? 'text-green-500'
+                        : 'text-destructive',
+                    )}
+                  >
+                    {item.type === 'earn' ? '+' : ''}
+                    {item.amount}
+                  </div>
+                  <p className="text-xs text-muted-foreground text-right">
+                    {item.expired
+                      ? 'Expiration Time: Mar 12, 2026, 05:22:48'
+                      : ''}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Current plan summary */}
-      <div className="rounded-xl border border-border bg-primary/5 p-5 mb-8 flex items-center justify-between">
+      {/* <div className="rounded-xl border border-border bg-primary/5 p-5 mb-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
             <IconCrown size={20} className="text-primary" />
@@ -85,10 +248,9 @@ export default function SubscriptionPage() {
             <p className="font-semibold">Apr 1, 2026</p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Plans */}
-      <h2 className="text-2xl font-bold mb-4">Subscription History</h2>
 
       {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {plans.map((plan) => (

@@ -34,11 +34,6 @@ const mainNav = [
 
 const userNav = [
   { label: 'Subscription', url: RouterUrl.UserSubscription, icon: IconCrown },
-  {
-    label: 'Credit Activity',
-    url: RouterUrl.UserCreditActivity,
-    icon: IconLogs,
-  },
   { label: 'My Prompt', url: RouterUrl.UserMyPrompt, icon: IconArchive },
   {
     label: 'Order History',

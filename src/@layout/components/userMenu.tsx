@@ -59,15 +59,6 @@ export function UserMenu() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link
-                href={RouterUrl.UserCreditActivity}
-                className="cursor-pointer"
-              >
-                <IconLogs />
-                Credit Activity
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
               <Link href={RouterUrl.UserMyPrompt} className="cursor-pointer">
                 <IconArchive />
                 My Prompt

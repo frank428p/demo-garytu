@@ -20,11 +20,6 @@ const userNav = [
     icon: IconCrown,
   },
   {
-    label: 'Credit Activity',
-    url: RouterUrl.UserCreditActivity,
-    icon: IconLogs,
-  },
-  {
     label: 'My Prompt',
     url: RouterUrl.UserMyPrompt,
     icon: IconArchive,
