@@ -32,8 +32,11 @@ export function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="mt-2">
-        <div className="flex flex-col w-[260px]">
-          <div className="flex items-center gap-2 p-3">
+        <div className="flex flex-col w-[280px]">
+          <div className="flex items-center gap-2 p-3 relative">
+            <div className="absolute top-3 right-3 bg-primary/10 py-1 px-3 border border-primary rounded-md text-primary">
+              <Small className="text-xs">Pro</Small>
+            </div>
             <Avatar size="sm">
               <AvatarFallback className="bg-primary text-primary-foreground">
                 <IconUserFilled size={20} />
@@ -47,15 +50,21 @@ export function UserMenu() {
 
           <div className="flex flex-col gap-1 px-1 pb-2">
             <DropdownMenuItem asChild>
-              <Link href={RouterUrl.UserSubscription} className="cursor-pointer">
+              <Link
+                href={RouterUrl.UserSubscription}
+                className="cursor-pointer"
+              >
                 <IconCrown />
                 Subscription
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={RouterUrl.UserCreditHistory} className="cursor-pointer">
+              <Link
+                href={RouterUrl.UserCreditActivity}
+                className="cursor-pointer"
+              >
                 <IconLogs />
-                Credit History
+                Credit Activity
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -65,13 +74,19 @@ export function UserMenu() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={RouterUrl.UserOrderHistory} className="cursor-pointer">
+              <Link
+                href={RouterUrl.UserOrderHistory}
+                className="cursor-pointer"
+              >
                 <IconHistory />
                 Order History
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={RouterUrl.UserManageAccount} className="cursor-pointer">
+              <Link
+                href={RouterUrl.UserManageAccount}
+                className="cursor-pointer"
+              >
                 <IconSettings />
                 Manage Account
               </Link>

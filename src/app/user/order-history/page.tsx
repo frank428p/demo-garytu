@@ -56,18 +56,32 @@ const orders = [
 ];
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  completed: { label: 'Completed', className: 'bg-green-500/10 text-green-500 border-green-500/20' },
-  pending: { label: 'Pending', className: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' },
-  refunded: { label: 'Refunded', className: 'bg-muted text-muted-foreground border-border' },
-  failed: { label: 'Failed', className: 'bg-destructive/10 text-destructive border-destructive/20' },
+  completed: {
+    label: 'Completed',
+    className: 'bg-green-500/10 text-green-500 border-green-500/20',
+  },
+  pending: {
+    label: 'Pending',
+    className: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
+  },
+  refunded: {
+    label: 'Refunded',
+    className: 'bg-muted text-muted-foreground border-border',
+  },
+  failed: {
+    label: 'Failed',
+    className: 'bg-destructive/10 text-destructive border-destructive/20',
+  },
 };
 
 export default function OrderHistoryPage() {
   return (
-    <div className="max-w-3xl">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Order History</h1>
-        <p className="text-muted-foreground mt-1">View all your past purchases and transactions.</p>
+        <p className="text-muted-foreground mt-1">
+          View all your past purchases and transactions.
+        </p>
       </div>
 
       <div className="rounded-xl border border-border overflow-hidden">
@@ -97,7 +111,10 @@ export default function OrderHistoryPage() {
                 <div className="text-sm font-semibold text-right">
                   {order.paymentMethod === 'Credit' ? (
                     <div className="flex items-center gap-0.5 justify-end">
-                      <IconCurrencyEthereum size={13} className="text-primary" />
+                      <IconCurrencyEthereum
+                        size={13}
+                        className="text-primary"
+                      />
                       <span>{order.total}</span>
                     </div>
                   ) : (

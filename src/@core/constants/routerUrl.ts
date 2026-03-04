@@ -8,7 +8,7 @@ export const RouterUrl = {
   Cart: '/toolkit/cart',
   Checkout: '/toolkit/checkout',
   UserSubscription: '/user/subscription',
-  UserCreditHistory: '/user/credit-history',
+  UserCreditActivity: '/user/credit-activity',
   UserMyPrompt: '/user/my-prompt',
   UserOrderHistory: '/user/order-history',
   UserManageAccount: '/user/manage-account',

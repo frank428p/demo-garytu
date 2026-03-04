@@ -8,8 +8,8 @@ import {
   IconSparkles,
   IconPolaroid,
   IconPolaroidFilled,
-  IconBrandYoutube,
-  IconBrandYoutubeFilled,
+  IconVideo,
+  IconVideoFilled,
 } from '@tabler/icons-react';
 
 export const StoreNav: NavigationType = {
@@ -43,8 +43,8 @@ export const ImageGenerateNav: NavigationType = {
 export const VideoGenerateNav: NavigationType = {
   i18nKey: 'Video',
   url: RouterUrl.VideoGenerate,
-  icon: IconBrandYoutube,
-  activeIcon: IconBrandYoutubeFilled,
+  icon: IconVideo,
+  activeIcon: IconVideoFilled,
 };
 
 // export const EnterpriseNav: NavigationType = {

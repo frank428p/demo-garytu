@@ -19,7 +19,7 @@ export function CartDrawer() {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetPopup side="right" variant="inset">
         {/* Header */}
-        <SheetHeader className="flex-row items-center gap-2 border-b border-border px-5 py-4">
+        <SheetHeader className="flex-row items-center gap-2 px-5 py-4">
           <SheetTitle>Shopping Cart</SheetTitle>
           {items.length > 0 && (
             <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-bold text-primary-foreground">

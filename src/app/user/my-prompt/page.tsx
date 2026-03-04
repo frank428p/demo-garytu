@@ -23,7 +23,8 @@ const prompts = [
   {
     id: 1,
     title: 'SEO Article Writer',
-    description: 'Generate SEO-optimized long-form articles with proper keyword density and structure.',
+    description:
+      'Generate SEO-optimized long-form articles with proper keyword density and structure.',
     category: 'Writing',
     credits: 10,
     starred: true,
@@ -32,7 +33,8 @@ const prompts = [
   {
     id: 2,
     title: 'Email Marketing Copy',
-    description: 'Write compelling email marketing campaigns with high open and click-through rates.',
+    description:
+      'Write compelling email marketing campaigns with high open and click-through rates.',
     category: 'Marketing',
     credits: 20,
     starred: false,
@@ -41,7 +43,8 @@ const prompts = [
   {
     id: 3,
     title: 'Product Description Generator',
-    description: 'Create detailed, persuasive product descriptions for e-commerce platforms.',
+    description:
+      'Create detailed, persuasive product descriptions for e-commerce platforms.',
     category: 'E-commerce',
     credits: 15,
     starred: true,
@@ -50,7 +53,8 @@ const prompts = [
   {
     id: 4,
     title: 'Social Media Caption Pack',
-    description: 'Generate engaging captions for Instagram, Twitter, and LinkedIn posts.',
+    description:
+      'Generate engaging captions for Instagram, Twitter, and LinkedIn posts.',
     category: 'Social Media',
     credits: 8,
     starred: false,
@@ -59,7 +63,8 @@ const prompts = [
   {
     id: 5,
     title: 'Code Review Assistant',
-    description: 'Analyze and provide constructive feedback on code quality, performance, and security.',
+    description:
+      'Analyze and provide constructive feedback on code quality, performance, and security.',
     category: 'Development',
     credits: 25,
     starred: false,
@@ -68,7 +73,8 @@ const prompts = [
   {
     id: 6,
     title: 'Business Plan Template',
-    description: 'Create comprehensive business plans with market analysis, financials, and strategy.',
+    description:
+      'Create comprehensive business plans with market analysis, financials, and strategy.',
     category: 'Business',
     credits: 30,
     starred: true,
@@ -98,10 +104,12 @@ export default function MyPromptPage() {
   );
 
   return (
-    <div className="max-w-4xl">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">My Prompt</h1>
-        <p className="text-muted-foreground mt-1">Prompts you've purchased and saved.</p>
+        <p className="text-muted-foreground mt-1">
+          {`Prompts you've purchased and saved.`}
+        </p>
       </div>
 
       {/* Search + filter bar */}
@@ -118,7 +126,9 @@ export default function MyPromptPage() {
             className="pl-9"
           />
         </div>
-        <span className="text-sm text-muted-foreground">{filtered.length} prompts</span>
+        <span className="text-sm text-muted-foreground">
+          {filtered.length} prompts
+        </span>
       </div>
 
       {/* Prompt grid */}
@@ -139,7 +149,9 @@ export default function MyPromptPage() {
               </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button
-                  onClick={() => setStarred((s) => ({ ...s, [prompt.id]: !s[prompt.id] }))}
+                  onClick={() =>
+                    setStarred((s) => ({ ...s, [prompt.id]: !s[prompt.id] }))
+                  }
                   className="p-1 rounded hover:bg-accent transition-colors"
                 >
                   {starred[prompt.id] ? (
@@ -155,8 +167,12 @@ export default function MyPromptPage() {
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="cursor-pointer">Use Prompt</DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">View Details</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Use Prompt
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      View Details
+                    </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
                       Remove
                     </DropdownMenuItem>
@@ -164,14 +180,20 @@ export default function MyPromptPage() {
                 </DropdownMenu>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground line-clamp-2">{prompt.description}</p>
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {prompt.description}
+            </p>
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <IconCurrencyEthereum size={13} className="text-primary" />
-                <span className="font-medium text-primary">{prompt.credits}</span>
+                <span className="font-medium text-primary">
+                  {prompt.credits}
+                </span>
                 <span>credits / use</span>
               </div>
-              <span className="text-xs text-muted-foreground">Used {prompt.usedAt}</span>
+              <span className="text-xs text-muted-foreground">
+                Used {prompt.usedAt}
+              </span>
             </div>
           </div>
         ))}

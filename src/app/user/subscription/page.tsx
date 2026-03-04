@@ -1,6 +1,10 @@
 'use client';
 
-import { IconCrown, IconCheck, IconCurrencyEthereum } from '@tabler/icons-react';
+import {
+  IconCrown,
+  IconCheck,
+  IconCurrencyEthereum,
+} from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -11,7 +15,11 @@ const plans = [
     name: 'Free',
     price: 0,
     credits: 100,
-    features: ['100 credits / month', 'Access to basic prompts', 'Standard support'],
+    features: [
+      '100 credits / month',
+      'Access to basic prompts',
+      'Standard support',
+    ],
     current: false,
   },
   {
@@ -44,10 +52,12 @@ const plans = [
 
 export default function SubscriptionPage() {
   return (
-    <div className="max-w-4xl">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Subscription</h1>
-        <p className="text-muted-foreground mt-1">Manage your plan and billing information.</p>
+        <p className="text-muted-foreground mt-1">
+          Manage your plan and billing information.
+        </p>
       </div>
 
       {/* Current plan summary */}
@@ -78,8 +88,9 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Plans */}
-      <h2 className="text-lg font-semibold mb-4">Available Plans</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <h2 className="text-2xl font-bold mb-4">Subscription History</h2>
+
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {plans.map((plan) => (
           <div
             key={plan.name}
@@ -99,19 +110,30 @@ export default function SubscriptionPage() {
               <p className="font-semibold text-base">{plan.name}</p>
               <div className="flex items-end gap-1 mt-1">
                 <span className="text-2xl font-bold">${plan.price}</span>
-                <span className="text-muted-foreground text-sm mb-0.5">/ month</span>
+                <span className="text-muted-foreground text-sm mb-0.5">
+                  / month
+                </span>
               </div>
             </div>
             <ul className="flex flex-col gap-2 flex-1">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                <li
+                  key={f}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
                   <IconCheck size={16} className="text-primary shrink-0" />
                   {f}
                 </li>
               ))}
             </ul>
             <Button
-              variant={plan.current ? 'outline' : plan.highlight ? 'default' : 'outline'}
+              variant={
+                plan.current
+                  ? 'outline'
+                  : plan.highlight
+                    ? 'default'
+                    : 'outline'
+              }
               className="w-full"
               disabled={plan.current}
             >
@@ -119,7 +141,7 @@ export default function SubscriptionPage() {
             </Button>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

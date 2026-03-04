@@ -50,10 +50,14 @@ export function Header() {
         {isDesktop && (
           <>
             <Link href={RouterUrl.Store} className="">
-              <Muted className="font-bold text-base">{'Prompt Store'}</Muted>
+              <Muted className="font-normal text-base hover:text-primary">
+                {'Prompt Store'}
+              </Muted>
             </Link>
             <Link href={RouterUrl.Store} className="">
-              <Muted className="font-bold text-base">{'AI Toolkit'}</Muted>
+              <Muted className="font-normal text-base hover:text-primary">
+                {'AI Toolkit'}
+              </Muted>
             </Link>
           </>
         )}
@@ -66,11 +70,15 @@ export function Header() {
           <>
             <div className="flex items-center gap-6">
               <Link href={RouterUrl.Business}>
-                <Muted className="font-bold text-base">{'Enterprise'}</Muted>
+                <Muted className="font-normal text-base hover:text-primary">
+                  {'Enterprise'}
+                </Muted>
               </Link>
 
               <Link href={RouterUrl.Store} className="">
-                <Muted className="font-bold text-base">{'Pricing'}</Muted>
+                <Muted className="font-normal text-base hover:text-primary">
+                  {'Pricing'}
+                </Muted>
               </Link>
             </div>
             <Separator orientation="vertical" />

@@ -20,8 +20,8 @@ const userNav = [
     icon: IconCrown,
   },
   {
-    label: 'Credit History',
-    url: RouterUrl.UserCreditHistory,
+    label: 'Credit Activity',
+    url: RouterUrl.UserCreditActivity,
     icon: IconLogs,
   },
   {
@@ -70,7 +70,9 @@ export default function UserLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
       </aside>
-      <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 justify-items-center">
+        <div className="max-w-3xl w-full">{children}</div>
+      </main>
     </div>
   );
 }

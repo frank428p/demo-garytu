@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { IconCamera, IconUserFilled, IconAlertCircle } from '@tabler/icons-react';
+import {
+  IconCamera,
+  IconUserFilled,
+  IconAlertCircle,
+} from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
@@ -15,15 +19,17 @@ export default function ManageAccountPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Manage Account</h1>
-        <p className="text-muted-foreground mt-1">Update your profile and account settings.</p>
+        <p className="text-muted-foreground mt-1">
+          Update your profile and account settings.
+        </p>
       </div>
 
       {/* Avatar section */}
       <section className="mb-8">
-        <h2 className="text-base font-semibold mb-4">Profile Photo</h2>
+        <h2 className="text-base font-semibold mb-4">Profile</h2>
         <div className="flex items-center gap-5">
           <div className="relative">
             <Avatar size="lg">
@@ -31,14 +37,14 @@ export default function ManageAccountPage() {
                 <IconUserFilled size={28} />
               </AvatarFallback>
             </Avatar>
-            <button className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors">
+            {/* <button className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors">
               <IconCamera size={14} />
-            </button>
+            </button> */}
           </div>
           <div>
-            <p className="text-sm font-medium">Upload a photo</p>
+            <p className="text-sm font-medium">User Name</p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              JPG, PNG or GIF. Max size 2 MB.
+              username@gmail.com
             </p>
           </div>
         </div>
@@ -60,7 +66,11 @@ export default function ManageAccountPage() {
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium">Email Address</label>
-            <Input value={email} disabled className="opacity-60 cursor-not-allowed" />
+            <Input
+              value={email}
+              disabled
+              className="opacity-60 cursor-not-allowed"
+            />
             <p className="text-xs text-muted-foreground">
               Contact support to change your email address.
             </p>
@@ -120,11 +130,15 @@ export default function ManageAccountPage() {
         </p>
         <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 flex items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <IconAlertCircle size={18} className="text-destructive mt-0.5 shrink-0" />
+            <IconAlertCircle
+              size={18}
+              className="text-destructive mt-0.5 shrink-0"
+            />
             <div>
               <p className="text-sm font-medium">Delete Account</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                This action cannot be undone. All your data will be permanently removed.
+                This action cannot be undone. All your data will be permanently
+                removed.
               </p>
             </div>
           </div>
