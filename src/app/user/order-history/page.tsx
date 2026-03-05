@@ -126,15 +126,15 @@ export default function OrderHistoryPage() {
 
       <div className="rounded-xl border border-border overflow-hidden">
         {/* Header */}
-        <div className="grid grid-cols-[32px_1fr_110px_76px_100px] items-center px-4 py-3 bg-muted/40">
+        <div className="grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center px-4 py-3 bg-muted/40">
           <span />
           <span className="text-xs font-medium text-muted-foreground">
             Order
           </span>
-          <span className="text-xs font-medium text-muted-foreground text-right">
+          <span className="hidden md:inline text-xs font-medium text-muted-foreground text-right">
             Items
           </span>
-          <span className="text-xs font-medium text-muted-foreground text-right">
+          <span className="hidden md:inline text-xs font-medium text-muted-foreground text-right">
             Status
           </span>
           <span className="text-xs font-medium text-muted-foreground text-right">
@@ -153,7 +153,7 @@ export default function OrderHistoryPage() {
               {/* Main row */}
               <button
                 onClick={() => setOpenId(open ? null : r.id)}
-                className="cursor-pointer grid grid-cols-[32px_1fr_110px_76px_100px] items-center w-full px-4 py-3 text-left hover:bg-muted/20 transition-colors"
+                className="cursor-pointer grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center w-full px-4 py-3 text-left hover:bg-muted/20 transition-colors"
               >
                 <span className="flex items-center justify-center text-muted-foreground">
                   {open ? (
@@ -165,13 +165,22 @@ export default function OrderHistoryPage() {
 
                 <div>
                   <p className="text-sm font-medium">{r.orderNo}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {r.date}
-                  </p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <p className="text-xs text-muted-foreground">{r.date}</p>
+                    {/* Status badge — mobile only */}
+                    <span
+                      className={cn(
+                        'md:hidden inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium',
+                        status.className,
+                      )}
+                    >
+                      {status.label}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Thumbnail stack */}
-                <div className="flex items-center justify-end -space-x-2">
+                {/* Thumbnail stack — desktop only */}
+                <div className="hidden md:flex items-center justify-end -space-x-2">
                   {preview.map((c, i) => (
                     <div
                       key={c.id + i}
@@ -192,9 +201,10 @@ export default function OrderHistoryPage() {
                   )}
                 </div>
 
+                {/* Status badge — desktop only */}
                 <span
                   className={cn(
-                    'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium w-[max-content] ml-auto',
+                    'hidden md:inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium w-[max-content] ml-auto',
                     status.className,
                   )}
                 >
