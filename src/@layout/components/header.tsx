@@ -4,9 +4,12 @@ import {
   IconWorld,
   IconShoppingBag,
   IconCurrencyEthereum,
+  IconChevronDown,
+  IconPhoto,
+  IconVideo,
 } from '@tabler/icons-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { RouterUrl } from '@/@core/constants/routerUrl';
-import { Muted } from '@/components/ui/typography';
+import { Muted, Small } from '@/components/ui/typography';
 import { useCart } from '@/contexts/cartContext';
 import { useAuth } from '@/contexts/authContext';
 
@@ -38,6 +41,17 @@ export function Header() {
   const [locale, setLocale] = useState<'en' | 'zh-TW'>('en');
 
   const [isAuth, setIsAuth] = useState(true);
+  const [toolkitOpen, setToolkitOpen] = useState(false);
+  const toolkitCloseTimer = useRef<ReturnType<typeof setTimeout>>(null);
+
+  const handleToolkitEnter = () => {
+    if (toolkitCloseTimer.current) clearTimeout(toolkitCloseTimer.current);
+    setToolkitOpen(true);
+  };
+
+  const handleToolkitLeave = () => {
+    toolkitCloseTimer.current = setTimeout(() => setToolkitOpen(false), 100);
+  };
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center justify-between bg-background px-4">
@@ -48,18 +62,75 @@ export function Header() {
         </Link>
 
         {isDesktop && (
-          <>
-            <Link href={RouterUrl.Store} className="">
+          <div className="flex items-center gap-2">
+            <Link href={RouterUrl.Store} className="py-1 px-2">
               <Muted className="font-normal text-base hover:text-primary">
                 {'Prompt Store'}
               </Muted>
             </Link>
-            <Link href={RouterUrl.Store} className="">
-              <Muted className="font-normal text-base hover:text-primary">
-                {'AI Toolkit'}
-              </Muted>
-            </Link>
-          </>
+
+            <DropdownMenu
+              open={toolkitOpen}
+              onOpenChange={setToolkitOpen}
+              modal={false}
+            >
+              <DropdownMenuTrigger
+                asChild
+                onMouseEnter={handleToolkitEnter}
+                onMouseLeave={handleToolkitLeave}
+              >
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-muted-foreground font-normal text-base hover:text-primary h-auto py-1 px-2 rounded-lg"
+                >
+                  <Muted>AI Toolkit</Muted>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                onMouseEnter={handleToolkitEnter}
+                onMouseLeave={handleToolkitLeave}
+                className="p-3"
+              >
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer w-[280px] p-2 rounded-xl"
+                >
+                  <Link
+                    href={RouterUrl.ImageGenerate}
+                    className="flex gap-3 items-center"
+                  >
+                    <div className="p-3 bg-background/60 rounded-lg">
+                      <IconPhoto size={48} className="!size-6 shrink-0" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <Small>Create Image</Small>
+                      <Muted>Generate AI Images</Muted>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer w-[280px] p-2 rounded-xl"
+                >
+                  <Link
+                    href={RouterUrl.VideoGenerate}
+                    className="flex gap-3 items-center"
+                  >
+                    <div className="p-3 bg-background/60 rounded-lg">
+                      <IconVideo size={48} className="!size-6 shrink-0" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <Small>Create Video</Small>
+                      <Muted>Generate AI Videos</Muted>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         )}
       </div>
 
@@ -68,14 +139,14 @@ export function Header() {
         <Switch checked={isAuth} onCheckedChange={setIsAuth} />
         {isDesktop && (
           <>
-            <div className="flex items-center gap-6">
-              <Link href={RouterUrl.Business}>
+            <div className="flex items-center gap-2">
+              <Link href={RouterUrl.Business} className="py-1 px-2">
                 <Muted className="font-normal text-base hover:text-primary">
                   {'Enterprise'}
                 </Muted>
               </Link>
 
-              <Link href={RouterUrl.Store} className="">
+              <Link href={RouterUrl.Store} className="py-1 px-2">
                 <Muted className="font-normal text-base hover:text-primary">
                   {'Pricing'}
                 </Muted>
@@ -88,12 +159,19 @@ export function Header() {
         {isDesktop && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="p-2 text-muted-foreground">
+              {/* <Button variant="ghost" className="p-2 text-muted-foreground">
+                <IconWorld />
+                English
+              </Button> */}
+              <Button
+                variant="ghost"
+                className="text-muted-foreground font-normal text-base hover:text-primary h-auto py-1 px-2 rounded-lg focus-visible:ring-0 focus-visible:outline-none"
+              >
                 <IconWorld />
                 English
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="p-3">
               {LOCALES.map((l) => (
                 <DropdownMenuItem
                   key={l.value}

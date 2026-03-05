@@ -100,7 +100,7 @@ export function HeaderMenu() {
                     <Link
                       href={item.url}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors',
                         'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
                       )}
                     >
@@ -120,7 +120,7 @@ export function HeaderMenu() {
                     <Link
                       href={item.url}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors',
                         'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
                       )}
                     >
