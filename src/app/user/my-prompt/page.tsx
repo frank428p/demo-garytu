@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs';
 
 const prompts = [
   {
@@ -111,6 +112,30 @@ export default function MyPromptPage() {
           {`Prompts you've purchased and saved.`}
         </p>
       </div>
+
+      <Tabs defaultValue="tab-1">
+        <div className="border-b border-border">
+          <TabsList variant="underline">
+            <TabsTab value="tab-1">Purchased</TabsTab>
+            <TabsTab value="tab-2">Favorite</TabsTab>
+          </TabsList>
+        </div>
+        <TabsPanel value="tab-1">
+          <p className="p-4 text-center text-muted-foreground text-xs">
+            Tab 1 content
+          </p>
+        </TabsPanel>
+        <TabsPanel value="tab-2">
+          <p className="p-4 text-center text-muted-foreground text-xs">
+            Tab 2 content
+          </p>
+        </TabsPanel>
+        <TabsPanel value="tab-3">
+          <p className="p-4 text-center text-muted-foreground text-xs">
+            Tab 3 content
+          </p>
+        </TabsPanel>
+      </Tabs>
 
       {/* Search + filter bar */}
       <div className="flex items-center gap-3 mb-6">
