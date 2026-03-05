@@ -208,52 +208,59 @@ export default function OrderHistoryPage() {
                 </div>
               </button>
 
-              {/* Expanded detail — full-width rows */}
-              {open && (
-                <div className="bg-muted/10">
-                  {r.children.map((c, i) => {
-                    const MediaIcon =
-                      c.mediaType === 'video' ? IconVideo : IconPhoto;
-                    return (
-                      <div
-                        key={c.id + i}
-                        className="grid grid-cols-[40px_1fr_auto] gap-3 items-center px-10 py-4"
-                        // className={cn(
-                        //   'grid grid-cols-[40px_1fr_auto] gap-3 items-center px-10 py-4',
-                        //   i > 0 && 'border-t border-border',
-                        // )}
-                      >
-                        <div className="h-10 w-10 shrink-0 rounded-md overflow-hidden">
-                          <img
-                            src={c.image}
-                            alt=""
-                            className="h-full w-full object-cover"
-                          />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium truncate">
-                            {c.title}
-                          </p>
-                          <div className="flex items-center gap-1 mt-0.5">
-                            <MediaIcon
-                              size={12}
-                              className="text-muted-foreground shrink-0"
+              {/* Expanded detail — animated */}
+              <div
+                className={cn(
+                  'grid transition-[grid-template-rows] duration-200 ease-in-out',
+                  open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+                )}
+              >
+                <div className="overflow-hidden">
+                  <div className="bg-muted/10">
+                    {r.children.map((c, i) => {
+                      const MediaIcon =
+                        c.mediaType === 'video' ? IconVideo : IconPhoto;
+                      return (
+                        <div
+                          key={c.id + i}
+                          className="grid grid-cols-[40px_1fr_auto] gap-3 items-center px-10 py-4"
+                          // className={cn(
+                          //   'grid grid-cols-[40px_1fr_auto] gap-3 items-center px-10 py-4',
+                          //   i > 0 && 'border-t border-border',
+                          // )}
+                        >
+                          <div className="h-10 w-10 shrink-0 rounded-md overflow-hidden">
+                            <img
+                              src={c.image}
+                              alt=""
+                              className="h-full w-full object-cover"
                             />
-                            <span className="text-xs text-muted-foreground capitalize">
-                              {c.mediaType}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium truncate">
+                              {c.title}
+                            </p>
+                            <div className="flex items-center gap-1 mt-0.5">
+                              <MediaIcon
+                                size={12}
+                                className="text-muted-foreground shrink-0"
+                              />
+                              <span className="text-xs text-muted-foreground capitalize">
+                                {c.mediaType}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            <span className="text-sm font-semibold">
+                              NT${c.price.toLocaleString()}
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-0.5 shrink-0">
-                          <span className="text-sm font-semibold">
-                            NT${c.price.toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
