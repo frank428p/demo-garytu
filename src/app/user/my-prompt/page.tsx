@@ -8,10 +8,20 @@ import {
   IconStar,
   IconStarFilled,
   IconDots,
+  IconPhoto,
+  IconVideo,
 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +29,188 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs';
+
+type Photo = {
+  src: string;
+  poster?: string;
+  width: number;
+  height: number;
+  id: string;
+  aspectRatio: string;
+  mediaType: 'image' | 'video';
+};
+
+const photos: Photo[] = [
+  {
+    src: '/images/gallery/1-to-1_1.jpg',
+    width: 1024,
+    height: 1024,
+    id: '1',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_2.jpg',
+    width: 1024,
+    height: 1024,
+    id: '2',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_3.jpg',
+    width: 1024,
+    height: 1024,
+    id: '3',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.jpg',
+    width: 3072,
+    height: 5440,
+    id: '4',
+    aspectRatio: '9:16',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.jpg',
+    width: 5440,
+    height: 3072,
+    id: '5',
+    aspectRatio: '16:9',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/16-to-9_2.jpg',
+    width: 1376,
+    height: 768,
+    id: '6',
+    aspectRatio: '16:9',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_1.mp4',
+    poster: '/images/gallery/1-to-1-cover_1.avif',
+    width: 1440,
+    height: 1440,
+    id: '7',
+    aspectRatio: '1:1',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.jpg',
+    width: 3072,
+    height: 5440,
+    id: '8',
+    aspectRatio: '9:16',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_2.jpg',
+    width: 1024,
+    height: 1024,
+    id: '9',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.mp4',
+    poster: '/images/gallery/16-to-9-cover_1.avif',
+    width: 1344,
+    height: 768,
+    id: '10',
+    aspectRatio: '16:9',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.jpg',
+    width: 5440,
+    height: 3072,
+    id: '11',
+    aspectRatio: '16:9',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_3.jpg',
+    width: 1024,
+    height: 1024,
+    id: '12',
+    aspectRatio: '1:1',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/9-to-16_2.mp4',
+    poster: '/images/gallery/9-to-16-cover_2.avif',
+    width: 1080,
+    height: 1920,
+    id: '13',
+    aspectRatio: '9:16',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.jpg',
+    width: 3072,
+    height: 5440,
+    id: '14',
+    aspectRatio: '9:16',
+    mediaType: 'image',
+  },
+  {
+    src: '/images/gallery/1-to-1_1.mp4',
+    poster: '/images/gallery/1-to-1-cover_1.avif',
+    width: 1440,
+    height: 1440,
+    id: '15',
+    aspectRatio: '1:1',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/1-to-1_2.mp4',
+    poster: '/images/gallery/1-to-1-cover_2.avif',
+    width: 1440,
+    height: 1440,
+    id: '16',
+    aspectRatio: '1:1',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/16-to-9_1.mp4',
+    poster: '/images/gallery/16-to-9-cover_1.avif',
+    width: 1344,
+    height: 768,
+    id: '17',
+    aspectRatio: '16:9',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/16-to-9_2.mp4',
+    poster: '/images/gallery/16-to-9-cover_2.avif',
+    width: 1344,
+    height: 768,
+    id: '18',
+    aspectRatio: '16:9',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_1.mp4',
+    poster: '/images/gallery/9-to-16-cover_1.avif',
+    width: 1080,
+    height: 1920,
+    id: '19',
+    aspectRatio: '9:16',
+    mediaType: 'video',
+  },
+  {
+    src: '/images/gallery/9-to-16_2.mp4',
+    poster: '/images/gallery/9-to-16-cover_2.avif',
+    width: 1080,
+    height: 1920,
+    id: '20',
+    aspectRatio: '9:16',
+    mediaType: 'video',
+  },
+];
 
 const prompts = [
   {
@@ -92,17 +284,37 @@ const categoryColors: Record<string, string> = {
   Business: 'bg-yellow-500/10 text-yellow-600',
 };
 
+const PAGE_SIZE = 12;
+
+function getPageItems(current: number, total: number): (number | 'ellipsis')[] {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const items: (number | 'ellipsis')[] = [1];
+  if (current > 3) items.push('ellipsis');
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  for (let i = start; i <= end; i++) items.push(i);
+  if (current < total - 2) items.push('ellipsis');
+  items.push(total);
+  return items;
+}
+
 export default function MyPromptPage() {
   const [search, setSearch] = useState('');
   const [starred, setStarred] = useState<Record<number, boolean>>(
     Object.fromEntries(prompts.map((p) => [p.id, p.starred])),
   );
+  const [page, setPage] = useState(1);
 
   const filtered = prompts.filter(
     (p) =>
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.description.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const totalPages = Math.ceil(photos.length / PAGE_SIZE);
+  const pagedPhotos = photos.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div className="w-full">
@@ -117,125 +329,125 @@ export default function MyPromptPage() {
         <div className="border-b border-border">
           <TabsList variant="underline">
             <TabsTab value="tab-1">Purchased</TabsTab>
-            <TabsTab value="tab-2">Favorite</TabsTab>
+            <TabsTab value="tab-2">Favorite(?)</TabsTab>
           </TabsList>
         </div>
+
         <TabsPanel value="tab-1">
-          <p className="p-4 text-center text-muted-foreground text-xs">
-            Tab 1 content
-          </p>
+          <div className="pt-4">
+            {/* Card grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {pagedPhotos.map((p) => {
+                const thumb = p.poster ?? p.src;
+                const MediaIcon =
+                  p.mediaType === 'video' ? IconVideo : IconPhoto;
+                return (
+                  <div
+                    key={p.id}
+                    className="rounded-xl overflow-hidden border border-border bg-card hover:border-primary/80 hover:border-[2px] transition-colors cursor-pointer group"
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative aspect-square overflow-hidden bg-muted">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={thumb}
+                        alt=""
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {/* Video badge */}
+                      {p.mediaType === 'video' && (
+                        <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/60 text-white text-xs font-medium px-1.5 py-0.5 rounded">
+                          <IconVideo size={11} />
+                          Video
+                        </div>
+                      )}
+                    </div>
+                    {/* Info */}
+                    <div className="p-3 flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          Cinematic Lighting Pack
+                        </p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <MediaIcon
+                            size={11}
+                            className="text-muted-foreground shrink-0"
+                          />
+                          <span className="text-xs text-muted-foreground">
+                            {p.aspectRatio}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <Pagination className="mt-6 flex justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage((p) => Math.max(1, p - 1));
+                      }}
+                      className={
+                        page === 1 ? 'pointer-events-none opacity-50' : ''
+                      }
+                    />
+                  </PaginationItem>
+
+                  {getPageItems(page, totalPages).map((item, i) =>
+                    item === 'ellipsis' ? (
+                      <PaginationItem key={`ellipsis-${i}`}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    ) : (
+                      <PaginationItem key={item}>
+                        <PaginationLink
+                          href="#"
+                          isActive={item === page}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPage(item);
+                          }}
+                        >
+                          {item}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ),
+                  )}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage((p) => Math.min(totalPages, p + 1));
+                      }}
+                      className={
+                        page === totalPages
+                          ? 'pointer-events-none opacity-50'
+                          : ''
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </div>
         </TabsPanel>
+
         <TabsPanel value="tab-2">
           <p className="p-4 text-center text-muted-foreground text-xs">
             Tab 2 content
           </p>
         </TabsPanel>
-        <TabsPanel value="tab-3">
-          <p className="p-4 text-center text-muted-foreground text-xs">
-            Tab 3 content
-          </p>
-        </TabsPanel>
       </Tabs>
-
-      {/* Search + filter bar */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="relative flex-1 max-w-sm">
-          <IconSearch
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-          />
-          <Input
-            placeholder="Search prompts..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-        <span className="text-sm text-muted-foreground">
-          {filtered.length} prompts
-        </span>
-      </div>
-
-      {/* Prompt grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map((prompt) => (
-          <div
-            key={prompt.id}
-            className="rounded-xl border border-border bg-background p-5 flex flex-col gap-3 hover:border-primary/40 transition-colors"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold truncate">{prompt.title}</p>
-                <span
-                  className={`inline-block mt-1 rounded-md px-2 py-0.5 text-xs font-medium ${categoryColors[prompt.category] ?? 'bg-muted text-muted-foreground'}`}
-                >
-                  {prompt.category}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  onClick={() =>
-                    setStarred((s) => ({ ...s, [prompt.id]: !s[prompt.id] }))
-                  }
-                  className="p-1 rounded hover:bg-accent transition-colors"
-                >
-                  {starred[prompt.id] ? (
-                    <IconStarFilled size={16} className="text-yellow-400" />
-                  ) : (
-                    <IconStar size={16} className="text-muted-foreground" />
-                  )}
-                </button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="p-1 rounded hover:bg-accent transition-colors">
-                      <IconDots size={16} className="text-muted-foreground" />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="cursor-pointer">
-                      Use Prompt
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
-                      Remove
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {prompt.description}
-            </p>
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <IconCurrencyEthereum size={13} className="text-primary" />
-                <span className="font-medium text-primary">
-                  {prompt.credits}
-                </span>
-                <span>credits / use</span>
-              </div>
-              <span className="text-xs text-muted-foreground">
-                Used {prompt.usedAt}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <IconArchive size={40} className="text-muted-foreground mb-3" />
-          <p className="font-medium">No prompts found</p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Try a different search term or browse the store.
-          </p>
-          <Button className="mt-4" variant="default">
-            Browse Prompt Store
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
