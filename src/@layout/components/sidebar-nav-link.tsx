@@ -21,7 +21,7 @@ export function SidebarNavLink({
     <Link
       href={item.url}
       className={cn(
-        'flex flex-col items-center gap-1 rounded-lg px-3 py-2 font-medium transition-colors group',
+        'flex flex-col items-center lg:gap-1 rounded-lg px-3 py-2 font-medium transition-colors group',
         className,
         isActive
           ? 'text-accent-foreground'
@@ -45,7 +45,7 @@ export function SidebarNavLink({
       </div>
       <span
         className={cn(
-          'text-[10px] lg:text-xs text-muted-foreground  lg:group-hover:text-foreground',
+          'text-[10px] lg:text-xs text-muted-foreground lg:group-hover:text-foreground',
           isActive
             ? 'text-primary lg:text-foreground'
             : 'text-muted-foreground',
