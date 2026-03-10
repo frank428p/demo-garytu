@@ -1,4 +1,4 @@
-import React from 'react';
+'use client';
 
 type AspectRatioBoxProps = {
   ratio: string; // e.g. "1:1" | "16:9" | "9:16"
@@ -30,14 +30,14 @@ function getFittedSize(ratio: string, maxSize: number) {
 
 export default function AspectRatioBox({
   ratio,
-  maxSize = 20,
+  maxSize = 15,
   className = '',
 }: AspectRatioBoxProps) {
   const { width, height } = getFittedSize(ratio, maxSize);
 
   return (
     <div
-      className={`border border-gray-400 bg-transparent rounded-[2px] ${className}`}
+      className={`border border-[1.5px] border-foreground bg-transparent rounded-[2px] ${className}`}
       style={{
         width: `${width}px`,
         height: `${height}px`,

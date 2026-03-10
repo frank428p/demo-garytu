@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.freepik.com)",
+      "WebSearch",
+      "WebFetch(domain:docs.aimlapi.com)",
+      "WebFetch(domain:fal.ai)",
+      "WebFetch(domain:replicate.com)",
+      "WebFetch(domain:wavespeed.ai)"
+    ]
+  }
+}

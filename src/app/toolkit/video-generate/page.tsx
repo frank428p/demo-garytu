@@ -1,7 +1,9 @@
 'use client';
 
+import VideoGenerateView from '@/views/video-generate';
+
 const VideoGeneratePage = () => {
-  return <></>;
+  return <VideoGenerateView />;
 };
 
 export default VideoGeneratePage;

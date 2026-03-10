@@ -66,9 +66,21 @@ export const Small = createComponent<HTMLParagraphElement>(
   'Small',
 );
 
+export const Tiny = createComponent<HTMLParagraphElement>(
+  'p',
+  'text-xs font-medium leading-none',
+  'Small',
+);
+
 export const Muted = createComponent<HTMLSpanElement>(
   'span',
   'text-sm text-muted-foreground',
+  'Muted',
+);
+
+export const TinyMuted = createComponent<HTMLSpanElement>(
+  'span',
+  'text-xs text-muted-foreground',
   'Muted',
 );
 
