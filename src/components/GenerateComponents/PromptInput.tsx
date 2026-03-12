@@ -23,22 +23,29 @@ export function PromptInput() {
         }}
       ></div>
 
-      {showNegative && (
-        <div className="flex flex-col gap-1 px-3 pb-3">
-          <TinyMuted className="font-bold">Negative Prompt</TinyMuted>
-          <div
-            contentEditable
-            suppressContentEditableWarning
-            data-placeholder='List what to exclude from your video (e.g. "trees", "blur")'
-            className="focus:outline-none text-sm min-h-15 max-h-20 overflow-y-auto"
-            onInput={(e) => {
-              if (e.currentTarget.innerHTML === '<br>') {
-                e.currentTarget.innerHTML = '';
-              }
-            }}
-          ></div>
+      <div
+        className={cn(
+          'grid transition-[grid-template-rows] duration-200 ease-in-out',
+          showNegative ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="flex flex-col gap-1 px-3 pb-3">
+            <TinyMuted className="font-bold">Negative Prompt</TinyMuted>
+            <div
+              contentEditable
+              suppressContentEditableWarning
+              data-placeholder='List what to exclude from your video (e.g. "trees", "blur")'
+              className="focus:outline-none text-sm min-h-10 max-h-15 overflow-y-auto"
+              onInput={(e) => {
+                if (e.currentTarget.innerHTML === '<br>') {
+                  e.currentTarget.innerHTML = '';
+                }
+              }}
+            ></div>
+          </div>
         </div>
-      )}
+      </div>
 
       <div className="px-3 pb-3">
         <Toggle
