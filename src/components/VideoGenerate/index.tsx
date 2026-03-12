@@ -1,11 +1,8 @@
 'use client';
 
 import { Button } from '../ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { IconSparkles2Filled } from '@tabler/icons-react';
-import { H4, Small, Tiny } from '../ui/typography';
-import { DurationSelector } from '../GenerateComponents/DurationSelector';
-import { AspectRatioSelector } from '../GenerateComponents/AspectRatioSelector';
+import { H4, Small } from '../ui/typography';
 import { OutputSettingSelector } from '../GenerateComponents/OutputSettingSelector';
 import { AudioSelector } from '../GenerateComponents/AudioSelector';
 
@@ -13,7 +10,7 @@ const VideoGenerate = () => {
   return (
     <div className="bg-card/70 p-4 rounded-3xl">
       <div className="flex flex-col gap-4">
-        <div className="h-40 w-full aspect-[2.3] w-full relative group select-none overflow-hidden rounded-xl">
+        <div className="h-30 w-full aspect-1 lg:aspect-[2.3] cursor-pointer relative group select-none overflow-hidden rounded-xl">
           <video
             src={'/video/style_general.mp4'}
             loop
@@ -72,14 +69,14 @@ const VideoGenerate = () => {
             className="focus:outline-none px-3 py-3 bg-secondary rounded-lg h-[120px] text-sm"
           ></div>
 
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <div className="w-[180px] shrink-0">
               <AudioSelector />
             </div>
             <div className="flex-1">
               <OutputSettingSelector />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <Button className="mt-4 w-full flex items-center text-base h-11 mb-1 shadow-[0_4px_0_0_color-mix(in_oklch,var(--color-primary)_70%,black)] active:translate-y-[3px] transition-all duration-75">

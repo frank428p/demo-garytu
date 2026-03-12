@@ -62,7 +62,7 @@ export function OutputSettingSelector() {
       <PopoverContent
         side="right"
         align="start"
-        className="p-3 w-85 flex flex-col gap-4 rounded-xl mb-4"
+        className="p-3 w-85 flex flex-col gap-4 rounded-xl mb-4 ml-1"
       >
         <div className="flex flex-col gap-2">
           <Muted>Aspect ratio</Muted>
