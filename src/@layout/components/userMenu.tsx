@@ -15,13 +15,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Muted, Small } from '@/components/ui/typography';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { RouterUrl } from '@/@core/constants/routerUrl';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/store/authAtoms';
+import { signOut } from 'next-auth/react';
 
 export function UserMenu() {
+  const user = useAtomValue(userAtom);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,13 +43,14 @@ export function UserMenu() {
               <Small className="text-xs">Pro</Small>
             </div>
             <Avatar size="sm">
+              {user?.image && <AvatarImage src={user.image} alt={user.name ?? ''} />}
               <AvatarFallback className="bg-primary text-primary-foreground">
                 <IconUserFilled size={20} />
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <Small className="text-sm">User Name</Small>
-              <Muted className="text-xs">user@gmail.com</Muted>
+              <Small className="text-sm">{user?.name}</Small>
+              <Muted className="text-xs">{user?.email}</Muted>
             </div>
           </div>
 
@@ -87,7 +93,7 @@ export function UserMenu() {
             <Separator />
           </div>
           <div className="px-1 pt-2 pb-2">
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
               <IconLogout />
               Logout
             </DropdownMenuItem>

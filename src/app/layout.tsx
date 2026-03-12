@@ -5,6 +5,8 @@ import { MainLayout } from '@/@layout/MainLayout';
 import { CartProvider } from '@/contexts/cartContext';
 import { AuthProvider } from '@/contexts/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
+import { JotaiProvider } from '@/components/JotaiProvider';
+import { NextAuthSessionProvider } from '@/components/NextAuthSessionProvider';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -32,12 +34,16 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${notoSansTC.variable} antialiased`}
       >
-        <AuthProvider>
-          <CartProvider>
-            <MainLayout>{children}</MainLayout>
-            <AuthDialog />
-          </CartProvider>
-        </AuthProvider>
+        <JotaiProvider>
+          <NextAuthSessionProvider>
+            <AuthProvider>
+              <CartProvider>
+                <MainLayout>{children}</MainLayout>
+                <AuthDialog />
+              </CartProvider>
+            </AuthProvider>
+          </NextAuthSessionProvider>
+        </JotaiProvider>
       </body>
     </html>
   );

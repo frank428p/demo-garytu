@@ -10,6 +10,8 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/store/authAtoms';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,13 +23,11 @@ import { RouterUrl } from '@/@core/constants/routerUrl';
 import { Muted, Small } from '@/components/ui/typography';
 import { useCart } from '@/contexts/cartContext';
 import { useAuth } from '@/contexts/authContext';
-
 import { Separator } from '@/components/ui/separator';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 import { HeaderMenu } from '@/@layout/components/headerMenu';
 import { UserMenu } from '@/@layout/components/userMenu';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
 
 const LOCALES = [
   { value: 'en', label: 'English' },
@@ -40,7 +40,8 @@ export function Header() {
   const { openLogin, openSignup } = useAuth();
   const [locale, setLocale] = useState<'en' | 'zh-TW'>('en');
 
-  const [isAuth, setIsAuth] = useState(true);
+  const user = useAtomValue(userAtom);
+  const isAuth = !!user;
   const [toolkitOpen, setToolkitOpen] = useState(false);
   const toolkitCloseTimer = useRef<ReturnType<typeof setTimeout>>(null);
 
@@ -136,7 +137,6 @@ export function Header() {
 
       {/* Right: Actions */}
       <div className="flex h-5 items-center gap-3">
-        <Switch checked={isAuth} onCheckedChange={setIsAuth} />
         {isDesktop && (
           <>
             <div className="flex items-center gap-2">
