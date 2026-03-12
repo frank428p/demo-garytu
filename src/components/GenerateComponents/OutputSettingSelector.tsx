@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import AspectRatioBox from '../AspectRatioBox';
 import { List, ListItem } from '../ui/list';
 import { Separator } from '../ui/separator';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 const MIN = 3;
 const MAX = 10;
@@ -26,7 +27,7 @@ export function OutputSettingSelector() {
       <PopoverTrigger asChild>
         <Button
           variant="secondary"
-          className="flex-1 flex justify-between h-auto rounded-xl p-2"
+          className="flex w-full justify-between h-auto rounded-xl p-2"
         >
           <div className="flex gap-2 flex-1">
             <div className="p-3 rounded-xl bg-background/20">
@@ -34,7 +35,7 @@ export function OutputSettingSelector() {
             </div>
             <div className="flex flex-col items-start flex-1">
               <TinyMuted className="py-1">Output</TinyMuted>
-              <div className="flex items-center gap-1 h-4">
+              <div className="flex items-center gap-1.5 h-4">
                 <Small className="leading-5">9:16</Small>
                 <Separator
                   orientation="vertical"
@@ -46,6 +47,11 @@ export function OutputSettingSelector() {
                   className="border-[1px] border-border"
                 />
                 <Small className="leading-5">1080p</Small>
+                <Separator
+                  orientation="vertical"
+                  className="border-[1px] border-border"
+                />
+                <Small className="leading-5">4</Small>
               </div>
             </div>
           </div>
@@ -56,8 +62,27 @@ export function OutputSettingSelector() {
       <PopoverContent
         side="right"
         align="start"
-        className="p-3 w-85 flex flex-col gap-1 rounded-xl"
+        className="p-3 w-85 flex flex-col gap-4 rounded-xl mb-4"
       >
+        <div className="flex flex-col gap-2">
+          <Muted>Aspect ratio</Muted>
+          <ToggleGroup type="single" variant="segmented" defaultValue="16:9">
+            {(['16:9', '9:16', '1:1'] as const).map((ratio) => (
+              <ToggleGroupItem key={ratio} value={ratio} className="h-auto">
+                <div className="flex flex-col items-center gap-2 p-2">
+                  <div className="h-[15px] flex items-center">
+                    <AspectRatioBox
+                      ratio={ratio}
+                      className="border-muted-foreground"
+                    ></AspectRatioBox>
+                  </div>
+                  {ratio}
+                </div>
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+
         <div className="flex flex-col gap-2">
           <Muted>Duration</Muted>
           <div className="w-full overflow-hidden rounded-sm">
@@ -84,6 +109,28 @@ export function OutputSettingSelector() {
               />
             </SliderPrimitive.Root>
           </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Muted>Resolution</Muted>
+          <ToggleGroup type="single" variant="segmented" defaultValue="16:9">
+            {(['720p', '1080p'] as const).map((resolution) => (
+              <ToggleGroupItem key={resolution} value={resolution}>
+                {resolution}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Muted>Number of Outputs</Muted>
+          <ToggleGroup type="single" variant="segmented" defaultValue="16:9">
+            {(['1', '2', '3', '4'] as const).map((count) => (
+              <ToggleGroupItem key={`number-of-outputs-${count}`} value={count}>
+                {count}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         </div>
       </PopoverContent>
     </Popover>

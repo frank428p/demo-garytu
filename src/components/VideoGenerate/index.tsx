@@ -73,8 +73,12 @@ const VideoGenerate = () => {
           ></div>
 
           <div className="flex gap-2">
-            <AudioSelector />
-            <OutputSettingSelector />
+            <div className="w-[180px] shrink-0">
+              <AudioSelector />
+            </div>
+            <div className="flex-1">
+              <OutputSettingSelector />
+            </div>
           </div>
         </div>
 

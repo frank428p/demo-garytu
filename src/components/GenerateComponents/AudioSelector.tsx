@@ -14,7 +14,7 @@ export function AudioSelector() {
         <div className="flex flex-col items-start flex-1">
           <TinyMuted className="py-1">Audio</TinyMuted>
           <div className="flex items-center gap-1 h-4">
-            <Small className="leading-5">On</Small>
+            <Small className="leading-5">Off</Small>
           </div>
         </div>
       </div>
