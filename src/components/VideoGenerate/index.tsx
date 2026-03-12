@@ -69,14 +69,14 @@ const VideoGenerate = () => {
             className="focus:outline-none px-3 py-3 bg-secondary rounded-lg h-[120px] text-sm"
           ></div>
 
-          {/* <div className="flex gap-2">
+          <div className="flex gap-2">
             <div className="w-[180px] shrink-0">
               <AudioSelector />
             </div>
             <div className="flex-1">
               <OutputSettingSelector />
             </div>
-          </div> */}
+          </div>
         </div>
 
         <Button className="mt-4 w-full flex items-center text-base h-11 mb-1 shadow-[0_4px_0_0_color-mix(in_oklch,var(--color-primary)_70%,black)] active:translate-y-[3px] transition-all duration-75">
