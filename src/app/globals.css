@@ -171,6 +171,13 @@ body {
   font-family: var(--font-inter), var(--font-noto-sans-tc), sans-serif;
 }
 
+[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  pointer-events: none;
+  font-size: 12px;
+}
+
 /* Radix Dialog 在 modal 模式下會將 body.pointerEvents 設為 none，
    導致 react-photo-view 的 portal 繼承後箭頭無法點擊，
    點擊穿透到 dialog backdrop 而觸發關閉。

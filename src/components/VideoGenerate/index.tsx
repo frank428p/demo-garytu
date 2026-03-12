@@ -5,12 +5,13 @@ import { IconSparkles2Filled } from '@tabler/icons-react';
 import { H4, Small } from '../ui/typography';
 import { OutputSettingSelector } from '../GenerateComponents/OutputSettingSelector';
 import { AudioSelector } from '../GenerateComponents/AudioSelector';
+import { PromptInput } from '../GenerateComponents/PromptInput';
 
 const VideoGenerate = () => {
   return (
     <div className="bg-card/70 p-4 rounded-3xl">
       <div className="flex flex-col gap-4">
-        <div className="h-30 w-full aspect-1 lg:aspect-[2.3] cursor-pointer relative group select-none overflow-hidden rounded-xl">
+        <div className="h-30 w-full aspect-auto lg:aspect-[2.3] cursor-pointer relative group select-none overflow-hidden rounded-xl">
           <video
             src={'/video/style_general.mp4'}
             loop
@@ -64,13 +65,10 @@ const VideoGenerate = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <div
-            contentEditable
-            className="focus:outline-none px-3 py-3 bg-secondary rounded-lg h-[120px] text-sm"
-          ></div>
+          <PromptInput />
 
-          <div className="flex gap-2">
-            <div className="w-[180px] shrink-0">
+          <div className="flex flex-col md:flex-row lg:flex-row gap-2">
+            <div className="w-full md:w-[180px] lg:w-[180px] shrink-0">
               <AudioSelector />
             </div>
             <div className="flex-1">
