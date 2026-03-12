@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Toggle } from '../ui/toggle';
 import { TinyMuted, Tiny } from '../ui/typography';
 import { cn } from '@/lib/utils';
+import { IconPencilOff } from '@tabler/icons-react';
 
 export function PromptInput() {
   const [showNegative, setShowNegative] = useState(false);
@@ -46,10 +47,11 @@ export function PromptInput() {
           variant="outline"
           size="sm"
           className={cn(
-            'rounded-full py-1 px-2 h-auto bg-background',
+            'rounded-full py-1 px-2 h-auto bg-background flex items-center gap-1',
             showNegative ? 'text-foreground' : 'text-muted-foreground',
           )}
         >
+          <IconPencilOff className="!size-3" />
           <Tiny className="text-[10px]">Negative Prompt</Tiny>
         </Toggle>
       </div>
