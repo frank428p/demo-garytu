@@ -102,7 +102,7 @@ export function Header() {
                     href={RouterUrl.ImageGenerate}
                     className="flex gap-3 items-center"
                   >
-                    <div className="p-3 bg-background/60 rounded-lg">
+                    <div className="p-3  bg-ring/20 rounded-lg">
                       <IconPhoto size={48} className="!size-6 shrink-0" />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -120,7 +120,7 @@ export function Header() {
                     href={RouterUrl.VideoGenerate}
                     className="flex gap-3 items-center"
                   >
-                    <div className="p-3 bg-background/60 rounded-lg">
+                    <div className="p-3  bg-ring/20 rounded-lg">
                       <IconVideo size={48} className="!size-6 shrink-0" />
                     </div>
                     <div className="flex flex-col gap-1">

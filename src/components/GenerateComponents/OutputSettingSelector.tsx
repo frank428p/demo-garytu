@@ -30,7 +30,7 @@ export function OutputSettingSelector() {
           className="flex w-full justify-between h-auto rounded-xl p-2"
         >
           <div className="flex gap-2 flex-1">
-            <div className="p-3 rounded-xl bg-background/20">
+            <div className="p-3 rounded-xl bg-ring/20">
               <IconAdjustmentsHorizontal className="!size-6" />
             </div>
             <div className="flex flex-col items-start flex-1">
@@ -47,11 +47,11 @@ export function OutputSettingSelector() {
                   className="border-[1px] border-border"
                 />
                 <Small className="leading-5">1080p</Small>
-                <Separator
+                {/* <Separator
                   orientation="vertical"
                   className="border-[1px] border-border"
                 />
-                <Small className="leading-5">4</Small>
+                <Small className="leading-5">4</Small> */}
               </div>
             </div>
           </div>

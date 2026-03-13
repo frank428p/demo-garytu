@@ -1,31 +1,69 @@
 'use client';
 
-import { IconPencil } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
 import { Button } from '../ui/button';
-import { H4, Small, Tiny } from '../ui/typography';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { H4, Small, Tiny, TinyMuted } from '../ui/typography';
+import { IconKling } from '../icons/IconKling';
+import { List, ListItem } from '../ui/list';
 
 export function ModelSelector() {
   return (
-    <div className="h-30 w-full aspect-auto lg:aspect-[2.3] cursor-pointer relative group select-none overflow-hidden rounded-xl">
-      <video
-        src={'/video/style_general.mp4'}
-        loop
-        autoPlay
-        muted
-        playsInline
-        preload="metadata"
-        className="w-full h-full object-cover"
-      />
-      <div className="absolute w-full bottom-[0px] p-3">
-        <H4 className="text-primary font-extrabold">
-          {'Aerial Pullback'.toUpperCase()}
-        </H4>
-        <Small>Kling 2.6</Small>
-      </div>
-      <Button className="absolute top-2 right-2 border-none py-1 px-2 h-auto flex items-center gap-1 rounded-full bg-white/10 backdrop-blur-sm hover:bg-primary">
-        <IconPencil className="!size-4" />
-        <Tiny className="text-[12px] leading-normal">Change</Tiny>
-      </Button>
-    </div>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="secondary"
+          className="flex w-full justify-between h-auto rounded-xl p-2"
+        >
+          <div className="flex gap-2 flex-1">
+            <div className="p-3 rounded-xl bg-ring/20">
+              <IconKling className="!h-6 !w-6" />
+            </div>
+            <div className="flex flex-col items-start flex-1">
+              <TinyMuted className="py-1">Model</TinyMuted>
+              <div className="flex items-center gap-1.5 h-4">
+                <Small className="leading-5">Kling</Small>
+              </div>
+            </div>
+          </div>
+
+          <IconChevronRight />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        side="right"
+        align="start"
+        className="p-3 w-125 flex flex-col gap-2 rounded-xl mb-4 ml-1 top-[10px]"
+      >
+        <H4 className="text-base px-2">Model</H4>
+
+        <List>
+          <ListItem className="p-2">
+            <div className="flex gap-2 items-center">
+              <div className="rounded-lg bg-ring/20 p-2">
+                <IconKling className="!h-4 !w-4" />
+              </div>
+              <div className="flex flex-col">
+                <Tiny>Kling 3.0mni </Tiny>
+                <TinyMuted>Enhanced multimodal references</TinyMuted>
+              </div>
+            </div>
+          </ListItem>
+
+          <ListItem className="p-2">
+            <div className="flex gap-2 items-center">
+              <div className="rounded-lg bg-ring/20 p-2">
+                <IconKling className="!h-4 !w-4" />
+              </div>
+              <div className="flex flex-col">
+                <Tiny>Kling 3.0</Tiny>
+                <TinyMuted>Enhanced multimodal references</TinyMuted>
+              </div>
+            </div>
+          </ListItem>
+        </List>
+        <div className="flex flex-col"></div>
+      </PopoverContent>
+    </Popover>
   );
 }

@@ -10,17 +10,19 @@ import {
   IconPlus,
 } from '@tabler/icons-react';
 import { useState } from 'react';
-import { H4, Small, TinyMuted } from '../ui/typography';
-import { OutputSettingSelector } from '../GenerateComponents/OutputSettingSelector';
-import { AudioSelector } from '../GenerateComponents/AudioSelector';
-import { PromptInput } from '../GenerateComponents/PromptInput';
-import { ModelSelector } from '../GenerateComponents/ModelSelector';
+import { Small, TinyMuted } from '../ui/typography';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
-import { IconVoiceBars } from '../icons/IconVoiceBars';
+
+// components
+import { StyleSelector } from '../GenerateComponents/StyleSelector';
+import { ModelSelector } from '../GenerateComponents/ModelSelector';
+import { PromptInput } from '../GenerateComponents/PromptInput';
+import { AudioSelector } from '../GenerateComponents/AudioSelector';
+import { OutputSettingSelector } from '../GenerateComponents/OutputSettingSelector';
 
 const MAX = 4;
 
@@ -50,8 +52,11 @@ function QuantitySelector() {
 const VideoGenerate = () => {
   return (
     <div className="bg-card/60 p-4 rounded-3xl">
-      <div className="flex flex-col gap-4">
-        <ModelSelector />
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
+          <StyleSelector />
+          <ModelSelector />
+        </div>
 
         <div className="bg-secondary rounded-lg p-3 flex gap-2">
           <div className="bg-muted-foreground rounded-lg p-4 flex-1 h-15">
@@ -79,7 +84,7 @@ const VideoGenerate = () => {
             <CollapsibleTrigger asChild>
               <Button
                 variant="ghost"
-                className="group w-full rounded-xl hover:bg-transparent data-[state=open]:hover:bg-transparent text-muted-foreground"
+                className="group w-full text-xs rounded-xl hover:bg-transparent data-[state=open]:hover:bg-transparent text-muted-foreground"
               >
                 Advanced Setting
                 <IconChevronDown className="ml-auto group-data-[state=open]:rotate-180" />
@@ -88,7 +93,7 @@ const VideoGenerate = () => {
             <CollapsibleContent className="flex items-start gap-2 p-2 pt-0 text-sm">
               <div className="flex-1 flex justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
                 <div className="flex gap-2 flex-1">
-                  <div className="p-3 rounded-xl bg-background/20">
+                  <div className="p-3 rounded-xl bg-ring/20">
                     <IconCamera className="!h-6 !w-6" />
                   </div>
                   <div className="flex flex-col items-start flex-1">
@@ -102,7 +107,7 @@ const VideoGenerate = () => {
 
               <div className="flex-1 flex justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
                 <div className="flex gap-2 flex-1">
-                  <div className="p-3 rounded-xl bg-background/20">
+                  <div className="p-3 rounded-xl bg-ring/20">
                     <IconRun className="!h-6 !w-6" />
                   </div>
                   <div className="flex flex-col items-start flex-1">
@@ -118,7 +123,7 @@ const VideoGenerate = () => {
         </div>
 
         <div className="mt-2 flex items-center gap-2 mb-1">
-          {/* <QuantitySelector /> */}
+          <QuantitySelector />
           <Button className="flex-1 flex items-center text-base h-11 shadow-[0_4px_0_0_color-mix(in_oklch,var(--color-primary)_70%,black)] active:translate-y-[3px] transition-all duration-75">
             Generate
             <p className="flex items-center gap-1">
