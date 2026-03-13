@@ -79,7 +79,7 @@ const VideoGenerate = () => {
             <CollapsibleTrigger asChild>
               <Button
                 variant="ghost"
-                className="group w-full rounded-xl data-[state=open]:hover:bg-transparent text-muted-foreground"
+                className="group w-full rounded-xl hover:bg-transparent data-[state=open]:hover:bg-transparent text-muted-foreground"
               >
                 Advanced Setting
                 <IconChevronDown className="ml-auto group-data-[state=open]:rotate-180" />
