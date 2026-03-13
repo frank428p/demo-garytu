@@ -36,8 +36,8 @@ const photos = [
   },
   {
     src: '/images/gallery/9-to-16_1.jpg',
-    width: 3072,
-    height: 5440,
+    width: 1040,
+    height: 1572,
     id: '4',
     aspectRatio: '9:16',
     mediaType: 'image',
@@ -69,8 +69,8 @@ const photos = [
   },
   {
     src: '/images/gallery/9-to-16_1.jpg',
-    width: 3072,
-    height: 5440,
+    width: 1040,
+    height: 1572,
     id: '8',
     aspectRatio: '9:16',
     mediaType: 'image',
@@ -119,8 +119,8 @@ const photos = [
   },
   {
     src: '/images/gallery/9-to-16_1.jpg',
-    width: 3072,
-    height: 5440,
+    width: 1040,
+    height: 1572,
     id: '14',
     aspectRatio: '9:16',
     mediaType: 'image',
@@ -221,7 +221,7 @@ const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
               key={index}
               onClick={() => handleOpen(media.id)}
               style={{ width, height: 'auto' }}
-              className="relative group cursor-pointer overflow-hidden rounded-xl border border-border bg-card block"
+              className="relative group cursor-pointer overflow-hidden rounded-xl border border-none bg-card block"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {media.mediaType === 'image' && (
