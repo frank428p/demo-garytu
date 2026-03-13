@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/contexts/cartContext';
+import { useCart } from '@/@core/provider/cartContext';
 
 export function CartDrawer() {
   const { items, removeItem, total, isOpen, setIsOpen } = useCart();

@@ -9,7 +9,7 @@ import {
 import ThumbnailSlider from '@/components/ThumbnailSlider';
 import { MediaType, AspectRatioType } from '@/@core/types';
 import { useMemo } from 'react';
-import { useCart } from '@/contexts/cartContext';
+import { useCart } from '@/@core/provider/cartContext';
 import { useRouter } from 'next/navigation';
 import { RouterUrl } from '@/@core/constants/routerUrl';
 

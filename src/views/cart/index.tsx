@@ -10,7 +10,7 @@ import {
 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { RouterUrl } from '@/@core/constants/routerUrl';
-import { useCart } from '@/contexts/cartContext';
+import { useCart } from '@/@core/provider/cartContext';
 
 export default function CartView() {
   const { items, removeItem, total } = useCart();

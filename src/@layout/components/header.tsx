@@ -21,8 +21,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { RouterUrl } from '@/@core/constants/routerUrl';
 import { Muted, Small } from '@/components/ui/typography';
-import { useCart } from '@/contexts/cartContext';
-import { useAuth } from '@/contexts/authContext';
+import { useCart } from '@/@core/provider/cartContext';
+import { useAuth } from '@/@core/provider/authContext';
 import { Separator } from '@/components/ui/separator';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 import { HeaderMenu } from '@/@layout/components/headerMenu';

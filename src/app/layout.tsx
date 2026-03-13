@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import { Inter, Noto_Sans_TC } from 'next/font/google';
 import './globals.css';
 import { MainLayout } from '@/@layout/MainLayout';
-import { CartProvider } from '@/contexts/cartContext';
-import { AuthProvider } from '@/contexts/authContext';
+import { CartProvider } from '@/@core/provider/cartContext';
+import { AuthProvider } from '@/@core/provider/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
-import { JotaiProvider } from '@/components/JotaiProvider';
-import { NextAuthSessionProvider } from '@/components/NextAuthSessionProvider';
+import { JotaiProvider } from '@/@core/provider/JotaiProvider';
+import { NextAuthSessionProvider } from '@/@core/provider/NextAuthSessionProvider';
 
 const inter = Inter({
   variable: '--font-inter',
