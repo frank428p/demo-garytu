@@ -5,13 +5,13 @@ const VideoGenerateView = () => {
   const { isMobile, isTablet, isDesktop } = useBreakpoint();
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 h-full">
       <div className="w-full lg:w-[480px] shrink-0">
         <VideoGenerate />
       </div>
       {isDesktop && (
         <div className="flex-1">
-          <div className="bg-card p-4 rounded-lg"></div>
+          <div className="bg-card p-4 rounded-lg max-h-[calc(100vh-56px-12px)] h-full"></div>
         </div>
       )}
     </div>
