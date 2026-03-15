@@ -48,7 +48,10 @@ export function FrameUploader({ label, required }: Props) {
         !preview && 'bg-secondary hover:bg-secondary/80',
       )}
       onClick={() => inputRef.current?.click()}
-      onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragging(true);
+      }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
     >
@@ -83,6 +86,9 @@ export function FrameUploader({ label, required }: Props) {
             <IconUpload size={16} className="text-muted-foreground" />
           </div>
           <Tiny className="text-muted-foreground font-medium">{label}</Tiny>
+          {/* <div className="p-2 bg-white/10 backdrop-blur-sm">
+            <TinyMuted>Optional</TinyMuted>
+          </div> */}
           {required ? (
             <TinyMuted>Required</TinyMuted>
           ) : (

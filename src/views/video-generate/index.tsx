@@ -11,7 +11,9 @@ const VideoGenerateView = () => {
       </div>
       {isDesktop && (
         <div className="flex-1">
-          <div className="bg-card/60 p-4 rounded-3xl max-h-[calc(100vh-56px-12px)] h-full"></div>
+          <div className="bg-card/60 p-4 rounded-3xl max-h-[calc(100vh-56px-12px)] h-full">
+            {/* <img src="/images/gallery/1-to-1_1.jpg"></img> */}
+          </div>
         </div>
       )}
     </div>

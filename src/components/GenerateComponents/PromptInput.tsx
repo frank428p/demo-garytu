@@ -6,6 +6,16 @@ import { TinyMuted, Tiny } from '../ui/typography';
 import { cn } from '@/lib/utils';
 import { IconPencilOff } from '@tabler/icons-react';
 
+function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+  e.preventDefault();
+  const text = e.clipboardData.getData('text/plain');
+  const selection = window.getSelection();
+  if (!selection?.rangeCount) return;
+  selection.deleteFromDocument();
+  selection.getRangeAt(0).insertNode(document.createTextNode(text));
+  selection.collapseToEnd();
+}
+
 export function PromptInput() {
   const [showNegative, setShowNegative] = useState(false);
 
@@ -16,6 +26,7 @@ export function PromptInput() {
         suppressContentEditableWarning
         data-placeholder="Describe scene transitions, camera movement trajectories, or character actions with text to precisely control the entire video from beginning to end."
         className="focus:outline-none text-sm min-h-30 max-h-65 overflow-y-auto p-3"
+        onPaste={handlePaste}
         onInput={(e) => {
           if (e.currentTarget.innerHTML === '<br>') {
             e.currentTarget.innerHTML = '';
@@ -37,6 +48,7 @@ export function PromptInput() {
               suppressContentEditableWarning
               data-placeholder='List what to exclude from your video (e.g. "trees", "blur")'
               className="focus:outline-none text-sm min-h-10 max-h-15 overflow-y-auto"
+              onPaste={handlePaste}
               onInput={(e) => {
                 if (e.currentTarget.innerHTML === '<br>') {
                   e.currentTarget.innerHTML = '';
