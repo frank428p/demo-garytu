@@ -11,7 +11,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const u = session?.user;
-    setUser(u ? { name: u.name ?? null, email: u.email ?? null, image: u.image ?? null } : null);
+    console.log('session', session);
+    setUser(
+      u
+        ? {
+            name: u.name ?? null,
+            email: u.email ?? null,
+            image: u.image ?? null,
+          }
+        : null,
+    );
   }, [session, setUser]);
 
   return <>{children}</>;
