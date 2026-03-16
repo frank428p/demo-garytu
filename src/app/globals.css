@@ -183,6 +183,24 @@ body {
    導致 react-photo-view 的 portal 繼承後箭頭無法點擊，
    點擊穿透到 dialog backdrop 而觸發關閉。
    此規則讓 PhotoView portal 恢復可互動狀態。 */
+@keyframes aurora-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -40px) scale(1.08); }
+  66% { transform: translate(-30px, 50px) scale(0.95); }
+}
+@keyframes aurora-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, 60px) scale(1.05); }
+  66% { transform: translate(40px, -30px) scale(1.1); }
+}
+@keyframes aurora-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -60px) scale(0.92); }
+}
+.aurora-1 { animation: aurora-drift-1 18s ease-in-out infinite; }
+.aurora-2 { animation: aurora-drift-2 22s ease-in-out infinite; }
+.aurora-3 { animation: aurora-drift-3 15s ease-in-out infinite; }
+
 .PhotoView-Portal {
   pointer-events: auto;
 }

@@ -21,6 +21,9 @@ import {
   IconTrophy,
   IconUsers,
   IconBookmark,
+  IconSearch,
+  IconArrowRight,
+  IconSparkles,
 } from '@tabler/icons-react';
 
 const mediaLikes: Record<string, number> = {
@@ -437,6 +440,51 @@ const PromptStoreView = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-background py-24 md:py-36">
+        {/* Dot grid */}
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle, currentColor 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+
+        {/* Aurora blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="aurora-1 absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-primary/20 blur-[100px]" />
+          <div className="aurora-2 absolute -bottom-40 -right-20 w-[500px] h-[500px] rounded-full bg-primary/15 blur-[120px]" />
+          <div className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/10 blur-[80px]" />
+        </div>
+
+        {/* Fade edges */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background pointer-events-none" />
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full border border-border bg-background/60 backdrop-blur-sm">
+            <IconSparkles size={13} className="text-primary" />
+            <span className="text-xs font-medium text-muted-foreground tracking-widest uppercase">
+              Prompt Marketplace
+            </span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
+            The Art of
+            <br />
+            <span className="text-primary">AI Prompts</span>
+          </h1>
+
+          <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed mb-10">
+            Curated prompt packages crafted by top AI artists and creators.
+            Elevate your generation workflow instantly.
+          </p>
+        </div>
+      </section>
+
       {/* Submissions */}
       <section className="pb-16">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
