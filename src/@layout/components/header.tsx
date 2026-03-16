@@ -67,7 +67,7 @@ export function Header() {
     <header
       className={cn(
         'sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center justify-between px-4 transition-all duration-300',
-        scrolled ? 'bg-background/60 backdrop-blur-md' : 'bg-background',
+        scrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-background',
       )}
     >
       {/* Left: Logo */}

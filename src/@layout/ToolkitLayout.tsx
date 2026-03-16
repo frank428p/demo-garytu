@@ -11,6 +11,7 @@ import {
   VideoGenerateNav,
 } from './constants';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 const mainNav = [StoreNav, AssetsNav];
 const generateNav = [ImageGenerateNav, VideoGenerateNav];
@@ -26,7 +27,12 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
   return (
     <div className="flex">
       {isDesktop && <Sidebar />}
-      <main className="flex-1 px-4 pb-20 md:pb-0">
+      <main
+        className={cn(
+          'flex-1 px-4 pb-20 md:pb-0',
+          pathname === '/toolkit/store' ? 'px-0' : 'px-2',
+        )}
+      >
         {children}
       </main>
 

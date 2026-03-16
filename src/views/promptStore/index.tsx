@@ -454,14 +454,13 @@ const PromptStoreView = () => {
 
         {/* Aurora blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="aurora-1 absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-primary/20 blur-[100px]" />
-          <div className="aurora-2 absolute -bottom-40 -right-20 w-[500px] h-[500px] rounded-full bg-primary/15 blur-[120px]" />
-          <div className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/10 blur-[80px]" />
+          <div className="aurora-1 absolute -top-20 -left-20 w-[500px] h-[500px] rounded-full bg-primary/40 blur-[70px]" />
+          <div className="aurora-2 absolute -bottom-20 -right-10 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[80px]" />
+          <div className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-primary/25 blur-[50px]" />
         </div>
 
-        {/* Fade edges */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background pointer-events-none" />
+        {/* Fade bottom only */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
@@ -486,7 +485,7 @@ const PromptStoreView = () => {
       </section>
 
       {/* Submissions */}
-      <section className="pb-16">
+      <section className="pb-16 px-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <H2 className="text-2xl">Submissions</H2>
           <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
