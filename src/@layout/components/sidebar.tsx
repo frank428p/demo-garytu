@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import {
+  ExploreNav,
   StoreNav,
   AssetsNav,
   ImageGenerateNav,
@@ -10,7 +11,7 @@ import {
 } from '../constants';
 import { SidebarNavLink } from './sidebar-nav-link';
 
-const mainNav = [StoreNav, AssetsNav];
+const mainNav = [ExploreNav, StoreNav, AssetsNav];
 const generateNav = [ImageGenerateNav, VideoGenerateNav];
 // const otherNav = [EnterpriseNav];
 

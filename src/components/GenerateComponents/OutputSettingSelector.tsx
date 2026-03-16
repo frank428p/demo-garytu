@@ -12,12 +12,12 @@ import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover';
 import { Muted, Small, TinyMuted } from '../ui/typography';
 import { cn } from '@/lib/utils';
 import AspectRatioBox from '../AspectRatioBox';
-import { List, ListItem } from '../ui/list';
+
 import { Separator } from '../ui/separator';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 const MIN = 3;
-const MAX = 10;
+const MAX = 15;
 
 export function OutputSettingSelector() {
   const [duration, setDuration] = useState(10);
@@ -122,7 +122,7 @@ export function OutputSettingSelector() {
           </ToggleGroup>
         </div>
 
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <Muted>Number of Outputs</Muted>
           <ToggleGroup type="single" variant="segmented" defaultValue="16:9">
             {(['1', '2', '3', '4'] as const).map((count) => (
@@ -131,7 +131,7 @@ export function OutputSettingSelector() {
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
-        </div>
+        </div> */}
       </PopoverContent>
     </Popover>
   );

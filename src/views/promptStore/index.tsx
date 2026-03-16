@@ -1,15 +1,52 @@
 'use client';
 
-import { useState } from 'react';
-import { H2 } from '@/components/ui/typography';
-import { MasonryPhotoAlbum } from 'react-photo-album';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import PromptDetailView from '@/views/promptStore/detail';
-import 'react-photo-album/masonry.css';
-import { AspectRatioType, MediaType } from '@/@core/types';
+import { useState, useRef } from 'react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs';
+import {
+  H1,
+  H2,
+  H3,
+  Muted,
+  Small,
+  TinyMuted,
+} from '@/components/ui/typography';
+import {
+  IconFlame,
+  IconClock,
+  IconHeart,
+  IconEye,
+  IconTrophy,
+  IconUsers,
+  IconBookmark,
+} from '@tabler/icons-react';
 
-const photos = [
+const mediaLikes: Record<string, number> = {
+  '1': 843,
+  '2': 512,
+  '3': 291,
+  '4': 674,
+  '5': 1024,
+  '6': 388,
+  '7': 756,
+  '8': 443,
+  '9': 317,
+  '10': 892,
+  '11': 601,
+  '12': 229,
+  '13': 478,
+  '14': 334,
+  '15': 987,
+  '16': 723,
+  '17': 456,
+  '18': 561,
+  '19': 812,
+  '20': 345,
+};
+
+const medias = [
   {
     src: '/images/gallery/1-to-1_1.jpg',
     width: 1024,
@@ -125,7 +162,6 @@ const photos = [
     aspectRatio: '9:16',
     mediaType: 'image',
   },
-
   {
     src: '/images/gallery/1-to-1_1.mp4',
     poster: '/images/gallery/1-to-1-cover_1.avif',
@@ -135,7 +171,6 @@ const photos = [
     aspectRatio: '1:1',
     mediaType: 'video',
   },
-
   {
     src: '/images/gallery/1-to-1_2.mp4',
     poster: '/images/gallery/1-to-1-cover_2.avif',
@@ -145,7 +180,6 @@ const photos = [
     aspectRatio: '1:1',
     mediaType: 'video',
   },
-
   {
     src: '/images/gallery/16-to-9_1.mp4',
     poster: '/images/gallery/16-to-9-cover_1.avif',
@@ -184,109 +218,263 @@ const photos = [
   },
 ];
 
-type PromptStoreViewProps = {
-  initialSelectedId?: string;
+const SORT_OPTIONS = [
+  { label: 'Trending', value: 'trending', icon: IconFlame },
+  { label: 'Newest', value: 'newest', icon: IconClock },
+  { label: 'Most Liked', value: 'liked', icon: IconHeart },
+  { label: 'Most Viewed', value: 'viewed', icon: IconEye },
+];
+
+const prizes = [
+  { rank: '1st Place', amount: 'NT$150,000', highlight: true },
+  { rank: '2nd Place', amount: 'NT$100,000', highlight: false },
+  { rank: '3rd Place', amount: 'NT$50,000', highlight: false },
+  { rank: '5 Honorable Mentions', amount: 'NT$10,000 each', highlight: false },
+];
+
+const judges = [
+  {
+    name: 'Gary Tu',
+    title: 'AI Art Director',
+    avatar: '/images/gallery/img-01.jpg',
+  },
+  {
+    name: 'Sarah Lin',
+    title: 'VFX Studio Lead',
+    avatar: '/images/gallery/img-02.jpg',
+  },
+  {
+    name: 'Kevin Wu',
+    title: 'Concept Artist',
+    avatar: '/images/gallery/img-03.jpg',
+  },
+  {
+    name: 'Mia Chen',
+    title: 'AI Creator',
+    avatar: '/images/gallery/img-04.jpg',
+  },
+  {
+    name: 'Jason Park',
+    title: 'Production Director',
+    avatar: '/images/gallery/img-05.jpg',
+  },
+  {
+    name: 'Lily Huang',
+    title: 'Digital Artist',
+    avatar: '/images/gallery/img-06.jpg',
+  },
+];
+
+type Media = (typeof medias)[number];
+
+const titles = [
+  'The Conspiracy Theory',
+  'Scrap',
+  'Have Fun!',
+  'The Bind',
+  'In Despair',
+  'Blade.',
+  'Sorry, Mom',
+  'Down to Earth',
+  "360's Night",
+  'Neon Shadows',
+  'Final Protocol',
+  'Iron Drift',
+  'Phantom Signal',
+  'Last Stand',
+  'Heist',
+  'Zero Hour',
+  'The Fall',
+  'Rogue Circuit',
+  'Eclipse',
+  'Aftermath',
+];
+
+const usernames = [
+  'baroque_tea',
+  'colormestadic',
+  'craneofilms',
+  'adriansuarez',
+  'jaemin_yoo',
+  'paperwolf',
+  'myrzakhan',
+  'sethadvit',
+  'sceneerr',
+  'voidframe',
+  'lenscraft',
+  'neonreel',
+  'ghostcut',
+  'arcvision',
+  'pixelwave',
+  'silkmotion',
+  'duskframe',
+  'luminos',
+  'staticbloom',
+  'motionhex',
+];
+
+const mediaViews: Record<string, number> = {
+  '1': 71739,
+  '2': 39805,
+  '3': 67727,
+  '4': 12581,
+  '5': 118822,
+  '6': 43350,
+  '7': 17137,
+  '8': 40065,
+  '9': 33103,
+  '10': 55420,
+  '11': 28900,
+  '12': 61200,
+  '13': 47300,
+  '14': 22100,
+  '15': 88500,
+  '16': 34700,
+  '17': 51200,
+  '18': 29800,
+  '19': 76400,
+  '20': 43100,
 };
 
-const PromptStoreView = ({ initialSelectedId }: PromptStoreViewProps) => {
-  const [selectedId, setSelectedId] = useState<string | null>(
-    initialSelectedId ?? null,
-  );
+function MediaCard({ item, index }: { item: Media; index: number }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const title = titles[index % titles.length];
+  const username = usernames[index % usernames.length];
+  const avatarNum = String((index % 9) + 1).padStart(2, '0');
 
-  const handleOpen = (id: string) => {
-    setSelectedId(id);
-    window.history.pushState(null, '', `/toolkit/store/${id}`);
+  const handleMouseEnter = () => {
+    if (item.mediaType === 'video' && videoRef.current) {
+      videoRef.current.play();
+    }
   };
 
-  const handleClose = () => {
-    setSelectedId(null);
-    window.history.pushState(null, '', '/toolkit/store');
+  const handleMouseLeave = () => {
+    if (item.mediaType === 'video' && videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
   };
 
   return (
-    <div className="py-6">
-      <H2 className="mb-6">Prompt Store</H2>
-      <MasonryPhotoAlbum
-        photos={photos}
-        columns={(containerWidth) => {
-          if (containerWidth < 640) return 2;
-          if (containerWidth < 1024) return 3;
-          if (containerWidth < 1280) return 4;
-          return 5;
-        }}
-        spacing={8}
-        render={{
-          photo: (_props, { photo: media, index, width, height }) => (
-            <div
-              key={index}
-              onClick={() => handleOpen(media.id)}
-              style={{ width, height: 'auto' }}
-              className="relative group cursor-pointer overflow-hidden rounded-xl border border-none bg-card block"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              {media.mediaType === 'image' && (
-                <img
-                  src={media.src}
-                  alt={`AI Artwork ${index + 1}`}
-                  width={width}
-                  height={height}
-                  className="w-full object-cover transition-transform duration-300 group-hover:scale-100"
-                />
-              )}
-
-              {media.mediaType === 'video' && (
-                <video
-                  src={media.src}
-                  poster={media.poster}
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  className="w-full object-cover"
-                  onMouseEnter={(e) => e.currentTarget.play()}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.pause();
-                    e.currentTarget.currentTime = 0;
-                  }}
-                  onPointerDown={(e) => e.stopPropagation()}
-                />
-              )}
-              {media.mediaType === 'video' && (
-                <div className="absolute top-3 right-3 z-[1] flex items-center h-6 px-2 py-1 rounded bg-black/50 text-white text-xs font-bold pointer-events-none">
-                  Video
-                </div>
-              )}
-            </div>
-          ),
-        }}
-      />
-
-      <Dialog
-        open={selectedId !== null}
-        onOpenChange={(open) => {
-          if (!open) handleClose();
-        }}
+    <div className="group flex flex-col rounded-xl overflow-hidden bg-background p-1 cursor-pointer hover:bg-secondary transition-colors">
+      {/* Thumbnail */}
+      <div
+        className="relative w-full aspect-video overflow-hidden rounded-xl"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        <DialogContent className="p-0 max-w-[80vw]">
-          <VisuallyHidden>
-            <DialogTitle></DialogTitle>
-          </VisuallyHidden>
+        {item.mediaType === 'video' ? (
+          <video
+            ref={videoRef}
+            src={item.src}
+            poster={'poster' in item ? item.poster : undefined}
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <img
+            src={item.src}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
 
-          {selectedId && (
-            <PromptDetailView
-              id={selectedId}
-              mediaType={(() => {
-                const photo = photos.find((p) => p.id === selectedId);
-                return photo?.mediaType as MediaType;
-              })()}
-              aspectRatio={(() => {
-                const photo = photos.find((p) => p.id === selectedId);
-                return photo?.aspectRatio as AspectRatioType;
-              })()}
+        {/* Has Assets badge */}
+        {item.mediaType === 'video' && (
+          <div className="absolute top-2 right-2 rounded-md bg-black/60 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
+            <span className="text-[10px] text-white/90 font-medium">Video</span>
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="flex flex-col px-3 pt-2 pb-1">
+        <div className="flex items-start justify-between gap-2">
+          <span className="text-base font-semibold text-foreground leading-snug line-clamp-1">
+            Cinematic Portrait Lighting Pack
+          </span>
+          <IconBookmark size={16} className="text-muted-foreground shrink-0" />
+        </div>
+
+        <div className="flex items-center justify-between mt-1.5">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-xs text-muted-foreground shrink-0">by</span>
+            <img
+              src={`/images/gallery/img-${avatarNum}.jpg`}
+              alt={username}
+              className="w-4 h-4 rounded-full object-cover shrink-0"
             />
-          )}
-        </DialogContent>
-      </Dialog>
+            <span className="text-xs text-muted-foreground truncate">
+              {username}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1 text-muted-foreground">
+              <IconEye size={12} />
+              <span className="text-xs">
+                {(mediaViews[item.id] ?? 0).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 text-muted-foreground">
+              <IconHeart size={12} />
+              <span className="text-xs">{mediaLikes[item.id] ?? 0}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Green accent line */}
+        <div className="mt-2 h-[2px] w-full bg-primary/70 rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+const PromptStoreView = () => {
+  const [sort, setSort] = useState('trending');
+
+  return (
+    <div className="min-h-screen">
+      {/* Submissions */}
+      <section className="pb-16">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <H2 className="text-2xl">Submissions</H2>
+          <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+            {SORT_OPTIONS.map((option) => {
+              const Icon = option.icon;
+              return (
+                <button
+                  key={option.value}
+                  onClick={() => setSort(option.value)}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                    sort === option.value
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  <Icon size={14} />
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {medias.map((item, index) => (
+            <MediaCard key={item.id} item={item} index={index} />
+          ))}
+        </div>
+
+        <div className="flex justify-center mt-10">
+          <Button variant="outline" size="lg">
+            Load More
+          </Button>
+        </div>
+      </section>
     </div>
   );
 };

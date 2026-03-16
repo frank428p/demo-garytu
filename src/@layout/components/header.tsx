@@ -9,7 +9,7 @@ import {
   IconVideo,
 } from '@tabler/icons-react';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/authAtoms';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { RouterUrl } from '@/@core/constants/routerUrl';
+import { cn } from '@/lib/utils';
 import { Muted, Small } from '@/components/ui/typography';
 import { useCart } from '@/@core/provider/cartContext';
 import { useAuth } from '@/@core/provider/authContext';
@@ -35,6 +36,14 @@ const LOCALES = [
 ] as const;
 
 export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 0);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const { isMobile, isTablet, isDesktop } = useBreakpoint();
   const { items, setIsOpen } = useCart();
   const { openLogin, openSignup } = useAuth();
@@ -55,7 +64,12 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center justify-between bg-background px-4">
+    <header
+      className={cn(
+        'sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center justify-between px-4 transition-all duration-300',
+        scrolled ? 'bg-background/60 backdrop-blur-md' : 'bg-background',
+      )}
+    >
       {/* Left: Logo */}
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
@@ -64,6 +78,12 @@ export function Header() {
 
         {isDesktop && (
           <div className="flex items-center gap-2">
+            <Link href={RouterUrl.Explore} className="py-1 px-2">
+              <Muted className="font-normal text-base hover:text-primary">
+                {'Explore'}
+              </Muted>
+            </Link>
+
             <Link href={RouterUrl.Store} className="py-1 px-2">
               <Muted className="font-normal text-base hover:text-primary">
                 {'Prompt Store'}
@@ -194,7 +214,7 @@ export function Header() {
             <Button
               variant="outline"
               size="icon"
-              className="relative h-8"
+              className="relative h-8 bg-transparent"
               onClick={() => setIsOpen(true)}
             >
               <IconShoppingBag />

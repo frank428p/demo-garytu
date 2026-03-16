@@ -1,3 +1,5 @@
+'use client';
+
 import PromptStoreView from '@/views/promptStore';
 
 const StorePage = () => {

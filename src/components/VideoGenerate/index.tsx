@@ -60,8 +60,8 @@ const VideoGenerate = () => {
         </div>
 
         <div className="flex gap-2">
-          <FrameUploader label="Start frame" required />
-          <FrameUploader label="End frame" />
+          <FrameUploader label="Add a start frame" required />
+          <FrameUploader label="Add an end frame" />
         </div>
 
         <div className="flex flex-col gap-2">

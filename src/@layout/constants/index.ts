@@ -2,15 +2,24 @@ import { RouterUrl } from '@/@core/constants/routerUrl';
 import { NavigationType } from '@/@layout/types/index';
 
 import {
+  IconCompass,
+  IconCompassFilled,
   IconBuildingStore,
   IconFolder,
   IconFolderFilled,
   IconSparkles,
-  IconPolaroid,
-  IconPolaroidFilled,
+  IconPhoto,
+  IconPhotoFilled,
   IconVideo,
   IconVideoFilled,
 } from '@tabler/icons-react';
+
+export const ExploreNav: NavigationType = {
+  i18nKey: 'Explore',
+  url: RouterUrl.Explore,
+  icon: IconCompass,
+  activeIcon: IconCompassFilled,
+};
 
 export const StoreNav: NavigationType = {
   i18nKey: 'Store',
@@ -36,8 +45,8 @@ export const GenerateNav: NavigationType = {
 export const ImageGenerateNav: NavigationType = {
   i18nKey: 'Image',
   url: RouterUrl.ImageGenerate,
-  icon: IconPolaroid,
-  activeIcon: IconPolaroidFilled,
+  icon: IconPhoto,
+  activeIcon: IconPhotoFilled,
 };
 
 export const VideoGenerateNav: NavigationType = {
