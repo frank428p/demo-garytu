@@ -439,9 +439,9 @@ const PromptStoreView = () => {
   const [sort, setSort] = useState('trending');
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen rounded-tl-[32px] rounded-tr-[32px] overflow-hidden">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-background py-24 md:py-36">
+      <section className="relative overflow-hidden bg-background py-24 md:py-36 rounded-tl-[32px] rounded-tr-[32px]">
         {/* Dot grid */}
         <div
           className="absolute inset-0 opacity-[0.15]"
