@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter, Noto_Sans_TC } from 'next/font/google';
 import './globals.css';
 import { MainLayout } from '@/@layout/MainLayout';
-import { CartProvider } from '@/@core/provider/cartContext';
 import { AuthProvider } from '@/@core/provider/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
 import { JotaiProvider } from '@/@core/provider/JotaiProvider';
@@ -32,20 +31,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-TW" className="dark">
-      <body
-        className={`${inter.variable} ${notoSansTC.variable} antialiased`}
-      >
+      <body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
         <ReactQueryProvider>
-        <JotaiProvider>
-          <NextAuthSessionProvider>
-            <AuthProvider>
-              <CartProvider>
+          <JotaiProvider>
+            <NextAuthSessionProvider>
+              <AuthProvider>
                 <MainLayout>{children}</MainLayout>
                 <AuthDialog />
-              </CartProvider>
-            </AuthProvider>
-          </NextAuthSessionProvider>
-        </JotaiProvider>
+              </AuthProvider>
+            </NextAuthSessionProvider>
+          </JotaiProvider>
         </ReactQueryProvider>
       </body>
     </html>

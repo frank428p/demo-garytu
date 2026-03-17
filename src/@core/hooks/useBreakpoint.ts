@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
+import { useMediaQuery } from '@/@core/hooks/useMediaQuery';
 
 export function useBreakpoint() {
   const isSm = useMediaQuery('(max-width: 767px)');
