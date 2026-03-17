@@ -45,7 +45,7 @@ function MediaCard({ item }: { item: PromptItem }) {
   return (
     <Link
       href={`/toolkit/store/${item.id}`}
-      className="group flex flex-col rounded-xl overflow-hidden bg-background p-1 hover:bg-secondary transition-colors"
+      className="group flex flex-col rounded-xl overflow-hidden bg-background px-1 pt-1 pb-2 hover:bg-secondary transition-colors"
     >
       {/* Thumbnail */}
       <div
@@ -84,14 +84,13 @@ function MediaCard({ item }: { item: PromptItem }) {
           <span className="text-base font-semibold text-foreground leading-snug line-clamp-1">
             {item.title}
           </span>
-          <IconBookmark size={16} className="text-muted-foreground shrink-0" />
+          <IconBookmark size={18} className="text-muted-foreground shrink-0" />
         </div>
 
-        <div className="flex items-center justify-between mt-1.5">
+        {/* <div className="flex items-center justify-between mt-1.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-xs text-muted-foreground shrink-0">by</span>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+                 <img
               src={item.avatar}
               alt={item.username}
               className="w-4 h-4 rounded-full object-cover shrink-0"
@@ -113,7 +112,7 @@ function MediaCard({ item }: { item: PromptItem }) {
           </div>
         </div>
 
-        <div className="mt-2 h-[2px] w-full bg-primary/70 rounded-full" />
+        <div className="mt-2 h-[2px] w-full bg-primary/70 rounded-full" /> */}
       </div>
     </Link>
   );
