@@ -26,7 +26,7 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
 
   return (
     <div className="flex">
-      {isDesktop && <Sidebar />}
+      <Sidebar />
       <main
         className={cn(
           'flex-1 px-4 pb-20 md:pb-0',

@@ -12,11 +12,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt({ token, account }) {
       if (account) {
         token.accessToken = account.access_token;
+        token.idToken = account.id_token;
       }
       return token;
     },
     session({ session, token }) {
       session.user.accessToken = token.accessToken as string;
+      session.user.idToken = token.idToken as string;
       return session;
     },
   },
