@@ -11,6 +11,7 @@ import {
   IconEye,
   IconBookmark,
   IconSparkles,
+  IconBookmarkFilled,
 } from '@tabler/icons-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { PromptItem, PromptsResponse } from '@/app/api/prompts/route';
@@ -84,7 +85,11 @@ function MediaCard({ item }: { item: PromptItem }) {
           <span className="text-base font-semibold text-foreground leading-snug line-clamp-1">
             {item.title}
           </span>
-          <IconBookmark size={18} className="text-muted-foreground shrink-0" />
+          <IconBookmarkFilled
+            size={18}
+            color="var(--primary)"
+            className="shrink-0"
+          />
         </div>
 
         {/* <div className="flex items-center justify-between mt-1.5">
@@ -216,7 +221,7 @@ const PromptStoreView = () => {
             <span className="text-primary">AI Prompts</span>
           </h1>
 
-          <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed mb-10">
+          <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed">
             Curated prompt packages crafted by top AI artists and creators.
             Elevate your generation workflow instantly.
           </p>
