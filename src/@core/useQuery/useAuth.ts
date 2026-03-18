@@ -8,16 +8,19 @@ import type {
   LoginRequest,
 } from '../types/auth';
 
-function saveAccessToken(token: string) {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem('access_token', token);
+async function saveAccessToken(token: string) {
+  await fetch('/api/auth/set-token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ access_token: token }),
+  });
 }
 
 export function useEmailLogin() {
   return useMutation({
     mutationFn: (data: LoginRequest) => authApi.emailLogin(data),
-    onSuccess: (res) => {
-      saveAccessToken(res.data.access_token);
+    onSuccess: async (res) => {
+      await saveAccessToken(res.data.access_token);
     },
   });
 }
@@ -38,8 +41,8 @@ export function useVerifyEmailRegister() {
 export function useGoogleLogin() {
   return useMutation({
     mutationFn: (idToken: string) => authApi.googleLogin(idToken),
-    onSuccess: (res) => {
-      saveAccessToken(res.data.access_token);
+    onSuccess: async (res) => {
+      await saveAccessToken(res.data.access_token);
     },
   });
 }
