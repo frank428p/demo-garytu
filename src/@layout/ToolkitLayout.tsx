@@ -5,6 +5,7 @@ import { Sidebar } from './components/sidebar';
 import { SidebarNavLink } from './components/sidebar-nav-link';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 import {
+  ExploreNav,
   StoreNav,
   AssetsNav,
   ImageGenerateNav,
@@ -13,8 +14,15 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
-const mainNav = [StoreNav, AssetsNav];
+const mainNav = [ExploreNav, AssetsNav];
 const generateNav = [ImageGenerateNav, VideoGenerateNav];
+const BottomNav = [
+  ExploreNav,
+  StoreNav,
+  ImageGenerateNav,
+  VideoGenerateNav,
+  AssetsNav,
+];
 
 type ToolkitLayoutProps = {
   children: ReactNode;
@@ -38,7 +46,15 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
 
       {(isMobile || isTablet) && (
         <nav className="fixed bottom-0 left-0 z-40 w-screen flex items-center bg-background border-t border-border px-2 overflow-hidden">
-          {mainNav.map((item) => (
+          {BottomNav.map((item) => (
+            <SidebarNavLink
+              key={item.url}
+              item={item}
+              isActive={pathname === item.url}
+              className="flex-1"
+            />
+          ))}
+          {/* {mainNav.map((item) => (
             <SidebarNavLink
               key={item.url}
               item={item}
@@ -53,7 +69,7 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
               isActive={pathname === item.url}
               className="flex-1"
             />
-          ))}
+          ))} */}
         </nav>
       )}
     </div>
