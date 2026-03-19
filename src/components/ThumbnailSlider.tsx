@@ -130,7 +130,7 @@ export default function ThumbnailSlider({
       style={{ width: mainSliderWidth }}
     >
       {/* Main slider */}
-      {mediaType === 'image' && (
+      {mediaType === 'IMAGE' && (
         <PhotoProvider>
           <div
             className="mx-auto overflow-hidden rounded-lg"
@@ -158,7 +158,7 @@ export default function ThumbnailSlider({
         </PhotoProvider>
       )}
 
-      {mediaType === 'video' && (
+      {mediaType === 'VIDEO' && (
         <div
           className="mx-auto overflow-hidden rounded-lg"
           style={{
