@@ -324,9 +324,10 @@ function SignupOtpView({
 }) {
   const [otp, setOtp] = useState(Array(6).fill(''));
   const [error, setError] = useState('');
-  const { mutate: verify, isPending } = useVerifyEmailRegister();
-  const { mutate: login } = useEmailLogin();
+  const { mutate: verify, isPending: isVerifying } = useVerifyEmailRegister();
+  const { mutate: login, isPending: isLoggingIn } = useEmailLogin();
 
+  const isPending = isVerifying || isLoggingIn;
   const isFull = otp.every((d) => d !== '');
 
   const handleVerify = () => {
