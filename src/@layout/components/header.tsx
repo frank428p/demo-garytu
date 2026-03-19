@@ -11,7 +11,7 @@ import {
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import { userAtom } from '@/store/authAtoms';
+import { userAtom } from '@/@core/store/authAtoms';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

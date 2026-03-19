@@ -1,43 +1,33 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 import { H2 } from '@/components/ui/typography';
-import {
-  IconFlame,
-  IconClock,
-  IconHeart,
-  IconEye,
-  IconBookmark,
-  IconSparkles,
-  IconBookmarkFilled,
-} from '@tabler/icons-react';
+import { IconBookmarkFilled } from '@tabler/icons-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { PromptItem, PromptsResponse } from '@/app/api/prompts/route';
-
-const SORT_OPTIONS = [
-  { label: 'Trending', value: 'trending', icon: IconFlame },
-  { label: 'Newest', value: 'newest', icon: IconClock },
-  { label: 'Most Liked', value: 'liked', icon: IconHeart },
-  { label: 'Most Viewed', value: 'viewed', icon: IconEye },
-];
-
-const LIMIT = 20;
+import { usePromptsList } from '@/@core/useQuery/usePrompts';
+import type { Prompt } from '@/@core/types/prompt';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
-function MediaCard({ item }: { item: PromptItem }) {
+function MediaCard({ prompt }: { prompt: Prompt }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const sortedFiles = [...prompt.files].sort((a, b) => a.position - b.position);
+  const mainFile = sortedFiles[0];
+  const posterFile =
+    mainFile?.file_type === 'VIDEO'
+      ? sortedFiles.find((f) => f.file_type === 'IMAGE')
+      : undefined;
+
   const handleMouseEnter = () => {
-    if (item.mediaType === 'video' && videoRef.current) {
+    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
       videoRef.current.play();
     }
   };
 
   const handleMouseLeave = () => {
-    if (item.mediaType === 'video' && videoRef.current) {
+    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -45,7 +35,7 @@ function MediaCard({ item }: { item: PromptItem }) {
 
   return (
     <Link
-      href={`/toolkit/store/${item.id}`}
+      href={`/toolkit/store/${prompt.uuid}`}
       className="group flex flex-col rounded-xl overflow-hidden bg-background px-1 pt-1 pb-2 hover:bg-secondary transition-colors"
     >
       {/* Thumbnail */}
@@ -54,11 +44,11 @@ function MediaCard({ item }: { item: PromptItem }) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {item.mediaType === 'video' ? (
+        {mainFile?.file_type === 'VIDEO' ? (
           <video
             ref={videoRef}
-            src={item.src}
-            poster={item.poster}
+            src={mainFile.url}
+            poster={posterFile?.url}
             muted
             loop
             playsInline
@@ -66,13 +56,13 @@ function MediaCard({ item }: { item: PromptItem }) {
           />
         ) : (
           <img
-            src={item.src}
-            alt={item.title}
+            src={mainFile?.url}
+            alt={prompt.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
 
-        {item.mediaType === 'video' && (
+        {mainFile?.file_type === 'VIDEO' && (
           <div className="absolute top-2 right-2 rounded-md bg-black/60 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
             <span className="text-[10px] text-white/90 font-medium">Video</span>
           </div>
@@ -83,7 +73,7 @@ function MediaCard({ item }: { item: PromptItem }) {
       <div className="flex flex-col px-3 pt-2 pb-1">
         <div className="flex items-start justify-between gap-2">
           <span className="text-base font-semibold text-foreground leading-snug line-clamp-1">
-            {item.title}
+            {prompt.name}
           </span>
           <IconBookmarkFilled
             size={18}
@@ -91,33 +81,6 @@ function MediaCard({ item }: { item: PromptItem }) {
             className="shrink-0"
           />
         </div>
-
-        {/* <div className="flex items-center justify-between mt-1.5">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <span className="text-xs text-muted-foreground shrink-0">by</span>
-                 <img
-              src={item.avatar}
-              alt={item.username}
-              className="w-4 h-4 rounded-full object-cover shrink-0"
-            />
-            <span className="text-xs text-muted-foreground truncate">
-              {item.username}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <IconEye size={12} />
-              <span className="text-xs">{item.views.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <IconHeart size={12} />
-              <span className="text-xs">{item.likes.toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-2 h-[2px] w-full bg-primary/70 rounded-full" /> */}
       </div>
     </Link>
   );
@@ -126,47 +89,11 @@ function MediaCard({ item }: { item: PromptItem }) {
 // ─── PromptStoreView ──────────────────────────────────────────────────────────
 
 const PromptStoreView = () => {
-  const [sort, setSort] = useState('trending');
-  const [items, setItems] = useState<PromptItem[]>([]);
-  const [page, setPage] = useState(0);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    usePromptsList();
 
+  const items = data?.pages.flatMap((p) => p.data) ?? [];
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const isFetching = useRef(false);
-
-  const fetchPage = useCallback(
-    async (nextPage: number, currentSort: string) => {
-      if (isFetching.current) return;
-      isFetching.current = true;
-      setLoading(true);
-
-      try {
-        const res = await fetch(
-          `/api/prompts?page=${nextPage}&limit=${LIMIT}&sort=${currentSort}`,
-        );
-        const json: PromptsResponse = await res.json();
-
-        setItems((prev) =>
-          nextPage === 1 ? json.data : [...prev, ...json.data],
-        );
-        setPage(nextPage);
-        setHasNextPage(json.pagination.hasNextPage);
-      } finally {
-        setLoading(false);
-        isFetching.current = false;
-      }
-    },
-    [],
-  );
-
-  // Reset and fetch when sort changes
-  useEffect(() => {
-    setItems([]);
-    setPage(0);
-    setHasNextPage(true);
-    fetchPage(1, sort);
-  }, [sort, fetchPage]);
 
   // Infinite scroll
   useEffect(() => {
@@ -175,8 +102,8 @@ const PromptStoreView = () => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetching.current) {
-          fetchPage(page + 1, sort);
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
       },
       { rootMargin: '200px' },
@@ -184,7 +111,9 @@ const PromptStoreView = () => {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [fetchPage, hasNextPage, page, sort]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const loading = isLoading || isFetchingNextPage;
 
   return (
     <div className="min-h-screen rounded-tl-[32px] rounded-tr-[32px] overflow-hidden">
@@ -208,13 +137,6 @@ const PromptStoreView = () => {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
-          {/* <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full border border-border bg-background/60 backdrop-blur-sm">
-            <IconSparkles size={13} className="text-primary" />
-            <span className="text-xs font-medium text-muted-foreground tracking-widest uppercase">
-              Prompt Marketplace
-            </span>
-          </div> */}
-
           <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
             The Art of
             <br />
@@ -232,31 +154,11 @@ const PromptStoreView = () => {
       <section className="pb-16 px-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <H2 className="text-2xl">Submissions</H2>
-          {/* <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-            {SORT_OPTIONS.map((option) => {
-              const Icon = option.icon;
-              return (
-                <button
-                  key={option.value}
-                  onClick={() => setSort(option.value)}
-                  className={cn(
-                    'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-                    sort === option.value
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground',
-                  )}
-                >
-                  <Icon size={14} />
-                  {option.label}
-                </button>
-              );
-            })}
-          </div> */}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {items.map((item) => (
-            <MediaCard key={item.id} item={item} />
+          {items.map((prompt) => (
+            <MediaCard key={prompt.uuid} prompt={prompt} />
           ))}
         </div>
 

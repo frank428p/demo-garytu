@@ -5,7 +5,6 @@ import { MainLayout } from '@/@layout/MainLayout';
 import { AuthProvider } from '@/@core/provider/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
 import { JotaiProvider } from '@/@core/provider/JotaiProvider';
-import { NextAuthSessionProvider } from '@/@core/provider/NextAuthSessionProvider';
 import { ReactQueryProvider } from '@/@core/provider/ReactQueryProvider';
 
 const inter = Inter({
@@ -34,12 +33,10 @@ export default function RootLayout({
       <body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
         <ReactQueryProvider>
           <JotaiProvider>
-            <NextAuthSessionProvider>
-              <AuthProvider>
-                <MainLayout>{children}</MainLayout>
-                <AuthDialog />
-              </AuthProvider>
-            </NextAuthSessionProvider>
+            <AuthProvider>
+              <MainLayout>{children}</MainLayout>
+              <AuthDialog />
+            </AuthProvider>
           </JotaiProvider>
         </ReactQueryProvider>
       </body>

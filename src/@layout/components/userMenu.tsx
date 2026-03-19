@@ -21,11 +21,12 @@ import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { RouterUrl } from '@/@core/constants/routerUrl';
 import { useAtomValue } from 'jotai';
-import { userAtom } from '@/store/authAtoms';
-import { signOut } from 'next-auth/react';
+import { userAtom } from '@/@core/store/authAtoms';
+import { useLogout } from '@/@core/useQuery/useAuth';
 
 export function UserMenu() {
   const user = useAtomValue(userAtom);
+  const logout = useLogout();
 
   return (
     <DropdownMenu>
@@ -43,7 +44,9 @@ export function UserMenu() {
               <Small className="text-xs">Pro</Small>
             </div>
             <Avatar size="sm">
-              {user?.image && <AvatarImage src={user.image} alt={user.name ?? ''} />}
+              {user?.image && (
+                <AvatarImage src={user.image} alt={user.name ?? ''} />
+              )}
               <AvatarFallback className="bg-primary text-primary-foreground">
                 <IconUserFilled size={20} />
               </AvatarFallback>
@@ -93,7 +96,7 @@ export function UserMenu() {
             <Separator />
           </div>
           <div className="px-1 pt-2 pb-2">
-            <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
+            <DropdownMenuItem className="cursor-pointer" onClick={logout}>
               <IconLogout />
               Logout
             </DropdownMenuItem>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState, KeyboardEvent, ClipboardEvent } from 'react';
-import { signIn } from 'next-auth/react';
 import { IconArrowLeft, IconEye, IconEyeOff } from '@tabler/icons-react';
 import {
   Dialog,
@@ -13,12 +12,37 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/@core/provider/authContext';
+import {
+  useEmailLogin,
+  useEmailRegister,
+  useVerifyEmailRegister,
+} from '@/@core/useQuery/useAuth';
 
 type SignupStep = 'method' | 'otp';
 
 function GoogleButton({ label }: { label: string }) {
+  const handleClick = () => {
+    // Do NOT encodeURIComponent here — searchParams.set encodes it once automatically
+    const returnTo = window.location.pathname + window.location.search;
+    const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/google`;
+
+    const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+    authUrl.searchParams.set('client_id', process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!);
+    authUrl.searchParams.set('redirect_uri', redirectUri);
+    authUrl.searchParams.set('response_type', 'code');
+    authUrl.searchParams.set('scope', 'openid email profile');
+    authUrl.searchParams.set('state', returnTo);
+
+    window.location.href = authUrl.toString();
+  };
+
   return (
-    <Button variant="outline" className="w-full gap-2" type="button" onClick={() => signIn('google')}>
+    <Button
+      variant="outline"
+      className="w-full gap-2"
+      type="button"
+      onClick={handleClick}
+    >
       <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
         <path
           d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -146,6 +170,21 @@ function OtpInput({
 function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { closeAuth } = useAuth();
+  const { mutate: login, isPending } = useEmailLogin();
+
+  const handleLogin = () => {
+    if (!email || !password) return;
+    setError('');
+    login(
+      { email, password },
+      {
+        onSuccess: () => closeAuth(),
+        onError: () => setError('Email 或密碼錯誤，請再試一次'),
+      },
+    );
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -174,8 +213,15 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
         />
       </div>
 
-      <Button className="w-full" type="button">
-        Login
+      {error && <p className="text-sm text-destructive">{error}</p>}
+
+      <Button
+        className="w-full"
+        type="button"
+        onClick={handleLogin}
+        disabled={isPending}
+      >
+        {isPending ? 'Signing in…' : 'Login'}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
@@ -194,11 +240,14 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
 
 // ─── Signup ───────────────────────────────────────────────────────────────────
 
-function SignupMethodView({ onNext }: { onNext: (email: string) => void }) {
+type SignupData = { name: string; email: string; password: string };
+
+function SignupMethodView({ onNext }: { onNext: (data: SignupData) => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { mutate: register, isPending } = useEmailRegister();
 
   const handleNext = () => {
     if (!name) return setError('Please enter your name');
@@ -206,7 +255,13 @@ function SignupMethodView({ onNext }: { onNext: (email: string) => void }) {
     if (password.length < 8)
       return setError('Password must be at least 8 characters');
     setError('');
-    onNext(email);
+    register(
+      { name, email, password },
+      {
+        onSuccess: () => onNext({ name, email, password }),
+        onError: () => setError('Registration failed. Please try again.'),
+      },
+    );
   };
 
   return (
@@ -246,23 +301,52 @@ function SignupMethodView({ onNext }: { onNext: (email: string) => void }) {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button className="w-full" type="button" onClick={handleNext}>
-        Next
+      <Button
+        className="w-full"
+        type="button"
+        onClick={handleNext}
+        disabled={isPending}
+      >
+        {isPending ? 'Sending code…' : 'Next'}
       </Button>
     </div>
   );
 }
 
 function SignupOtpView({
-  email,
+  signupData,
   onBack,
+  onDone,
 }: {
-  email: string;
+  signupData: SignupData;
   onBack: () => void;
+  onDone: () => void;
 }) {
   const [otp, setOtp] = useState(Array(6).fill(''));
+  const [error, setError] = useState('');
+  const { mutate: verify, isPending } = useVerifyEmailRegister();
+  const { mutate: login } = useEmailLogin();
 
   const isFull = otp.every((d) => d !== '');
+
+  const handleVerify = () => {
+    setError('');
+    verify(
+      { email: signupData.email, otp: otp.join('') },
+      {
+        onSuccess: () => {
+          login(
+            { email: signupData.email, password: signupData.password },
+            {
+              onSuccess: () => onDone(),
+              onError: () => onDone(),
+            },
+          );
+        },
+        onError: () => setError('Invalid code. Please try again.'),
+      },
+    );
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -279,14 +363,21 @@ function SignupOtpView({
 
       <DialogDescription>
         We sent a 6-digit code to{' '}
-        <span className="font-medium text-foreground">{email}</span>. Please
-        enter it below.
+        <span className="font-medium text-foreground">{signupData.email}</span>.
+        Please enter it below.
       </DialogDescription>
 
       <OtpInput value={otp} onChange={setOtp} />
 
-      <Button className="w-full" type="button" disabled={!isFull}>
-        Verify &amp; complete sign up
+      {error && <p className="text-sm text-destructive text-center">{error}</p>}
+
+      <Button
+        className="w-full"
+        type="button"
+        disabled={!isFull || isPending}
+        onClick={handleVerify}
+      >
+        {isPending ? 'Verifying…' : 'Verify & complete sign up'}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
@@ -305,16 +396,20 @@ function SignupOtpView({
 // ─── Root Dialog ──────────────────────────────────────────────────────────────
 
 export function AuthDialog() {
-  const { authMode, closeAuth, openSignup, openLogin } = useAuth();
+  const { authMode, closeAuth, openSignup } = useAuth();
 
   const [signupStep, setSignupStep] = useState<SignupStep>('method');
-  const [signupEmail, setSignupEmail] = useState('');
+  const [signupData, setSignupData] = useState<SignupData>({
+    name: '',
+    email: '',
+    password: '',
+  });
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       closeAuth();
       setSignupStep('method');
-      setSignupEmail('');
+      setSignupData({ name: '', email: '', password: '' });
     }
   };
 
@@ -332,8 +427,8 @@ export function AuthDialog() {
 
         {authMode === 'signup' && signupStep === 'method' && (
           <SignupMethodView
-            onNext={(email) => {
-              setSignupEmail(email);
+            onNext={(data) => {
+              setSignupData(data);
               setSignupStep('otp');
             }}
           />
@@ -341,8 +436,13 @@ export function AuthDialog() {
 
         {authMode === 'signup' && signupStep === 'otp' && (
           <SignupOtpView
-            email={signupEmail}
+            signupData={signupData}
             onBack={() => setSignupStep('method')}
+            onDone={() => {
+              closeAuth();
+              setSignupStep('method');
+              setSignupData({ name: '', email: '', password: '' });
+            }}
           />
         )}
       </DialogContent>

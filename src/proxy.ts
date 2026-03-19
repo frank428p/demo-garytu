@@ -1,11 +1,11 @@
-import { auth } from '@/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default auth((req) => {
-  if (!req.auth && req.nextUrl.pathname.startsWith('/user')) {
+export default function middleware(req: NextRequest) {
+  const token = req.cookies.get('access_token')?.value;
+  if (!token && req.nextUrl.pathname.startsWith('/user')) {
     return NextResponse.redirect(new URL('/', req.nextUrl));
   }
-});
+}
 
 export const config = {
   matcher: ['/user/:path*'],

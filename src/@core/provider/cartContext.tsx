@@ -1,8 +1,8 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { cartItemsAtom, cartIsOpenAtom } from '@/store/cartAtoms';
-import type { CartItem } from '@/store/cartAtoms';
+import { cartItemsAtom, cartIsOpenAtom } from '@/@core/store/cartAtoms';
+import type { CartItem } from '@/@core/store/cartAtoms';
 
 export type { CartItem };
 

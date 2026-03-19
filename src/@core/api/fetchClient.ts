@@ -1,5 +1,13 @@
 const BASE_URL = '/api/proxy';
 
+export class ApiError extends Error {
+  status: number;
+  constructor(status: number, path: string) {
+    super(`API error ${status}: ${path}`);
+    this.status = status;
+  }
+}
+
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit,
@@ -12,8 +20,10 @@ export async function apiFetch<T>(
     },
   });
 
+  console.log(res);
+
   if (!res.ok) {
-    throw new Error(`API error ${res.status}: ${path}`);
+    throw new ApiError(res.status, path);
   }
 
   return res.json() as Promise<T>;
