@@ -24,7 +24,7 @@ const PRODUCT_PRICE = 1500;
 
 const PromptDetailView = ({
   id,
-  mediaType = 'image',
+  mediaType = 'IMAGE',
   aspectRatio = '1:1',
 }: PromptDetailViewProps) => {
   const { addItem, items } = useCart();
@@ -33,7 +33,7 @@ const PromptDetailView = ({
 
   const sliderMedia = useMemo(() => {
     console.log('', mediaType, aspectRatio);
-    if (mediaType === 'image') {
+    if (mediaType === 'IMAGE') {
       switch (aspectRatio) {
         case '1:1':
           return [
@@ -85,7 +85,7 @@ const PromptDetailView = ({
       }
     }
 
-    if (mediaType === 'video') {
+    if (mediaType === 'VIDEO') {
       switch (aspectRatio) {
         case '1:1':
           return [
