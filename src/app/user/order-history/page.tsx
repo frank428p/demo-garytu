@@ -39,14 +39,14 @@ const mockRows: Row[] = [
         id: 'p-1',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/9-to-16_1.jpg',
-        mediaType: 'image',
+        mediaType: 'IMAGE',
         price: 1500,
       },
       {
         id: 'p-2',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/1-to-1_3.jpg',
-        mediaType: 'image',
+        mediaType: 'IMAGE',
         price: 1500,
       },
     ],
@@ -62,7 +62,7 @@ const mockRows: Row[] = [
         id: 'p-3',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/1-to-1-cover_1.avif',
-        mediaType: 'video',
+        mediaType: 'VIDEO',
         price: 1500,
       },
     ],
@@ -78,28 +78,28 @@ const mockRows: Row[] = [
         id: 'p-4',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/16-to-9-cover_1.avif',
-        mediaType: 'video',
+        mediaType: 'VIDEO',
         price: 1500,
       },
       {
         id: 'p-5',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/16-to-9_2.jpg',
-        mediaType: 'image',
+        mediaType: 'IMAGE',
         price: 1500,
       },
       {
         id: 'p-6',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/1-to-1_2.jpg',
-        mediaType: 'image',
+        mediaType: 'IMAGE',
         price: 1500,
       },
       {
         id: 'p-7',
         title: 'Cinematic Portrait Lighting Pack',
         image: '/images/gallery/1-to-1-cover_1.avif',
-        mediaType: 'video',
+        mediaType: 'VIDEO',
         price: 1500,
       },
     ],
@@ -229,7 +229,7 @@ export default function OrderHistoryPage() {
                   <div className="bg-muted/10">
                     {r.children.map((c, i) => {
                       const MediaIcon =
-                        c.mediaType === 'video' ? IconVideo : IconPhoto;
+                        c.mediaType === 'VIDEO' ? IconVideo : IconPhoto;
                       return (
                         <div
                           key={c.id + i}
