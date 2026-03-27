@@ -6,7 +6,7 @@ import {
   IconShieldCheck,
   IconDownload,
 } from '@tabler/icons-react';
-import ThumbnailSlider from '@/components/ThumbnailSlider';
+import { ThumbnailSlider } from '@/components/ThumbnailSlider';
 import { MediaType, AspectRatioType } from '@/@core/types';
 import { useMemo } from 'react';
 import { useCart } from '@/@core/provider/cartContext';
@@ -25,7 +25,7 @@ const PRODUCT_PRICE = 1500;
 const PromptStoreDetailView = ({
   id,
   mediaType = 'IMAGE',
-  aspectRatio = '1:1',
+  aspectRatio = '16:9',
 }: PromptDetailViewProps) => {
   const { addItem, items } = useCart();
   const router = useRouter();
@@ -71,6 +71,18 @@ const PromptStoreDetailView = ({
             {
               src: '/images/gallery/16-to-9_2.jpg',
               thumbnail: '/images/gallery/16-to-9_2.jpg',
+            },
+            {
+              src: '/images/gallery/16-to-9_1.jpg',
+              thumbnail: '/images/gallery/16-to-9_1.jpg',
+            },
+            {
+              src: '/images/gallery/16-to-9_1.jpg',
+              thumbnail: '/images/gallery/16-to-9_1.jpg',
+            },
+            {
+              src: '/images/gallery/16-to-9_1.jpg',
+              thumbnail: '/images/gallery/16-to-9_1.jpg',
             },
             {
               src: '/images/gallery/16-to-9_1.jpg',
@@ -141,32 +153,26 @@ const PromptStoreDetailView = ({
   }, [aspectRatio, mediaType]);
 
   return (
-    <div className="flex flex-col gap-6 p-6 lg:flex-row">
+    <div className="flex flex-col gap-12 p-6 lg:flex-row lg:items-start">
       {/* Image slider */}
-      <div className="flex min-w-0 flex-1 items-center justify-center">
-        <ThumbnailSlider
-          mediaType={mediaType}
-          slides={sliderMedia}
-          aspectRatio={aspectRatio}
-        />
+      <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-[3.5rem]">
+        <ThumbnailSlider />
       </div>
 
       {/* Info panel */}
-      <div className="flex w-full flex-col gap-5 lg:w-[650px] md:shrink-0">
-        {/* Category badges */}
-        <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
-            AI Prompt
-          </span>
-          <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-            Instant Download
-          </span>
-        </div>
-
+      <div className="flex w-full flex-col gap-5 lg:flex-[5] lg:shrink-0">
         {/* Title */}
-        <div>
+        <div className="flex flex-col gap-2">
           <h2 className="text-xl font-bold leading-snug">{PRODUCT_NAME}</h2>
-          <p className="mt-1 text-xs text-muted-foreground">#{id}</p>
+          {/* Category badges */}
+          <div className="flex flex-wrap gap-2">
+            <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
+              AI Prompt
+            </span>
+            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+              Instant Download
+            </span>
+          </div>
         </div>
 
         {/* Price */}
@@ -224,7 +230,7 @@ const PromptStoreDetailView = ({
         <div className="h-px bg-border" />
 
         {/* CTA buttons */}
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-row gap-2.5">
           <Button
             size="lg"
             className="w-full font-semibold"

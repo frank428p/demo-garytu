@@ -1,222 +1,149 @@
 'use client';
 
-import { type MutableRefObject, useEffect } from 'react';
-import {
-  useKeenSlider,
-  type KeenSliderPlugin,
-  type KeenSliderInstance,
-} from 'keen-slider/react';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'keen-slider/keen-slider.min.css';
-import 'react-photo-view/dist/react-photo-view.css';
-import { cn } from '@/lib/utils';
-import { MediaType } from '@/@core/types';
+import { useState } from 'react';
+import type { Swiper as SwiperType } from 'swiper';
+import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 
-/** 容器尺寸變化時自動重算 slide 寬度 */
-const ResizePlugin: KeenSliderPlugin = (slider) => {
-  const observer = new ResizeObserver(() => {
-    slider.update();
-  });
-  slider.on('created', () => {
-    observer.observe(slider.container);
-  });
-  slider.on('destroyed', () => {
-    observer.unobserve(slider.container);
-  });
-};
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+import Image from 'next/image';
 
-function ThumbnailPlugin(
-  mainRef: MutableRefObject<KeenSliderInstance | null>,
-): KeenSliderPlugin {
-  return (slider) => {
-    function removeActive() {
-      slider.slides.forEach((slide) => {
-        slide.classList.remove('active');
-      });
-    }
-    function addActive(idx: number) {
-      slider.slides[idx]?.classList.add('active');
-    }
+const images = [
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_2.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_2.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_2.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+  '/images/gallery/1-to-1_1.jpg',
+];
 
-    function addClickEvents() {
-      slider.slides.forEach((slide, idx) => {
-        slide.addEventListener('click', () => {
-          if (mainRef.current) mainRef.current.moveToIdx(idx);
-        });
-      });
-    }
-
-    slider.on('created', () => {
-      if (!mainRef.current) return;
-      addActive(slider.track.details.rel);
-      addClickEvents();
-      mainRef.current.on('animationStarted', (main) => {
-        removeActive();
-        const next = main.animator.targetIdx || 0;
-        addActive(main.track.absToRel(next));
-        slider.moveToIdx(Math.min(slider.track.details.maxIdx, next));
-      });
-    });
-  };
-}
-
-type Slide = {
-  src: string;
-  thumbnail: string;
-  alt?: string;
-};
-
-type ThumbnailSliderProps = {
-  mediaType: MediaType;
-  slides: Slide[];
-  className?: string;
-  aspectRatio?: string;
-  thumbnailHeight?: string;
-  thumbnailPerView?: number;
-};
-
-export default function ThumbnailSlider({
-  mediaType,
-  slides,
-  className,
-  aspectRatio,
-  thumbnailHeight = 'h-[80px]',
-  thumbnailPerView = 4,
-}: ThumbnailSliderProps) {
-  const cssAspectRatio = aspectRatio?.replace(':', '/');
-  const maxH = 'calc(95vh - 10rem)';
-  // 最大寬度 = min(100%, maxHeight × 寬高比)，確保高度碰上限時寬度同步縮減
-  const [aw, ah] = (aspectRatio ?? '1:1').split(':').map(Number);
-  const numericRatio = aw / ah;
-  const mainSliderWidth = cssAspectRatio
-    ? `min(100%, calc((95vh - 10rem) * ${numericRatio}))`
-    : '100%';
-
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
-    {
-      initial: 0,
-      slides: { perView: 1 },
-      renderMode: 'performance',
-    },
-    [ResizePlugin],
-  );
-  const [thumbnailRef, thumbnailInstanceRef] = useKeenSlider<HTMLDivElement>(
-    {
-      initial: 0,
-      mode: 'free-snap',
-      renderMode: 'performance',
-      rubberband: false,
-      drag: true,
-      slides: {
-        perView: thumbnailPerView,
-        spacing: 8,
-      },
-    },
-    [ThumbnailPlugin(instanceRef), ResizePlugin],
-  );
-
-  // Dialog 動畫結束後強制重算 slide 寬度（等 300ms 讓動畫完成）
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      instanceRef.current?.update();
-      thumbnailInstanceRef.current?.update();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [instanceRef, thumbnailInstanceRef]);
+function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   return (
-    <div
-      className={cn('mx-auto', className)}
-      style={{ width: mainSliderWidth }}
-    >
-      {/* Main slider */}
-      {mediaType === 'IMAGE' && (
-        <PhotoProvider>
-          <div
-            className="mx-auto overflow-hidden rounded-lg"
-            style={{
-              width: mainSliderWidth,
-              aspectRatio: cssAspectRatio,
-              maxHeight: maxH,
-            }}
-          >
-            <div ref={sliderRef} className="keen-slider h-full">
-              {slides.map((slide, i) => (
-                <div key={i} className="keen-slider__slide !min-w-full h-full">
-                  <PhotoView src={slide.src}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={slide.src}
-                      alt={slide.alt || `Slide ${i + 1}`}
-                      className="h-full w-full cursor-zoom-in object-cover"
-                    />
-                  </PhotoView>
-                </div>
-              ))}
-            </div>
-          </div>
-        </PhotoProvider>
-      )}
-
-      {mediaType === 'VIDEO' && (
+    <div className="w-full max-w-full overflow-hidden [&_.swiper-button-next]:text-white [&_.swiper-button-next]:w-6 [&_.swiper-button-next]:h-6 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:w-6 [&_.swiper-button-prev]:h-6 [&_.swiper-button-next:after]:text-2xl [&_.swiper-button-prev:after]:text-2xl">
+      {isDesktop ? (
         <div
-          className="mx-auto overflow-hidden rounded-lg"
-          style={{
-            width: mainSliderWidth,
-            aspectRatio: cssAspectRatio,
-            maxHeight: maxH,
-          }}
+          className="relative grid gap-4"
+          style={{ gridTemplateColumns: '5rem minmax(0, 1fr)' }}
         >
-          <div ref={sliderRef} className="keen-slider h-full">
-            {slides.map((slide, i) => (
-              <div
-                key={i}
-                className="keen-slider__slide !min-w-full h-full bg-black"
-              >
-                <video
-                  src={slide.src}
-                  poster={slide.thumbnail}
-                  controls
-                  controlsList="nodownload noremoteplayback"
-                  disablePictureInPicture
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  className="h-full w-full object-contain"
-                  onPointerDown={(e) => e.stopPropagation()}
-                />
-              </div>
-            ))}
+          {/* 左側縮圖：absolute 貼滿父容器高度 */}
+          <div className="absolute top-0 left-0 w-20 h-full overflow-hidden">
+            <Swiper
+              onSwiper={setThumbsSwiper}
+              modules={[FreeMode, Thumbs]}
+              direction="vertical"
+              spaceBetween={8}
+              slidesPerView="auto"
+              freeMode
+              watchSlidesProgress
+              style={{ height: '100%' }}
+              className="rounded-lg"
+            >
+              {images.map((image, index) => (
+                <SwiperSlide key={index} className="!h-auto cursor-pointer">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="block w-full rounded-md object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
+          {/* 主圖：grid 第 2 欄，決定父容器高度 */}
+          <div className="min-w-0" style={{ gridColumn: 2 }}>
+            <Swiper
+              modules={[FreeMode, Navigation, Thumbs]}
+              spaceBetween={10}
+              navigation
+              thumbs={{ swiper: thumbsSwiper }}
+              className="rounded-lg"
+            >
+              {images.map((image, index) => (
+                <SwiperSlide key={index}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <Image
+                    src={image}
+                    alt={`Slide ${index + 1}`}
+                    width={1120}
+                    height={1120}
+                    className="block w-full rounded-lg"
+                    sizes="(min-width: 768px) 40vw, 100vw"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
-      )}
-
-      {/* Thumbnail slider */}
-      <div
-        ref={thumbnailRef}
-        className="keen-slider mt-2"
-        style={{ overflow: 'clip', overflowClipMargin: '4px' }}
-      >
-        {slides.map((slide, i) => (
-          <div
-            key={i}
-            className={cn(
-              'keen-slider__slide group relative cursor-pointer overflow-hidden rounded-md opacity-30 transition-[opacity] duration-200 [&.active]:opacity-100',
-              thumbnailHeight,
-            )}
+      ) : (
+        <div className="space-y-2">
+          {/* 主圖 */}
+          <Swiper
+            modules={[FreeMode, Navigation, Thumbs]}
+            spaceBetween={10}
+            navigation
+            thumbs={{ swiper: thumbsSwiper }}
+            className="rounded-lg"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={slide.thumbnail}
-              alt={slide.alt || `Thumbnail ${i + 1}`}
-              className="h-full w-full object-cover"
-            />
-            <div className="pointer-events-none absolute inset-0 rounded-md border-2 border-transparent group-[.active]:border-primary" />
-          </div>
-        ))}
-      </div>
+            {images.map((image, index) => (
+              <SwiperSlide key={index}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={image}
+                  alt={`Slide ${index + 1}`}
+                  className="block w-full rounded-lg"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* lg 以下：下方水平縮圖 */}
+          <Swiper
+            onSwiper={setThumbsSwiper}
+            modules={[FreeMode, Thumbs]}
+            spaceBetween={8}
+            slidesPerView={4}
+            freeMode
+            watchSlidesProgress
+            className="w-full rounded-lg"
+          >
+            {images.map((image, index) => (
+              <SwiperSlide key={index} className="cursor-pointer">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={image}
+                  alt={`Thumbnail ${index + 1}`}
+                  className="block w-full rounded-md object-cover aspect-video opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
     </div>
+  );
+}
+
+export function ThumbnailSlider() {
+  const { isDesktop, isTablet, isMobile } = useBreakpoint();
+  return (
+    <ThumbnailSliderInner
+      key={isDesktop || isTablet ? 'desktop' : 'mobile'}
+      isDesktop={!!(isDesktop || isTablet)}
+    />
   );
 }

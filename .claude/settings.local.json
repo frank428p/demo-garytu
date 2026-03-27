@@ -6,7 +6,8 @@
       "WebFetch(domain:docs.aimlapi.com)",
       "WebFetch(domain:fal.ai)",
       "WebFetch(domain:replicate.com)",
-      "WebFetch(domain:wavespeed.ai)"
+      "WebFetch(domain:wavespeed.ai)",
+      "WebFetch(domain:drinkpouch.com)"
     ]
   }
 }

@@ -6,7 +6,7 @@ import {
   IconShieldCheck,
   IconDownload,
 } from '@tabler/icons-react';
-import ThumbnailSlider from '@/components/ThumbnailSlider';
+// import ThumbnailSlider from '@/components/ThumbnailSlider';
 import { MediaType, AspectRatioType } from '@/@core/types';
 import { useMemo } from 'react';
 import { useCart } from '@/@core/provider/cartContext';
@@ -132,11 +132,11 @@ const PromptDetailView = ({
     <div className="flex flex-col gap-6 p-6 md:flex-row">
       {/* Image slider */}
       <div className="flex min-w-0 flex-1 items-center justify-center">
-        <ThumbnailSlider
+        {/* <ThumbnailSlider
           mediaType={mediaType}
           slides={sliderMedia}
           aspectRatio={aspectRatio}
-        />
+        /> */}
       </div>
 
       {/* Info panel */}
