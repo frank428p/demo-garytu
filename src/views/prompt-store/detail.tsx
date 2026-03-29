@@ -32,7 +32,7 @@ const PromptStoreDetailView = ({
 
   const { addItem, items } = useCart();
   const router = useRouter();
-  const inCart = items.some((item) => item.id === id);
+  const inCart = items.some((item) => item.item.uuid === id);
 
   const sliderMedia = useMemo(() => {
     console.log('', mediaType, aspectRatio);
@@ -264,20 +264,7 @@ const PromptStoreDetailView = ({
 
         {/* CTA buttons */}
         <div className="flex flex-col md:flex-row gap-2.5">
-          <Button
-            size="lg"
-            className="w-full font-semibold"
-            onClick={() => {
-              addItem({
-                id,
-                name: prompt?.name ?? '',
-                price: prompt?.price ?? 0,
-                mediaType,
-                thumbnail: sliderMedia[0]?.thumbnail ?? '',
-              });
-              router.push(RouterUrl.Cart);
-            }}
-          >
+          <Button size="lg" className="w-full font-semibold" onClick={() => {}}>
             Buy Now
           </Button>
           <Button
@@ -285,15 +272,9 @@ const PromptStoreDetailView = ({
             size="lg"
             className="w-full"
             disabled={inCart}
-            onClick={() =>
-              addItem({
-                id,
-                name: prompt?.name ?? '',
-                price: prompt?.price ?? 0,
-                mediaType,
-                thumbnail: sliderMedia[0]?.thumbnail ?? '',
-              })
-            }
+            onClick={() => {
+              addItem(id);
+            }}
           >
             {inCart ? 'Added to Cart' : 'Add to Cart'}
           </Button>

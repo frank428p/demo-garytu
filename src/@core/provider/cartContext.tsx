@@ -3,24 +3,25 @@
 import { useAtom } from 'jotai';
 import { cartItemsAtom, cartIsOpenAtom } from '@/@core/store/cartAtoms';
 import type { CartItem } from '@/@core/store/cartAtoms';
+import { useAddToCart, useRemoveFromCart } from '@/@core/useQuery/useCart';
 
 export type { CartItem };
 
 export function useCart() {
-  const [items, setItems] = useAtom(cartItemsAtom);
+  const [items] = useAtom(cartItemsAtom);
   const [isOpen, setIsOpen] = useAtom(cartIsOpenAtom);
+  const { mutate: addToCart } = useAddToCart();
+  const { mutate: removeFromCart } = useRemoveFromCart();
 
-  const addItem = (item: CartItem) => {
-    setItems((prev) =>
-      prev.find((i) => i.id === item.id) ? prev : [...prev, item],
-    );
+  const addItem = (uuid: string) => {
+    addToCart(uuid);
   };
 
   const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
+    removeFromCart(id);
   };
 
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+  const total = items.reduce((sum, item) => sum + item.item.price, 0);
 
   return { items, addItem, removeItem, total, isOpen, setIsOpen };
 }

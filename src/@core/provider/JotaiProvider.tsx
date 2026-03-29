@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { createStore, Provider } from 'jotai';
-import { userAtom, isLoggedInAtom } from '@/@core/store/authAtoms';
+import { userAtom } from '@/@core/store/authAtoms';
 import type { User } from '@/@core/types/user';
 
 export function JotaiProvider({
@@ -15,7 +15,6 @@ export function JotaiProvider({
   const store = useMemo(() => {
     const s = createStore();
     s.set(userAtom, initialUser ?? null);
-    s.set(isLoggedInAtom, !!initialUser);
     return s;
   }, []);
 

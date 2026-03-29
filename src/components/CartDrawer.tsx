@@ -49,19 +49,21 @@ export function CartDrawer() {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={item.thumbnail}
-                    alt={item.name}
+                    src={item.item.files[0].url}
+                    alt={item.item.name}
                     className="h-20 w-20 shrink-0 rounded-lg object-cover"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{item.name}</p>
+                    <p className="truncate text-sm font-medium">
+                      {item.item.name}
+                    </p>
                     <p className="mt-0.5 text-xs text-muted-foreground">
                       #{item.id} ·{' '}
-                      {item.mediaType.charAt(0).toUpperCase() +
-                        item.mediaType.slice(1)}
+                      {item.item.files[0].file_type.charAt(0).toUpperCase() +
+                        item.item.files[0].file_type.slice(1).toLowerCase()}
                     </p>
                     <p className="mt-1 text-sm font-semibold">
-                      NT$&nbsp;{item.price.toLocaleString()}
+                      NT$&nbsp;{item.item.price.toLocaleString()}
                     </p>
                   </div>
                   <button

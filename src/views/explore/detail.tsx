@@ -211,44 +211,6 @@ const PromptDetailView = ({
 
         <div className="h-px bg-border" />
 
-        {/* CTA buttons */}
-        <div className="flex flex-col gap-2.5">
-          <Button
-            size="lg"
-            className="w-full font-semibold"
-            onClick={() => {
-              addItem({
-                id,
-                name: PRODUCT_NAME,
-                price: PRODUCT_PRICE,
-                mediaType,
-                thumbnail: sliderMedia[0]?.thumbnail ?? '',
-              });
-              router.push(RouterUrl.Cart);
-            }}
-          >
-            Buy Now
-          </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full"
-            disabled={inCart}
-            onClick={() =>
-              addItem({
-                id,
-                name: PRODUCT_NAME,
-                price: PRODUCT_PRICE,
-                mediaType,
-                thumbnail: sliderMedia[0]?.thumbnail ?? '',
-              })
-            }
-          >
-            <IconShoppingCart className="h-4 w-4" />
-            {inCart ? 'Added to Cart' : 'Add to Cart'}
-          </Button>
-        </div>
-
         {/* Trust indicators */}
         <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">

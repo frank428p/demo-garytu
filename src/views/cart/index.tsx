@@ -32,7 +32,9 @@ export default function CartView() {
           <IconShoppingCart size={22} />
           <h1 className="text-xl font-bold">Shopping Cart</h1>
         </div>
-        <span className="text-sm text-muted-foreground">{items.length} items</span>
+        <span className="text-sm text-muted-foreground">
+          {items.length} items
+        </span>
       </div>
 
       {/* Empty state */}
@@ -58,24 +60,26 @@ export default function CartView() {
                 {/* Thumbnail */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={item.thumbnail}
-                  alt={item.name}
+                  src={item.item.files[0].url}
+                  alt={item.item.name}
                   className="h-16 w-16 shrink-0 rounded-lg object-cover"
                 />
 
                 {/* Info */}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium leading-snug">{item.name}</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    #{item.id} · AI Prompt ·{' '}
-                    {item.mediaType.charAt(0).toUpperCase() + item.mediaType.slice(1)}
+                  <p className="truncate font-medium leading-snug">
+                    {item.item.name}
                   </p>
+                  {/* <p className="mt-0.5 text-xs text-muted-foreground">
+                    #{item.id} · AI Prompt ·{' '}
+                    {item.item.files[0].mediaType.charAt(0).toUpperCase() + item.mediaType.slice(1)}
+                  </p> */}
                 </div>
 
                 {/* Price + Remove */}
                 <div className="flex shrink-0 flex-col items-end gap-2">
                   <span className="font-semibold">
-                    NT$&nbsp;{item.price.toLocaleString()}
+                    NT$&nbsp;{item.item.price.toLocaleString()}
                   </span>
                   <button
                     onClick={() => removeItem(item.id)}

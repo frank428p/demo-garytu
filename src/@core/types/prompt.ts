@@ -25,8 +25,11 @@ export type Prompt = {
   user_state: PromptUserState;
 };
 
-export type PromptsListParams = {
+export type PromptsPaginationParams = {
   page?: number;
   page_size?: number;
+};
+
+export type PromptsListParams = PromptsPaginationParams & {
   search?: string;
 };

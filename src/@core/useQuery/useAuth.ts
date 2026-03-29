@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { authApi } from '@/@core/api/auth';
-import { isLoggedInAtom } from '@/@core/store/authAtoms';
+import { userAtom } from '@/@core/store/authAtoms';
 import { USER_ME_KEY } from './useUser';
 import type {
   EmailRegisterRequest,
@@ -21,13 +21,11 @@ async function saveAccessToken(token: string) {
 
 export function useEmailLogin() {
   const queryClient = useQueryClient();
-  const setIsLoggedIn = useSetAtom(isLoggedInAtom);
   return useMutation({
     mutationFn: (data: LoginRequest) => authApi.emailLogin(data),
     onSuccess: async (res) => {
       await saveAccessToken(res.data.access_token);
-      setIsLoggedIn(true);
-      await queryClient.invalidateQueries({ queryKey: USER_ME_KEY });
+      queryClient.invalidateQueries({ queryKey: USER_ME_KEY });
     },
   });
 }
@@ -47,25 +45,22 @@ export function useVerifyEmailRegister() {
 
 export function useGoogleLogin() {
   const queryClient = useQueryClient();
-  const setIsLoggedIn = useSetAtom(isLoggedInAtom);
   return useMutation({
     mutationFn: (idToken: string) => authApi.googleLogin(idToken),
     onSuccess: async (res) => {
       await saveAccessToken(res.data.access_token);
-      setIsLoggedIn(true);
-      await queryClient.invalidateQueries({ queryKey: USER_ME_KEY });
+      queryClient.invalidateQueries({ queryKey: USER_ME_KEY });
     },
   });
 }
 
 export function useLogout() {
   const queryClient = useQueryClient();
-  const setIsLoggedIn = useSetAtom(isLoggedInAtom);
+  const setUser = useSetAtom(userAtom);
   return async () => {
     await fetch('/api/auth/set-token', { method: 'DELETE' });
-    setIsLoggedIn(false);
+    setUser(null);
     queryClient.removeQueries({ queryKey: USER_ME_KEY });
-    // Redirect away from protected pages
     if (window.location.pathname.startsWith('/user')) {
       window.location.href = '/';
     }
