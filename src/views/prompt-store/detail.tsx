@@ -13,21 +13,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useCartItems } from '@/@core/useQuery/useCart';
 
 type PromptDetailViewProps = {
   id: string;
 };
 
 const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
-  const { data } = usePrompt(id);
+  const { data, isPending: isPromptPending } = usePrompt(id);
   const prompt = data?.data;
 
   const requireAuthWithDialog = useRequireAuth(false);
   const requireAuth = useRequireAuth(true);
   const isBookmarked = requireAuth() && prompt?.user_state?.is_favorite;
   const { add: addFavorite, remove: removeFavorite } = useToggleFavorite(id);
-  const { addItem, items } = useCart();
-  const inCart = items.some((item) => item.item.uuid === id);
+  const { addItem, isAddingToCart } = useCart();
+  const { data: cartData, isFetching: isCartFetching } = useCartItems();
+  const inCart = cartData?.data?.some((item) => item.item.uuid === id) ?? false;
 
   return (
     <div className="flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start pt-4">
@@ -153,7 +155,9 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             variant="secondary"
             size="lg"
             className="w-full"
-            disabled={inCart}
+            disabled={
+              inCart || isAddingToCart || isPromptPending || isCartFetching
+            }
             onClick={() => {
               if (!requireAuthWithDialog()) return;
               addItem(id);

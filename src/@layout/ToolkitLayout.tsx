@@ -37,7 +37,7 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
       <Sidebar />
       <main
         className={cn(
-          'flex-1 min-w-0 px-4 pb-20 md:pb-0',
+          'flex-1 min-w-0 px-4 pb-20 lg:pb-0',
           pathname === '/toolkit/store' ? 'px-0' : 'px-4',
         )}
       >
