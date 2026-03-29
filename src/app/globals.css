@@ -164,6 +164,19 @@
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
   --color-destructive-foreground: var(--destructive-foreground);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from { height: 0; overflow: hidden; }
+  to { height: var(--radix-accordion-content-height); overflow: hidden; }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); overflow: hidden; }
+  to { height: 0; overflow: hidden; }
 }
 
 body {

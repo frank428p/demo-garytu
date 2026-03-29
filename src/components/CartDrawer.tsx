@@ -61,9 +61,11 @@ export function CartDrawer() {
           ) : (
             <div className="flex flex-col">
               {items.map((item) => (
-                <div
+                <Link
                   key={item.id}
-                  className="flex items-center gap-3 py-5 border-b border-border last:border-b-0"
+                  href={`/toolkit/store/${item.item.uuid}`}
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 py-4 border-b border-border last:border-b-0"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -76,7 +78,6 @@ export function CartDrawer() {
                       {item.item.name}
                     </p>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      #{item.id} ·{' '}
                       {item.item.files[0].file_type.charAt(0).toUpperCase() +
                         item.item.files[0].file_type.slice(1).toLowerCase()}
                     </p>
@@ -85,12 +86,15 @@ export function CartDrawer() {
                     </p>
                   </div>
                   <button
-                    onClick={() => removeItem(item.id)}
-                    className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeItem(item.id);
+                    }}
+                    className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                   >
-                    <IconTrash size={15} />
+                    <IconTrash size={18} />
                   </button>
-                </div>
+                </Link>
               ))}
             </div>
           )}

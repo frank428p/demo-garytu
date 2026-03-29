@@ -131,9 +131,9 @@ const PromptStoreView = () => {
   const loading = isLoading || isFetchingNextPage;
 
   return (
-    <div className="min-h-screen rounded-tl-[32px] rounded-tr-[32px] overflow-hidden">
+    <div className="min-h-screen lg:rounded-tl-[32px] lg:rounded-tr-[32px] overflow-hidden lg:px-4">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-background py-24 md:py-36 rounded-tl-[32px] rounded-tr-[32px]">
+      <section className="relative overflow-hidden bg-background py-18 md:py-18 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
         <div
           className="absolute inset-0 opacity-[0.15]"
           style={{

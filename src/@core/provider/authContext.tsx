@@ -48,13 +48,13 @@ export function useAuth() {
   };
 }
 
-export function useRequireAuth() {
+export function useRequireAuth(skipLoginDialog: boolean) {
   const user = useAtomValue(userAtom);
   const setAuthMode = useSetAtom(authDialogAtom);
 
   return () => {
     if (user) return true;
-    setAuthMode('login');
+    if (!skipLoginDialog) setAuthMode('login');
     return false;
   };
 }

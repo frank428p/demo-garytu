@@ -25,7 +25,7 @@ export function Sidebar() {
           <SidebarNavLink
             key={item.url}
             item={item}
-            isActive={pathname === item.url}
+            isActive={pathname.startsWith(item.url)}
           />
         ))}
         <Separator />
@@ -34,7 +34,7 @@ export function Sidebar() {
           <SidebarNavLink
             key={item.url}
             item={item}
-            isActive={pathname === item.url}
+            isActive={pathname.startsWith(item.url)}
           />
         ))}
 
@@ -44,7 +44,7 @@ export function Sidebar() {
           <SidebarNavLink
             key={item.url}
             item={item}
-            isActive={pathname === item.url}
+            isActive={pathname.startsWith(item.url)}
           />
         ))} */}
 

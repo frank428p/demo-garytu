@@ -1,21 +1,18 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  IconBookmarkFilled,
-  IconBookmark,
-  IconShieldCheck,
-  IconDownload,
-} from '@tabler/icons-react';
+import { IconBookmarkFilled, IconBookmark } from '@tabler/icons-react';
 import { ThumbnailSlider } from '@/components/ThumbnailSlider';
-import { MediaType, AspectRatioType } from '@/@core/types';
-import { useMemo } from 'react';
 import { useCart } from '@/@core/provider/cartContext';
-import { useRouter } from 'next/navigation';
-import { RouterUrl } from '@/@core/constants/routerUrl';
-import { usePrompt } from '@/@core/useQuery/usePrompts';
+import { usePrompt, useToggleFavorite } from '@/@core/useQuery/usePrompts';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRequireAuth } from '@/@core/provider/authContext';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 type PromptDetailViewProps = {
   id: string;
@@ -25,28 +22,29 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const { data } = usePrompt(id);
   const prompt = data?.data;
 
-  const requireAuth = useRequireAuth();
+  const requireAuthWithDialog = useRequireAuth(false);
+  const requireAuth = useRequireAuth(true);
+  const isBookmarked = requireAuth() && prompt?.user_state?.is_favorite;
+  const { add: addFavorite, remove: removeFavorite } = useToggleFavorite(id);
   const { addItem, items } = useCart();
-  const router = useRouter();
   const inCart = items.some((item) => item.item.uuid === id);
 
   return (
-    <div className="flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start">
+    <div className="flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start pt-4">
       {/* Image slider */}
-      <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-[3.5rem]">
+      <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-18">
         {prompt ? (
           <ThumbnailSlider
             mediaType={prompt.files[0]?.file_type ?? 'IMAGE'}
             files={prompt.files}
           />
         ) : (
-          // <div className="aspect-square w-full animate-pulse rounded-xl bg-muted" />
           <Skeleton className="aspect-square w-full rounded-3xl" />
         )}
       </div>
 
       {/* Info panel */}
-      <div className="flex w-full flex-col gap-5 lg:flex-[5] lg:shrink-0">
+      <div className="flex w-full flex-col gap-5 pb-8 lg:flex-[5] lg:shrink-0">
         {/* Title */}
         <div className="flex flex-col gap-2">
           <div className="flex flex-row gap-2 items-center justify-between">
@@ -57,11 +55,20 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 <Skeleton className="h-8 w-2/3 rounded-lg" />
               )}
             </h2>
-            <IconBookmark
-              size={18}
+            <div
               className="cursor-pointer"
-              color="var(--muted-foreground)"
-            />
+              onClick={() => {
+                if (!requireAuthWithDialog()) return;
+                if (isBookmarked) removeFavorite.mutate();
+                else addFavorite.mutate();
+              }}
+            >
+              {isBookmarked ? (
+                <IconBookmarkFilled size={18} color="var(--primary)" />
+              ) : (
+                <IconBookmark size={18} color="var(--muted-foreground)" />
+              )}
+            </div>
           </div>
 
           {/* Category badges */}
@@ -138,7 +145,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
         <div className="h-px bg-border" />
 
         {/* CTA buttons */}
-        <div className="flex flex-col md:flex-row gap-2.5">
+        <div className="flex flex-col md:flex-row gap-2.5 mb-8">
           <Button size="lg" className="w-full font-semibold" onClick={() => {}}>
             Buy Now
           </Button>
@@ -148,8 +155,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             className="w-full"
             disabled={inCart}
             onClick={() => {
-              console.log('requireAuth', requireAuth);
-              if (!requireAuth()) return;
+              if (!requireAuthWithDialog()) return;
               addItem(id);
             }}
           >
@@ -157,17 +163,31 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
           </Button>
         </div>
 
-        {/* Trust indicators */}
-        <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <IconShieldCheck size={14} />
-            Secure checkout
-          </span>
-          <span className="flex items-center gap-1.5">
-            <IconDownload size={14} />
-            Instant access
-          </span>
-        </div>
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="shipping">
+            <AccordionTrigger>What is an AI prompt package?</AccordionTrigger>
+            <AccordionContent>
+              We offer standard (5-7 days), express (2-3 days), and overnight
+              shipping. Free shipping on international orders.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="returns">
+            <AccordionTrigger>How to use AI prompt package?</AccordionTrigger>
+            <AccordionContent>
+              Returns accepted within 30 days. Items must be unused and in
+              original packaging. Refunds processed within 5-7 business days.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="support">
+            <AccordionTrigger>
+              How can I contact customer support?
+            </AccordionTrigger>
+            <AccordionContent>
+              Reach us via email, live chat, or phone. We respond within 24
+              hours during business days.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );
