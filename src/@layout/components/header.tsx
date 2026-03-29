@@ -51,6 +51,7 @@ export function Header() {
 
   const user = useAtomValue(userAtom);
   const isAuth = !!user;
+  console.log('user', user);
   const [toolkitOpen, setToolkitOpen] = useState(false);
   const toolkitCloseTimer = useRef<ReturnType<typeof setTimeout>>(null);
 

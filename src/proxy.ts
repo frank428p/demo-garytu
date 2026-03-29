@@ -25,7 +25,7 @@ export default async function middleware(req: NextRequest) {
 
   const userData = await res.json();
   const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('x-user-data', JSON.stringify(userData));
+  requestHeaders.set('x-user-data', JSON.stringify(userData?.data));
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
 

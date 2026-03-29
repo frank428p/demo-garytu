@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { cartItemsAtom, cartIsOpenAtom } from '@/@core/store/cartAtoms';
 import type { CartItem } from '@/@core/store/cartAtoms';
 import { useAddToCart, useRemoveFromCart } from '@/@core/useQuery/useCart';
+import { toast } from 'sonner';
 
 export type { CartItem };
 
@@ -14,11 +15,17 @@ export function useCart() {
   const { mutate: removeFromCart } = useRemoveFromCart();
 
   const addItem = (uuid: string) => {
-    addToCart(uuid);
+    addToCart(uuid, {
+      onSuccess: () =>
+        toast.success('Added to cart', { position: 'top-center' }),
+    });
   };
 
   const removeItem = (id: string) => {
-    removeFromCart(id);
+    removeFromCart(id, {
+      onSuccess: () =>
+        toast.success('Removed from cart', { position: 'top-center' }),
+    });
   };
 
   const total = items.reduce((sum, item) => sum + item.item.price, 0);

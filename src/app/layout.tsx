@@ -6,6 +6,7 @@ import { AuthProvider } from '@/@core/provider/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
 import { JotaiProvider } from '@/@core/provider/JotaiProvider';
 import { ReactQueryProvider } from '@/@core/provider/ReactQueryProvider';
+import { Toaster } from '@/components/ui/sonner';
 import { headers } from 'next/headers';
 import type { User } from '@/@core/types/user';
 
@@ -36,6 +37,8 @@ export default async function RootLayout({
     ? JSON.parse(userDataHeader)
     : null;
 
+  console.log('initialUser', initialUser);
+
   return (
     <html lang="zh-TW" className="dark">
       <body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
@@ -44,6 +47,7 @@ export default async function RootLayout({
             <AuthProvider>
               <MainLayout>{children}</MainLayout>
               <AuthDialog />
+              <Toaster />
             </AuthProvider>
           </JotaiProvider>
         </ReactQueryProvider>

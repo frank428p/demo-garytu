@@ -1,10 +1,9 @@
 'use client';
 
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
+import { useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { cartApi } from '@/@core/api/cart';
-import { userAtom } from '@/@core/store/authAtoms';
 import { cartItemsAtom } from '@/@core/store/cartAtoms';
 
 export const CART_KEY = ['cart'];
@@ -15,9 +14,8 @@ export const cartQueryOptions = queryOptions({
 });
 
 export function useCartItems() {
-  const user = useAtomValue(userAtom);
   const setCartItems = useSetAtom(cartItemsAtom);
-  const query = useQuery({ ...cartQueryOptions, enabled: !!user });
+  const query = useQuery({ ...cartQueryOptions, enabled: false });
 
   useEffect(() => {
     if (!query.data?.data) return;
@@ -28,21 +26,21 @@ export function useCartItems() {
 }
 
 export function useAddToCart() {
-  const queryClient = useQueryClient();
+  const { refetch } = useCartItems();
   return useMutation({
     mutationFn: (uuid: string) => cartApi.addPrompt(uuid),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: CART_KEY });
+      refetch();
     },
   });
 }
 
 export function useRemoveFromCart() {
-  const queryClient = useQueryClient();
+  const { refetch } = useCartItems();
   return useMutation({
     mutationFn: (id: string) => cartApi.remove(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: CART_KEY });
+      refetch();
     },
   });
 }

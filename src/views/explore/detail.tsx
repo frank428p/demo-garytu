@@ -32,7 +32,6 @@ const PromptDetailView = ({
   const inCart = items.some((item) => item.id === id);
 
   const sliderMedia = useMemo(() => {
-    console.log('', mediaType, aspectRatio);
     if (mediaType === 'IMAGE') {
       switch (aspectRatio) {
         case '1:1':

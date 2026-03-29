@@ -3,43 +3,36 @@
 import { useEffect } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { authDialogAtom, userAtom } from '@/@core/store/authAtoms';
-import { useMe } from '@/@core/useQuery/useUser';
-import { useQueryClient } from '@tanstack/react-query';
-import { ApiError } from '@/@core/api/fetchClient';
-import { cartQueryOptions, useCartItems } from '@/@core/useQuery/useCart';
+import { cartItemsAtom } from '@/@core/store/cartAtoms';
+import { useCartItems } from '@/@core/useQuery/useCart';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { data, error } = useMe();
   const setUser = useSetAtom(userAtom);
-  const user = useAtomValue(userAtom);
-  const queryClient = useQueryClient();
-  const { refetch: getCartRefetch } = useCartItems();
+  const setCartItems = useSetAtom(cartItemsAtom);
 
-  // useMe 拿到資料後同步進 atom
+  // 全域監聽 401/403，清除 session
   useEffect(() => {
-    setUser(data?.data ?? null);
-  }, [data, setUser]);
-
-  // 有 user 後預取所有需要登入才能取得的資料
-  // 新增需要登入的 API，在這裡加入即可
-  useEffect(() => {
-    if (!user) return;
-    // queryClient.prefetchQuery(cartQueryOptions);
-    getCartRefetch();
-  }, [user, queryClient]);
-
-  // token 失效（401/403）清除 session
-  useEffect(() => {
-    if (!(error instanceof ApiError)) return;
-    if (error.status !== 401 && error.status !== 403) return;
-    (async () => {
+    const handleAuthError = async () => {
       await fetch('/api/auth/set-token', { method: 'DELETE' });
       setUser(null);
+      setCartItems([]);
       if (window.location.pathname.startsWith('/user')) {
         window.location.href = '/';
       }
-    })();
-  }, [error, setUser]);
+    };
+
+    window.addEventListener('auth-error', handleAuthError);
+    return () => window.removeEventListener('auth-error', handleAuthError);
+  }, [setUser, setCartItems]);
+
+  const user = useAtomValue(userAtom);
+  const { refetch: refetchCart } = useCartItems();
+
+  // 登入後強制重新 fetch cart（避免 stale cache 問題）
+  useEffect(() => {
+    if (!user) return;
+    refetchCart();
+  }, [user, refetchCart]);
 
   return <>{children}</>;
 }
