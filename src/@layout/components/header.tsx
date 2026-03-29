@@ -4,7 +4,7 @@ import {
   IconWorld,
   IconShoppingBag,
   IconCurrencyEthereum,
-  IconChevronDown,
+  IconShoppingCart,
   IconPhoto,
   IconVideo,
 } from '@tabler/icons-react';
@@ -218,7 +218,7 @@ export function Header() {
               className="relative h-8 bg-transparent"
               onClick={() => setIsOpen(true)}
             >
-              <IconShoppingBag />
+              <IconShoppingCart />
               {items.length > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
                   {items.length}

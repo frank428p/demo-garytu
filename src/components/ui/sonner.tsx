@@ -18,6 +18,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           color: 'var(--color-popover-foreground)',
           border: '1px solid var(--color-border)',
           padding: '12px',
+          borderWidth: '0px',
         },
         classNames: {
           toast: 'group toast group-[.toaster]:shadow-lg',

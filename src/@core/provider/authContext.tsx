@@ -37,11 +37,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export function useIsLoggedIn() {
-  const user = useAtomValue(userAtom);
-  return !!user;
-}
-
 export function useAuth() {
   const [authMode, setAuthMode] = useAtom(authDialogAtom);
 
@@ -50,5 +45,16 @@ export function useAuth() {
     openLogin: () => setAuthMode('login'),
     openSignup: () => setAuthMode('signup'),
     closeAuth: () => setAuthMode(null),
+  };
+}
+
+export function useRequireAuth() {
+  const user = useAtomValue(userAtom);
+  const setAuthMode = useSetAtom(authDialogAtom);
+
+  return () => {
+    if (user) return true;
+    setAuthMode('login');
+    return false;
   };
 }

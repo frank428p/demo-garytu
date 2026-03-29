@@ -15,144 +15,20 @@ import { useRouter } from 'next/navigation';
 import { RouterUrl } from '@/@core/constants/routerUrl';
 import { usePrompt } from '@/@core/useQuery/usePrompts';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useRequireAuth } from '@/@core/provider/authContext';
 
 type PromptDetailViewProps = {
   id: string;
-  mediaType?: MediaType;
-  aspectRatio?: AspectRatioType;
 };
 
-const PromptStoreDetailView = ({
-  id,
-  mediaType = 'IMAGE',
-  aspectRatio = '16:9',
-}: PromptDetailViewProps) => {
+const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const { data } = usePrompt(id);
   const prompt = data?.data;
 
+  const requireAuth = useRequireAuth();
   const { addItem, items } = useCart();
   const router = useRouter();
   const inCart = items.some((item) => item.item.uuid === id);
-
-  const sliderMedia = useMemo(() => {
-    if (mediaType === 'IMAGE') {
-      switch (aspectRatio) {
-        case '1:1':
-          return [
-            {
-              src: '/images/gallery/1-to-1_1.jpg',
-              thumbnail: '/images/gallery/1-to-1_1.jpg',
-            },
-            {
-              src: '/images/gallery/1-to-1_2.jpg',
-              thumbnail: '/images/gallery/1-to-1_2.jpg',
-            },
-            {
-              src: '/images/gallery/1-to-1_3.jpg',
-              thumbnail: '/images/gallery/1-to-1_3.jpg',
-            },
-            {
-              src: '/images/gallery/1-to-1_3.jpg',
-              thumbnail: '/images/gallery/1-to-1_3.jpg',
-            },
-            {
-              src: '/images/gallery/1-to-1_3.jpg',
-              thumbnail: '/images/gallery/1-to-1_3.jpg',
-            },
-            {
-              src: '/images/gallery/1-to-1_3.jpg',
-              thumbnail: '/images/gallery/1-to-1_3.jpg',
-            },
-          ];
-        case '16:9':
-          return [
-            {
-              src: '/images/gallery/16-to-9_1.jpg',
-              thumbnail: '/images/gallery/16-to-9_1.jpg',
-            },
-            {
-              src: '/images/gallery/16-to-9_2.jpg',
-              thumbnail: '/images/gallery/16-to-9_2.jpg',
-            },
-            {
-              src: '/images/gallery/16-to-9_1.jpg',
-              thumbnail: '/images/gallery/16-to-9_1.jpg',
-            },
-            {
-              src: '/images/gallery/16-to-9_1.jpg',
-              thumbnail: '/images/gallery/16-to-9_1.jpg',
-            },
-            {
-              src: '/images/gallery/16-to-9_1.jpg',
-              thumbnail: '/images/gallery/16-to-9_1.jpg',
-            },
-            {
-              src: '/images/gallery/16-to-9_1.jpg',
-              thumbnail: '/images/gallery/16-to-9_1.jpg',
-            },
-          ];
-        case '9:16':
-          return [
-            {
-              src: '/images/gallery/9-to-16_1.jpg',
-              thumbnail: '/images/gallery/9-to-16_1.jpg',
-            },
-            {
-              src: '/images/gallery/9-to-16_1.jpg',
-              thumbnail: '/images/gallery/9-to-16_1.jpg',
-            },
-            {
-              src: '/images/gallery/9-to-16_1.jpg',
-              thumbnail: '/images/gallery/9-to-16_1.jpg',
-            },
-          ];
-        default:
-          return [];
-      }
-    }
-
-    if (mediaType === 'VIDEO') {
-      switch (aspectRatio) {
-        case '1:1':
-          return [
-            {
-              src: '/images/gallery/1-to-1_1.mp4',
-              thumbnail: '/images/gallery/1-to-1-cover_1.avif',
-            },
-            {
-              src: '/images/gallery/1-to-1_2.mp4',
-              thumbnail: '/images/gallery/1-to-1-cover_2.avif',
-            },
-          ];
-        case '16:9':
-          return [
-            {
-              src: '/images/gallery/16-to-9_1.mp4',
-              thumbnail: '/images/gallery/16-to-9-cover_1.avif',
-            },
-            {
-              src: '/images/gallery/16-to-9_2.mp4',
-              thumbnail: '/images/gallery/16-to-9-cover_2.avif',
-            },
-          ];
-        case '9:16':
-          return [
-            {
-              src: '/images/gallery/9-to-16_1.mp4',
-              thumbnail: '/images/gallery/9-to-16-cover_1.avif',
-            },
-            {
-              src: '/images/gallery/9-to-16_2.mp4',
-              thumbnail: '/images/gallery/9-to-16-cover_2.avif',
-            },
-          ];
-        default:
-          return [];
-      }
-    }
-
-    return [];
-  }, [aspectRatio, mediaType]);
 
   return (
     <div className="flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start">
@@ -272,6 +148,8 @@ const PromptStoreDetailView = ({
             className="w-full"
             disabled={inCart}
             onClick={() => {
+              console.log('requireAuth', requireAuth);
+              if (!requireAuth()) return;
               addItem(id);
             }}
           >

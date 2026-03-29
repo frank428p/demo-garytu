@@ -8,7 +8,12 @@ import {
   SheetPanel,
   SheetFooter,
 } from '@/components/ui/sheet';
-import { IconShoppingCart, IconTrash } from '@tabler/icons-react';
+import {
+  IconShoppingCart,
+  IconTrash,
+  IconArrowRight,
+} from '@tabler/icons-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/@core/provider/cartContext';
 
@@ -29,16 +34,29 @@ export function CartDrawer() {
         </SheetHeader>
 
         {/* Items list */}
-        <SheetPanel className="px-5">
+        <SheetPanel className="px-5 h-full">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 py-20 text-center">
-              <IconShoppingCart
-                size={40}
-                className="text-muted-foreground/30"
-              />
-              <p className="text-sm text-muted-foreground">
-                Your cart is empty
-              </p>
+            <div className="flex flex-col h-full items-center justify-center text-center px-4">
+              {/* Icon */}
+              <div className="flex flex-col">
+                <h3 className="text-base font-semibold mb-2">
+                  Your cart is empty
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+                  Discover curated AI prompt packs crafted by top creators.
+                </p>
+              </div>
+
+              <Button
+                asChild
+                className="gap-1.5"
+                onClick={() => setIsOpen(false)}
+              >
+                <Link href="/toolkit/store">
+                  Browse Store
+                  <IconArrowRight size={15} />
+                </Link>
+              </Button>
             </div>
           ) : (
             <div className="flex flex-col">
