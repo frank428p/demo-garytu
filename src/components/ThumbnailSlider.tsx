@@ -1,16 +1,18 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
+import { MediaType } from '@/@core/types/index';
+import { PromptFile } from '@/@core/types/prompt';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-import Image from 'next/image';
 
 const images = [
   '/images/gallery/1-to-1_1.jpg',
@@ -28,12 +30,20 @@ const images = [
   '/images/gallery/1-to-1_1.jpg',
 ];
 
-function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
+function ThumbnailSliderInner({
+  isMobile,
+  mediaType,
+  files,
+}: {
+  isMobile: boolean;
+  mediaType: MediaType;
+  files: PromptFile[];
+}) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   return (
     <div className="w-full max-w-full overflow-hidden [&_.swiper-button-next]:text-white [&_.swiper-button-next]:w-6 [&_.swiper-button-next]:h-6 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:w-6 [&_.swiper-button-prev]:h-6 [&_.swiper-button-next:after]:text-2xl [&_.swiper-button-prev:after]:text-2xl">
-      {isDesktop ? (
+      {!isMobile ? (
         <div
           className="relative grid gap-4"
           style={{ gridTemplateColumns: '5rem minmax(0, 1fr)' }}
@@ -49,15 +59,15 @@ function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
               freeMode
               watchSlidesProgress
               style={{ height: '100%' }}
-              className="rounded-lg"
+              className="rounded-xl"
             >
-              {images.map((image, index) => (
+              {files.map((item, index) => (
                 <SwiperSlide key={index} className="!h-auto cursor-pointer">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={image}
+                    src={item.url}
                     alt={`Thumbnail ${index + 1}`}
-                    className="block w-full rounded-md object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
+                    className="block w-full rounded-xl object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
                   />
                 </SwiperSlide>
               ))}
@@ -67,23 +77,41 @@ function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
           {/* 主圖：grid 第 2 欄，決定父容器高度 */}
           <div className="min-w-0" style={{ gridColumn: 2 }}>
             <Swiper
-              modules={[FreeMode, Navigation, Thumbs]}
+              modules={[FreeMode, Thumbs]}
               spaceBetween={10}
-              navigation
               thumbs={{ swiper: thumbsSwiper }}
-              className="rounded-lg"
+              className="!rounded-[32px]"
             >
-              {images.map((image, index) => (
+              {files.map((item, index) => (
                 <SwiperSlide key={index}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <Image
-                    src={image}
-                    alt={`Slide ${index + 1}`}
-                    width={1120}
-                    height={1120}
-                    className="block w-full rounded-lg"
-                    sizes="(min-width: 768px) 40vw, 100vw"
-                  />
+                  {mediaType === 'VIDEO' ? (
+                    <video
+                      src={item.url}
+                      controls
+                      controlsList="nodownload noremoteplayback"
+                      disablePictureInPicture
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="h-full w-full object-contain"
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLVideoElement).style.display =
+                          'none';
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      src={item.url}
+                      alt={`Slide ${index + 1}`}
+                      width={1120}
+                      height={1120}
+                      className="block w-full !rounded-xl"
+                      sizes="(min-width: 768px) 40vw, 100vw"
+                    />
+                  )}
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -93,17 +121,16 @@ function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
         <div className="space-y-2">
           {/* 主圖 */}
           <Swiper
-            modules={[FreeMode, Navigation, Thumbs]}
+            modules={[FreeMode, Thumbs]}
             spaceBetween={10}
-            navigation
             thumbs={{ swiper: thumbsSwiper }}
             className="rounded-lg"
           >
-            {images.map((image, index) => (
+            {files.map((item, index) => (
               <SwiperSlide key={index}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={image}
+                  src={item.url}
                   alt={`Slide ${index + 1}`}
                   className="block w-full rounded-lg"
                 />
@@ -121,11 +148,11 @@ function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
             watchSlidesProgress
             className="w-full rounded-lg"
           >
-            {images.map((image, index) => (
+            {files.map((item, index) => (
               <SwiperSlide key={index} className="cursor-pointer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={image}
+                  src={item.url}
                   alt={`Thumbnail ${index + 1}`}
                   className="block w-full rounded-md object-cover aspect-video opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
                 />
@@ -138,12 +165,20 @@ function ThumbnailSliderInner({ isDesktop }: { isDesktop: boolean }) {
   );
 }
 
-export function ThumbnailSlider() {
-  const { isDesktop, isTablet, isMobile } = useBreakpoint();
+export function ThumbnailSlider({
+  mediaType,
+  files,
+}: {
+  mediaType: MediaType;
+  files: PromptFile[];
+}) {
+  const { isMobile } = useBreakpoint();
   return (
     <ThumbnailSliderInner
-      key={isDesktop || isTablet ? 'desktop' : 'mobile'}
-      isDesktop={!!(isDesktop || isTablet)}
+      key={isMobile ? 'mobile' : 'desktop'}
+      isMobile={isMobile}
+      mediaType={mediaType}
+      files={files}
     />
   );
 }

@@ -2,7 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import {
-  IconShoppingCart,
+  IconBookmarkFilled,
+  IconBookmark,
   IconShieldCheck,
   IconDownload,
 } from '@tabler/icons-react';
@@ -12,6 +13,8 @@ import { useMemo } from 'react';
 import { useCart } from '@/@core/provider/cartContext';
 import { useRouter } from 'next/navigation';
 import { RouterUrl } from '@/@core/constants/routerUrl';
+import { usePrompt } from '@/@core/useQuery/usePrompts';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type PromptDetailViewProps = {
   id: string;
@@ -19,14 +22,14 @@ type PromptDetailViewProps = {
   aspectRatio?: AspectRatioType;
 };
 
-const PRODUCT_NAME = 'Cinematic Portrait Lighting Pack';
-const PRODUCT_PRICE = 1500;
-
 const PromptStoreDetailView = ({
   id,
   mediaType = 'IMAGE',
   aspectRatio = '16:9',
 }: PromptDetailViewProps) => {
+  const { data } = usePrompt(id);
+  const prompt = data?.data;
+
   const { addItem, items } = useCart();
   const router = useRouter();
   const inCart = items.some((item) => item.id === id);
@@ -153,47 +156,77 @@ const PromptStoreDetailView = ({
   }, [aspectRatio, mediaType]);
 
   return (
-    <div className="flex flex-col gap-12 p-6 lg:flex-row lg:items-start">
+    <div className="flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start">
       {/* Image slider */}
       <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-[3.5rem]">
-        <ThumbnailSlider />
+        {prompt ? (
+          <ThumbnailSlider
+            mediaType={prompt.files[0]?.file_type ?? 'IMAGE'}
+            files={prompt.files}
+          />
+        ) : (
+          // <div className="aspect-square w-full animate-pulse rounded-xl bg-muted" />
+          <Skeleton className="aspect-square w-full rounded-3xl" />
+        )}
       </div>
 
       {/* Info panel */}
       <div className="flex w-full flex-col gap-5 lg:flex-[5] lg:shrink-0">
         {/* Title */}
         <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-bold leading-snug">{PRODUCT_NAME}</h2>
+          <div className="flex flex-row gap-2 items-center justify-between">
+            <h2 className="text-xl lg:text-3xl font-bold leading-snug">
+              {prompt?.name ? (
+                prompt.name
+              ) : (
+                <Skeleton className="h-8 w-2/3 rounded-lg" />
+              )}
+            </h2>
+            <IconBookmark
+              size={18}
+              className="cursor-pointer"
+              color="var(--muted-foreground)"
+            />
+          </div>
+
           {/* Category badges */}
           <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
-              AI Prompt
-            </span>
-            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-              Instant Download
-            </span>
+            {prompt?.name ? (
+              <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
+                AI Prompt
+              </span>
+            ) : (
+              <Skeleton className="h-4 w-1/3" />
+            )}
           </div>
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2.5">
-          <span className="text-3xl font-bold tracking-tight">
-            NT$&nbsp;{PRODUCT_PRICE.toLocaleString()}
-          </span>
-          <span className="text-sm text-muted-foreground line-through">
+        <div className="flex items-center gap-2.5">
+          {prompt ? (
+            <span className="text-2xl font-bold tracking-tight">
+              NT$&nbsp;{prompt?.price?.toLocaleString()}
+            </span>
+          ) : (
+            <Skeleton className="h-5 w-1/3" />
+          )}
+          {/* <span className="text-sm text-muted-foreground line-through">
             NT$&nbsp;2,000
-          </span>
-          <span className="rounded bg-destructive/15 px-1.5 py-0.5 text-xs font-bold text-destructive">
-            -25%
+          </span> */}
+          <span className="rounded bg-chart-1/10 px-1.5 py-0.5 text-xs font-bold text-chart-1">
+            Bonus Credit: {prompt?.bonus_credit}
           </span>
         </div>
 
         {/* Description */}
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          A professionally engineered AI prompt pack for generating cinematic
-          portrait lighting. Includes 10+ style variations optimized for
-          Firefly, Midjourney, and Stable Diffusion.
-        </p>
+
+        {prompt ? (
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {prompt.description}
+          </p>
+        ) : (
+          <Skeleton className="h-8 w-full" />
+        )}
 
         <div className="h-px bg-border" />
 
@@ -230,15 +263,15 @@ const PromptStoreDetailView = ({
         <div className="h-px bg-border" />
 
         {/* CTA buttons */}
-        <div className="flex flex-row gap-2.5">
+        <div className="flex flex-col md:flex-row gap-2.5">
           <Button
             size="lg"
             className="w-full font-semibold"
             onClick={() => {
               addItem({
                 id,
-                name: PRODUCT_NAME,
-                price: PRODUCT_PRICE,
+                name: prompt?.name ?? '',
+                price: prompt?.price ?? 0,
                 mediaType,
                 thumbnail: sliderMedia[0]?.thumbnail ?? '',
               });
@@ -255,14 +288,13 @@ const PromptStoreDetailView = ({
             onClick={() =>
               addItem({
                 id,
-                name: PRODUCT_NAME,
-                price: PRODUCT_PRICE,
+                name: prompt?.name ?? '',
+                price: prompt?.price ?? 0,
                 mediaType,
                 thumbnail: sliderMedia[0]?.thumbnail ?? '',
               })
             }
           >
-            <IconShoppingCart className="h-4 w-4" />
             {inCart ? 'Added to Cart' : 'Add to Cart'}
           </Button>
         </div>

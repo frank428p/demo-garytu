@@ -73,7 +73,7 @@ export function Header() {
       {/* Left: Logo */}
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
-          <img width={120} src="/images/logo.png" />
+          <img width={120} src="/images/logo.png" alt="GaryTu AI" />
         </Link>
 
         {isDesktop && (

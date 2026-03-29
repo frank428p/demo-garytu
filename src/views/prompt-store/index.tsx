@@ -33,6 +33,19 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
     }
   };
 
+  const handleTouchStart = () => {
+    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
+      videoRef.current.play();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
   return (
     <Link
       href={`/toolkit/store/${prompt.uuid}`}
@@ -43,6 +56,8 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
         className="relative w-full aspect-video overflow-hidden rounded-xl"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {mainFile?.file_type === 'VIDEO' ? (
           <video

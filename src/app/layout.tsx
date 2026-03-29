@@ -6,6 +6,8 @@ import { AuthProvider } from '@/@core/provider/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
 import { JotaiProvider } from '@/@core/provider/JotaiProvider';
 import { ReactQueryProvider } from '@/@core/provider/ReactQueryProvider';
+import { headers } from 'next/headers';
+import type { User } from '@/@core/types/user';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -23,16 +25,22 @@ export const metadata: Metadata = {
   description: 'AI Art Generation Platform',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const userDataHeader = headersList.get('x-user-data');
+  const initialUser: User | null = userDataHeader
+    ? JSON.parse(userDataHeader)
+    : null;
+
   return (
     <html lang="zh-TW" className="dark">
       <body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
         <ReactQueryProvider>
-          <JotaiProvider>
+          <JotaiProvider initialUser={initialUser}>
             <AuthProvider>
               <MainLayout>{children}</MainLayout>
               <AuthDialog />

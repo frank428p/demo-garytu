@@ -1,5 +1,18 @@
 import { MediaType } from './index';
 
+export type PromptFile = {
+  file_type: MediaType;
+  position: number;
+  url: string;
+  thumbnail_url: string;
+  created_at: string;
+};
+
+export type PromptUserState = {
+  is_favorite: boolean;
+  purchased: boolean;
+};
+
 export type Prompt = {
   uuid: string;
   name: string;
@@ -7,12 +20,9 @@ export type Prompt = {
   price: number;
   enabled: boolean;
   created_at: string;
-  files: Array<{
-    file_type: MediaType;
-    position: number;
-    url: string;
-    created_at: string;
-  }>;
+  files: Array<PromptFile>;
+  bonus_credit: number;
+  user_state: PromptUserState;
 };
 
 export type PromptsListParams = {

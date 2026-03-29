@@ -2,11 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import {
-  authDialogAtom,
-  isLoggedInAtom,
-  userAtom,
-} from '@/@core/store/authAtoms';
+import { authDialogAtom, isLoggedInAtom, userAtom } from '@/@core/store/authAtoms';
 import { useMe } from '@/@core/useQuery/useUser';
 import { ApiError } from '@/@core/api/fetchClient';
 
@@ -15,12 +11,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useSetAtom(userAtom);
   const setIsLoggedIn = useSetAtom(isLoggedInAtom);
 
-  // On mount: restore login state from auth_status cookie (handles page refresh)
+  // Sync fresh user data from API into atom
   useEffect(() => {
-    if (document.cookie.includes('auth_status=1')) {
-      setIsLoggedIn(true);
-    }
-  }, [setIsLoggedIn]);
+    setUser(data?.data ?? null);
+  }, [data, setUser]);
 
   // If token is invalid (401) or forbidden (403), clear the session
   useEffect(() => {
@@ -36,11 +30,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })();
   }, [error, setIsLoggedIn, setUser]);
 
-  useEffect(() => {
-    setUser(data?.data ?? null);
-  }, [data, setUser]);
-
   return <>{children}</>;
+}
+
+export function useIsLoggedIn() {
+  return useAtom(isLoggedInAtom)[0];
 }
 
 export function useAuth() {

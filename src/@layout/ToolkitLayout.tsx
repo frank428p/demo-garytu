@@ -38,14 +38,14 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
       <main
         className={cn(
           'flex-1 min-w-0 px-4 pb-20 md:pb-0',
-          pathname === '/toolkit/store' ? 'px-0' : 'px-2',
+          pathname === '/toolkit/store' ? 'px-0' : 'px-4',
         )}
       >
         {children}
       </main>
 
       {(isMobile || isTablet) && (
-        <nav className="fixed bottom-0 left-0 z-40 w-screen flex items-center bg-background border-t border-border px-2 overflow-hidden">
+        <nav className="fixed bottom-0 left-0 z-40 w-screen flex items-center bg-background border-t border-border px-2 pb-[env(safe-area-inset-bottom)] overflow-hidden">
           {BottomNav.map((item) => (
             <SidebarNavLink
               key={item.url}
