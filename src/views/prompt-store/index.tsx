@@ -91,7 +91,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
           </div>
         )}
 
-        {!prompt?.user_state.purchased && (
+        {prompt?.user_state.purchased && (
           <div className="absolute bottom-2 right-2 rounded-md bg-primary/70 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
             <span className="text-[10px] text-white/90 font-medium">
               Purchased

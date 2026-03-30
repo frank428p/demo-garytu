@@ -162,30 +162,45 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
 
         {/* CTA buttons */}
         <div className="flex flex-row gap-2.5 mb-8">
-          <Button
-            size="lg"
-            className="px-4 md:px-8 md:w-[160px] font-semibold"
-            onClick={() => {
-              if (!requireAuthWithDialog()) return;
-              if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
-            }}
-          >
-            Buy Now
-          </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            className="px-4 md:px-8 md:w-[160px]"
-            disabled={
-              inCart || isAddingToCart || isPromptPending || isCartFetching
-            }
-            onClick={() => {
-              if (!requireAuthWithDialog()) return;
-              addItem(id);
-            }}
-          >
-            {inCart ? 'Added to Cart' : 'Add to Cart'}
-          </Button>
+          {prompt?.user_state?.purchased ? (
+            <Button
+              size="lg"
+              className="px-4 md:px-8 md:w-[160px] font-semibold"
+              // onClick={() => {
+              //   if (!requireAuthWithDialog()) return;
+              //   if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
+              // }}
+            >
+              Open PDF
+            </Button>
+          ) : (
+            <>
+              <Button
+                size="lg"
+                className="px-4 md:px-8 md:w-[160px] font-semibold"
+                onClick={() => {
+                  if (!requireAuthWithDialog()) return;
+                  if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
+                }}
+              >
+                Buy Now
+              </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="px-4 md:px-8 md:w-[160px]"
+                disabled={
+                  inCart || isAddingToCart || isPromptPending || isCartFetching
+                }
+                onClick={() => {
+                  if (!requireAuthWithDialog()) return;
+                  addItem(id);
+                }}
+              >
+                {inCart ? 'Added to Cart' : 'Add to Cart'}
+              </Button>
+            </>
+          )}
 
           <Button
             variant="outline"
