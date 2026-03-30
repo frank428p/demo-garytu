@@ -7,7 +7,7 @@ export const RouterUrl = {
   VideoGenerate: '/toolkit/video-generate',
   Business: '/business',
   Cart: '/toolkit/cart',
-  Checkout: '/toolkit/checkout',
+  Checkout: '/checkout',
   UserSubscription: '/user/subscription',
   UserMyPrompt: '/user/my-prompt',
   UserOrderHistory: '/user/order-history',

@@ -113,8 +113,8 @@ export function CartDrawer() {
                   NT$&nbsp;{total.toLocaleString()}
                 </span>
               </div>
-              <Button size="lg" className="w-full font-semibold">
-                Checkout
+              <Button size="lg" className="w-full font-semibold" asChild onClick={() => setIsOpen(false)}>
+                <Link href="/checkout/cart">Checkout</Link>
               </Button>
             </div>
           </SheetFooter>

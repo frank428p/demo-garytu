@@ -18,6 +18,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { useCartItems } from '@/@core/useQuery/useCart';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -29,6 +30,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const { data, isPending: isPromptPending } = usePrompt(id);
   const prompt = data?.data;
 
+  const router = useRouter();
   const requireAuthWithDialog = useRequireAuth(false);
   const requireAuth = useRequireAuth(true);
   const isBookmarked = requireAuth() && prompt?.user_state?.is_favorite;
@@ -163,7 +165,10 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
           <Button
             size="lg"
             className="px-4 md:px-8 md:w-[160px] font-semibold"
-            onClick={() => {}}
+            onClick={() => {
+              if (!requireAuthWithDialog()) return;
+              if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
+            }}
           >
             Buy Now
           </Button>
