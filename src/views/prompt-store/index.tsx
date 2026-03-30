@@ -1,12 +1,20 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { H2 } from '@/components/ui/typography';
-import { IconBookmarkFilled } from '@tabler/icons-react';
+import { H2, Muted, Small } from '@/components/ui/typography';
+import {
+  IconBookmarkFilled,
+  IconChevronDown,
+  IconPhoto,
+  IconVideo,
+} from '@tabler/icons-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePromptsList } from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
@@ -82,19 +90,25 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
             <span className="text-[10px] text-white/90 font-medium">Video</span>
           </div>
         )}
+
+        {!prompt?.user_state.purchased && (
+          <div className="absolute bottom-2 right-2 rounded-md bg-primary/70 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
+            <span className="text-[10px] text-white/90 font-medium">
+              Purchased
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Info */}
-      <div className="flex flex-col px-3 pt-2 pb-1">
-        <div className="flex items-start justify-between gap-2">
-          <span className="text-base font-semibold text-foreground leading-snug line-clamp-1">
+      <div className="flex flex-col gap-1 px-3 pt-2 pb-1">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-semibold text-foreground leading-snug line-clamp-1">
             {prompt.name}
           </span>
-          <IconBookmarkFilled
-            size={18}
-            color="var(--primary)"
-            className="shrink-0"
-          />
+          <Small className="font-bold text-foreground/60">
+            NT${prompt.price.toLocaleString()}
+          </Small>
         </div>
       </div>
     </Link>
@@ -104,6 +118,10 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
 // ─── PromptStoreView ──────────────────────────────────────────────────────────
 
 const PromptStoreView = () => {
+  const [mediaTypeOpen, setMediaTypeOpen] = useState(false);
+  const [styleOpen, setStyleOpen] = useState(false);
+  const [selectedMediaType, setSelectedMediaType] = useState('');
+  const [selectedStyle, setSelectedStyle] = useState('');
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     usePromptsList();
 
@@ -144,21 +162,21 @@ const PromptStoreView = () => {
         />
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="aurora-1 absolute -top-20 -left-20 w-[500px] h-[500px] rounded-full bg-primary/40 blur-[70px]" />
-          <div className="aurora-2 absolute -bottom-20 -right-10 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[80px]" />
-          <div className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-primary/25 blur-[50px]" />
+          <div className="aurora-1 absolute -top-20 -left-20 w-[250px] h-[250px] md:w-[300px] md:h-[300px] lg:w-[500px] lg:h-[500px] rounded-full bg-primary/40 blur-[70px]" />
+          <div className="aurora-2 absolute -bottom-20 -right-10 w-[210px] h-[210px] md:w-[260px] md:h-[260px] lg:w-[420px] lg:h-[420px] rounded-full bg-primary/35 blur-[80px]" />
+          <div className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] md:w-[200px] md:h-[200px] lg:w-[300px] lg:h-[300px] rounded-full bg-primary/25 blur-[50px]" />
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
+          <h1 className="text-[32px] md:text-[42px] font-black tracking-tight leading-[1.05] mb-6">
             The Art of
             <br />
             <span className="text-primary">AI Prompts</span>
           </h1>
 
-          <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed">
+          <p className="text-muted-foreground text-md md:text-lg max-w-xl leading-relaxed">
             Curated prompt packages crafted by top AI artists and creators.
             Elevate your generation workflow instantly.
           </p>
@@ -166,12 +184,118 @@ const PromptStoreView = () => {
       </section>
 
       {/* Submissions */}
-      <section className="pb-16 px-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <H2 className="text-2xl">Submissions</H2>
+      <section className="pb-16 pt-4 px-4 lg:px-0">
+        {/* Filter bar */}
+        <div className="">
+          <div className="flex items-center gap-2 pb-3">
+            {/* Media Type trigger */}
+            <Button
+              variant="ghost"
+              className={cn(
+                'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
+                mediaTypeOpen &&
+                  'bg-accent text-foreground hover:text-foreground',
+                selectedMediaType &&
+                  'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
+              )}
+              onClick={() => {
+                setMediaTypeOpen((v) => !v);
+                setStyleOpen(false);
+              }}
+            >
+              Media Type
+            </Button>
+
+            {/* Style trigger */}
+            <Button
+              variant="ghost"
+              className={cn(
+                'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
+                styleOpen && 'bg-accent text-foreground hover:text-foreground',
+                selectedStyle &&
+                  'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
+              )}
+              onClick={() => {
+                setStyleOpen((v) => !v);
+                setMediaTypeOpen(false);
+              }}
+            >
+              Style
+            </Button>
+          </div>
+
+          {/* Media Type panel */}
+          <div
+            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${mediaTypeOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+          >
+            <div className="overflow-hidden">
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                size="sm"
+                value={selectedMediaType}
+                onValueChange={setSelectedMediaType}
+                className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
+              >
+                {(['Image', 'Video'] as const).map((style) => (
+                  <ToggleGroupItem
+                    className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
+                    key={style}
+                    value={style}
+                  >
+                    {style}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+          </div>
+
+          {/* Style panel */}
+          <div
+            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${styleOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+          >
+            <div className="overflow-hidden">
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                size="sm"
+                value={selectedStyle}
+                onValueChange={setSelectedStyle}
+                className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
+              >
+                {(
+                  [
+                    'Photorealistic',
+                    'Cinematic',
+                    'Anime',
+                    'Manga',
+                    '3D Render',
+                    'Digital Painting',
+                    'Oil Painting',
+                    'Watercolor',
+                    'Sketch',
+                    'Minimalist',
+                    'Flat Illustration',
+                    'Isometric',
+                    'Cyberpunk',
+                    'Fantasy Art',
+                    'Pixel Art',
+                  ] as const
+                ).map((style) => (
+                  <ToggleGroupItem
+                    className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
+                    key={style}
+                    value={style}
+                  >
+                    {style}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {items.map((prompt) => (
             <MediaCard key={prompt.uuid} prompt={prompt} />
           ))}
