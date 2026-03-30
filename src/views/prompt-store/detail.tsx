@@ -1,7 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { IconBookmarkFilled, IconBookmark } from '@tabler/icons-react';
+import {
+  IconBookmarkFilled,
+  IconBookmark,
+  IconShare3,
+} from '@tabler/icons-react';
 import { ThumbnailSlider } from '@/components/ThumbnailSlider';
 import { useCart } from '@/@core/provider/cartContext';
 import { usePrompt, useToggleFavorite } from '@/@core/useQuery/usePrompts';
@@ -14,6 +18,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { useCartItems } from '@/@core/useQuery/useCart';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 type PromptDetailViewProps = {
   id: string;
@@ -50,14 +56,15 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
         {/* Title */}
         <div className="flex flex-col gap-2">
           <div className="flex flex-row gap-2 items-center justify-between">
-            <h2 className="text-xl lg:text-3xl font-bold leading-snug">
-              {prompt?.name ? (
-                prompt.name
-              ) : (
-                <Skeleton className="h-8 w-2/3 rounded-lg" />
-              )}
-            </h2>
-            <div
+            {prompt?.name ? (
+              <h2 className="text-xl lg:text-3xl font-bold leading-snug">
+                {prompt?.name}
+              </h2>
+            ) : (
+              <Skeleton className="h-8 w-2/3 rounded-lg" />
+            )}
+
+            {/* <div
               className="cursor-pointer"
               onClick={() => {
                 if (!requireAuthWithDialog()) return;
@@ -70,17 +77,25 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               ) : (
                 <IconBookmark size={18} color="var(--muted-foreground)" />
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Category badges */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {prompt?.name ? (
               <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
                 AI Prompt
               </span>
             ) : (
-              <Skeleton className="h-4 w-1/3" />
+              <Skeleton className="h-4 w-[48px]" />
+            )}
+
+            {prompt?.bonus_credit != null ? (
+              <span className="rounded-full bg-chart-1/10 px-1.5 py-0.5 text-xs font-bold text-chart-1">
+                Bonus Credit: {prompt?.bonus_credit}
+              </span>
+            ) : (
+              <Skeleton className="h-4 w-[48px]" />
             )}
           </div>
         </div>
@@ -97,9 +112,6 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
           {/* <span className="text-sm text-muted-foreground line-through">
             NT$&nbsp;2,000
           </span> */}
-          <span className="rounded bg-chart-1/10 px-1.5 py-0.5 text-xs font-bold text-chart-1">
-            Bonus Credit: {prompt?.bonus_credit}
-          </span>
         </div>
 
         {/* Description */}
@@ -147,14 +159,18 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
         <div className="h-px bg-border" />
 
         {/* CTA buttons */}
-        <div className="flex flex-col md:flex-row gap-2.5 mb-8">
-          <Button size="lg" className="w-full font-semibold" onClick={() => {}}>
+        <div className="flex flex-row gap-2.5 mb-8">
+          <Button
+            size="lg"
+            className="px-4 md:px-8 md:w-[160px] font-semibold"
+            onClick={() => {}}
+          >
             Buy Now
           </Button>
           <Button
             variant="secondary"
             size="lg"
-            className="w-full"
+            className="px-4 md:px-8 md:w-[160px]"
             disabled={
               inCart || isAddingToCart || isPromptPending || isCartFetching
             }
@@ -164,6 +180,38 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             }}
           >
             {inCart ? 'Added to Cart' : 'Add to Cart'}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            className={cn(
+              'rounded-full !h-10 !w-10',
+              isBookmarked && 'border-primary',
+            )}
+            onClick={() => {
+              if (!requireAuthWithDialog()) return;
+              if (isBookmarked) removeFavorite.mutate();
+              else addFavorite.mutate();
+            }}
+          >
+            {isBookmarked ? (
+              <IconBookmarkFilled size={18} color="var(--primary)" />
+            ) : (
+              <IconBookmark size={18} color="var(--muted-foreground)" />
+            )}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full h-10 w-10"
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast.success('Share link copied!', { position: 'top-center' });
+            }}
+          >
+            <IconShare3 size={18} color="var(--muted-foreground)" />
           </Button>
         </div>
 
