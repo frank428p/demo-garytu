@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { promptsApi } from '@/@core/api/prompts';
-import type { PromptsListParams } from '@/@core/types/prompt';
+import type { PromptsListParams, PromptsPaginationParams } from '@/@core/types/prompt';
 
 export function usePromptsList(params: Omit<PromptsListParams, 'page'> = {}) {
   return useInfiniteQuery({
@@ -26,31 +26,35 @@ export function usePrompt(uuid: string) {
   });
 }
 
-export function useFavoritePrompts() {
+export function useFavoritePrompts(params: PromptsPaginationParams = {}) {
   return useInfiniteQuery({
-    queryKey: ['prompts', 'favorites'],
+    queryKey: ['prompts', 'favorites', params],
     queryFn: ({ pageParam = 1 }) =>
-      promptsApi.listFavorites({ page: pageParam as number }),
+      promptsApi.listFavorites({ ...params, page: pageParam as number }),
     getNextPageParam: (lastPage) => {
       const meta = lastPage.meta;
       if (!meta) return undefined;
       return meta.page < meta.total_pages ? meta.page + 1 : undefined;
     },
     initialPageParam: 1,
+    staleTime: 0,
+    gcTime: 0,
   });
 }
 
-export function usePurchasedPrompts() {
+export function usePurchasedPrompts(params: PromptsPaginationParams = {}) {
   return useInfiniteQuery({
-    queryKey: ['prompts', 'purchased'],
+    queryKey: ['prompts', 'purchased', params],
     queryFn: ({ pageParam = 1 }) =>
-      promptsApi.listPurchased({ page: pageParam as number }),
+      promptsApi.listPurchased({ ...params, page: pageParam as number }),
     getNextPageParam: (lastPage) => {
       const meta = lastPage.meta;
       if (!meta) return undefined;
       return meta.page < meta.total_pages ? meta.page + 1 : undefined;
     },
     initialPageParam: 1,
+    staleTime: 0,
+    gcTime: 0,
   });
 }
 
