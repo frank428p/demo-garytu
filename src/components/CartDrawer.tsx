@@ -12,10 +12,14 @@ import {
   IconShoppingCart,
   IconTrash,
   IconArrowRight,
+  IconVideo,
+  IconPhoto,
+  IconCurrencyEthereum,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/@core/provider/cartContext';
+import { Tag } from './ui/tag';
 
 export function CartDrawer() {
   const { items, removeItem, total, isOpen, setIsOpen } = useCart();
@@ -77,10 +81,34 @@ export function CartDrawer() {
                     <p className="truncate text-sm font-medium">
                       {item.item.name}
                     </p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
+                    <div className="inline-flex flex gap-1 mt-1">
+                      <Tag className="gap-1">
+                        {item.item.files[0].file_type === 'VIDEO' ? (
+                          <>
+                            <IconVideo size={14} />
+                            Video
+                          </>
+                        ) : (
+                          <>
+                            <IconPhoto size={14} />
+                            Image
+                          </>
+                        )}
+                      </Tag>
+
+                      {/* <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
+                        AI Prompt
+                      </span> */}
+
+                      <Tag variant="secondary" className="gap-1">
+                        <IconCurrencyEthereum size={14} />
+                        {item?.item?.bonus_credit}
+                      </Tag>
+                    </div>
+                    {/* <p className="mt-0.5 text-xs text-muted-foreground">
                       {item.item.files[0].file_type.charAt(0).toUpperCase() +
                         item.item.files[0].file_type.slice(1).toLowerCase()}
-                    </p>
+                    </p> */}
                     <p className="mt-1 text-sm font-semibold">
                       NT$&nbsp;{item.item.price.toLocaleString()}
                     </p>
@@ -113,7 +141,12 @@ export function CartDrawer() {
                   NT$&nbsp;{total.toLocaleString()}
                 </span>
               </div>
-              <Button size="lg" className="w-full font-semibold" asChild onClick={() => setIsOpen(false)}>
+              <Button
+                size="lg"
+                className="w-full font-semibold"
+                asChild
+                onClick={() => setIsOpen(false)}
+              >
                 <Link href="/checkout/cart">Checkout</Link>
               </Button>
             </div>

@@ -5,6 +5,9 @@ import {
   IconBookmarkFilled,
   IconBookmark,
   IconShare3,
+  IconVideo,
+  IconPhoto,
+  IconCurrencyEthereum,
 } from '@tabler/icons-react';
 import { ThumbnailSlider } from '@/components/ThumbnailSlider';
 import { useCart } from '@/@core/provider/cartContext';
@@ -21,6 +24,7 @@ import { useCartItems } from '@/@core/useQuery/useCart';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { Tag } from '@/components/ui/tag';
 
 type PromptDetailViewProps = {
   id: string;
@@ -49,7 +53,29 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             files={prompt.files}
           />
         ) : (
-          <Skeleton className="aspect-square w-full rounded-3xl" />
+          <>
+            {/* Mobile skeleton */}
+            <div className="space-y-2 md:hidden">
+              <Skeleton className="aspect-square w-full rounded-3xl" />
+              <div className="overflow-hidden flex gap-2">
+                <Skeleton className="aspect-square w-full h-12 rounded-xl" />
+                <Skeleton className="aspect-square w-full h-12 rounded-xl" />
+                <Skeleton className="aspect-square w-full h-12 rounded-xl" />
+              </div>
+            </div>
+            {/* Desktop skeleton */}
+            <div
+              className="hidden md:grid gap-4"
+              style={{ gridTemplateColumns: '5rem minmax(0, 1fr)' }}
+            >
+              <div className="w-20 h-full overflow-hidden flex flex-col gap-2">
+                <Skeleton className="aspect-square w-full rounded-xl" />
+                <Skeleton className="aspect-square w-full rounded-xl" />
+                <Skeleton className="aspect-square w-full rounded-xl" />
+              </div>
+              <Skeleton className="aspect-square w-full rounded-3xl" />
+            </div>
+          </>
         )}
       </div>
 
@@ -65,37 +91,41 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             ) : (
               <Skeleton className="h-8 w-2/3 rounded-lg" />
             )}
-
-            {/* <div
-              className="cursor-pointer"
-              onClick={() => {
-                if (!requireAuthWithDialog()) return;
-                if (isBookmarked) removeFavorite.mutate();
-                else addFavorite.mutate();
-              }}
-            >
-              {isBookmarked ? (
-                <IconBookmarkFilled size={18} color="var(--primary)" />
-              ) : (
-                <IconBookmark size={18} color="var(--muted-foreground)" />
-              )}
-            </div> */}
           </div>
 
           {/* Category badges */}
           <div className="flex flex-wrap items-center gap-2">
+            {prompt?.files[0] ? (
+              <Tag>
+                <div className="flex items-center gap-1">
+                  {prompt?.files[0]?.file_type === 'VIDEO' ? (
+                    <>
+                      <IconVideo size={14} />
+                      Video
+                    </>
+                  ) : (
+                    <>
+                      <IconPhoto size={14} />
+                      Image
+                    </>
+                  )}
+                </div>
+              </Tag>
+            ) : (
+              <Skeleton className="h-4 w-[48px]" />
+            )}
+
             {prompt?.name ? (
-              <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
-                AI Prompt
-              </span>
+              <Tag variant="primary">AI Prompt</Tag>
             ) : (
               <Skeleton className="h-4 w-[48px]" />
             )}
 
             {prompt?.bonus_credit != null ? (
-              <span className="rounded-full bg-chart-1/10 px-1.5 py-0.5 text-xs font-bold text-chart-1">
-                Bonus Credit: {prompt?.bonus_credit}
-              </span>
+              <Tag variant="secondary" className="items-center">
+                Bonus Credit <IconCurrencyEthereum size={14} />{' '}
+                {prompt?.bonus_credit}
+              </Tag>
             ) : (
               <Skeleton className="h-4 w-[48px]" />
             )}

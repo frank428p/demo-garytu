@@ -2,7 +2,10 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 import type { Swiper as SwiperType } from 'swiper';
+
+import 'react-photo-view/dist/react-photo-view.css';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
@@ -76,45 +79,49 @@ function ThumbnailSliderInner({
 
           {/* 主圖：grid 第 2 欄，決定父容器高度 */}
           <div className="min-w-0" style={{ gridColumn: 2 }}>
-            <Swiper
-              modules={[FreeMode, Thumbs]}
-              spaceBetween={10}
-              thumbs={{ swiper: thumbsSwiper }}
-              className="!rounded-[32px]"
-            >
-              {files.map((item, index) => (
-                <SwiperSlide key={index}>
-                  {mediaType === 'VIDEO' ? (
-                    <video
-                      src={item.url}
-                      controls
-                      controlsList="nodownload noremoteplayback"
-                      disablePictureInPicture
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="metadata"
-                      className="h-full w-full object-contain"
-                      onPointerDown={(e) => e.stopPropagation()}
-                      onError={(e) => {
-                        (e.currentTarget as HTMLVideoElement).style.display =
-                          'none';
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      src={item.url}
-                      alt={`Slide ${index + 1}`}
-                      width={1120}
-                      height={1120}
-                      className="block w-full !rounded-xl"
-                      sizes="(min-width: 768px) 40vw, 100vw"
-                    />
-                  )}
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <PhotoProvider>
+              <Swiper
+                modules={[FreeMode, Thumbs]}
+                spaceBetween={10}
+                thumbs={{ swiper: thumbsSwiper }}
+                className="rounded-3xl"
+              >
+                {files.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    {mediaType === 'VIDEO' ? (
+                      <video
+                        src={item.url}
+                        controls
+                        controlsList="nodownload noremoteplayback"
+                        disablePictureInPicture
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="metadata"
+                        className="h-full w-full object-contain"
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLVideoElement).style.display =
+                            'none';
+                        }}
+                      />
+                    ) : (
+                      <PhotoView src={item.url}>
+                        <Image
+                          src={item.url}
+                          alt={`Slide ${index + 1}`}
+                          width={1120}
+                          height={1120}
+                          className="block w-full !rounded-xl cursor-zoom-in"
+                          sizes="(min-width: 768px) 40vw, 100vw"
+                        />
+                      </PhotoView>
+                    )}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </PhotoProvider>
           </div>
         </div>
       ) : (
@@ -132,7 +139,7 @@ function ThumbnailSliderInner({
                 <img
                   src={item.url}
                   alt={`Slide ${index + 1}`}
-                  className="block w-full rounded-lg"
+                  className="block w-full rounded-xl"
                 />
               </SwiperSlide>
             ))}
@@ -146,7 +153,7 @@ function ThumbnailSliderInner({
             slidesPerView={4}
             freeMode
             watchSlidesProgress
-            className="w-full rounded-lg"
+            className="w-full rounded-xl"
           >
             {files.map((item, index) => (
               <SwiperSlide key={index} className="cursor-pointer">

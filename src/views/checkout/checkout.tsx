@@ -106,7 +106,7 @@ function OrderSummaryPanel({
   isPending: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 space-y-5 sticky top-[4.5rem]">
+    <div className="rounded-2xl bg-card p-6 space-y-5 sticky top-[4.5rem]">
       <h2 className="text-base font-semibold">Payment Summary</h2>
 
       <div className="space-y-3 text-sm">
@@ -116,10 +116,10 @@ function OrderSummaryPanel({
           </span>
           <span>NT$&nbsp;{total.toLocaleString()}</span>
         </div>
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Processing fee</span>
           <span className="text-muted-foreground">Free</span>
-        </div>
+        </div> */}
 
         <div className="h-px bg-border" />
 
@@ -190,8 +190,7 @@ const CheckoutView = ({ type }: CheckoutViewProps) => {
 
   const isPending = type === 'CART' ? cartPending : directPending;
   const totalAmount = type === 'CART' ? total : (prompt?.price ?? 0);
-  const itemCount =
-    type === 'CART' ? items.length : (prompt ? 1 : 0);
+  const itemCount = type === 'CART' ? items.length : prompt ? 1 : 0;
 
   return (
     <div className="px-4 py-8 max-w-5xl mx-auto">
@@ -199,7 +198,7 @@ const CheckoutView = ({ type }: CheckoutViewProps) => {
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Left: product list */}
-        <div className="flex-1 min-w-0 rounded-2xl border border-border bg-card p-6">
+        <div className="flex-1 min-w-0 rounded-2xl bg-card p-6">
           <h2 className="text-base font-semibold mb-1">
             {type === 'CART' ? 'Your Items' : 'Item'}
           </h2>
