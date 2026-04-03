@@ -186,7 +186,13 @@ const PromptStoreView = () => {
 
       {/* Collection */}
       <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 pt-5 md:flex-row ">
-        <div className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-full max-w-[450px] shrink-0 h-40 md:h-auto px-8 py-10">
+        <div
+          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-full max-w-[450px] shrink-0 h-40 md:h-auto px-8 py-10"
+          style={{
+            backgroundImage: `url(/images/bg-collection.jpg)`,
+            WebkitBackgroundSize: 'cover',
+          }}
+        >
           <h2 className="text-2xl font-bold leading-snug">
             Curated Collections
           </h2>
