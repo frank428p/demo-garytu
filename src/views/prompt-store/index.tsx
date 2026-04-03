@@ -15,6 +15,7 @@ import type { Prompt } from '@/@core/types/prompt';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { CollectionSlider } from '@/components/CollectionSlider';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
@@ -183,8 +184,61 @@ const PromptStoreView = () => {
         </div>
       </section>
 
+      {/* Collection */}
+      <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 pt-5 md:flex-row ">
+        <div className="hidden md:block bg-card rounded-2xl w-full shrink-0 md:max-h-[fill-available] md:w-1/3 h-40 md:h-auto"></div>
+        <div className="w-full min-w-0">
+          <CollectionSlider
+            items={[
+              {
+                id: '1',
+                badge: 'STORY',
+                title: 'Between lights',
+                image: '/images/gallery/16-to-9_1.jpg',
+                video: '/images/gallery/16-to-9_1.mp4',
+              },
+              {
+                id: '2',
+                badge: 'COLLECTION',
+                title: 'POV',
+                image: '/images/gallery/16-to-9_2.jpg',
+                video: '/images/gallery/16-to-9_1.mp4',
+              },
+              {
+                id: '3',
+                badge: 'STORY',
+                title: 'Unbound',
+                image: '/images/gallery/16-to-9_1.jpg',
+                video: '/images/gallery/16-to-9_1.mp4',
+              },
+              {
+                id: '4',
+                badge: 'COLLECTION',
+                title: 'Golden Hour',
+                image: '/images/gallery/16-to-9_2.jpg',
+                video: '/images/gallery/16-to-9_1.mp4',
+              },
+              {
+                id: '5',
+                badge: 'STORY',
+                title: 'Solitude',
+                image: '/images/gallery/16-to-9_1.jpg',
+                video: '/images/gallery/16-to-9_1.mp4',
+              },
+              {
+                id: '6',
+                badge: 'COLLECTION',
+                title: 'Neon Dreams',
+                image: '/images/gallery/16-to-9_2.jpg',
+                video: '/images/gallery/16-to-9_1.mp4',
+              },
+            ]}
+          />
+        </div>
+      </section>
+
       {/* Submissions */}
-      <section className="pb-16 pt-4 px-4 lg:px-0">
+      <section className="pb-16 px-4 lg:px-0">
         {/* Filter bar */}
         <div className="">
           <div className="flex items-center gap-2 pb-3">
