@@ -28,6 +28,9 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
   const [containerWidth, setContainerWidth] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const dragStartX = useRef<number | null>(null);
+  const isDragging = useRef(false);
+  const DRAG_THRESHOLD = 50;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -108,7 +111,26 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       }}
     >
       {/* Track */}
-      <div className="overflow-hidden">
+      <div
+        className="overflow-hidden cursor-grab active:cursor-grabbing"
+        onMouseDown={(e) => { dragStartX.current = e.clientX; isDragging.current = false; }}
+        onMouseMove={(e) => { if (dragStartX.current !== null && Math.abs(e.clientX - dragStartX.current) > 5) isDragging.current = true; }}
+        onMouseUp={(e) => {
+          if (dragStartX.current === null) return;
+          const dx = e.clientX - dragStartX.current;
+          if (Math.abs(dx) >= DRAG_THRESHOLD) navigate(dx < 0 ? 'next' : 'prev');
+          dragStartX.current = null;
+          isDragging.current = false;
+        }}
+        onMouseLeave={() => { dragStartX.current = null; isDragging.current = false; }}
+        onTouchStart={(e) => { dragStartX.current = e.touches[0].clientX; }}
+        onTouchEnd={(e) => {
+          if (dragStartX.current === null) return;
+          const dx = e.changedTouches[0].clientX - dragStartX.current;
+          if (Math.abs(dx) >= DRAG_THRESHOLD) navigate(dx < 0 ? 'next' : 'prev');
+          dragStartX.current = null;
+        }}
+      >
         <div
           style={{
             display: 'flex',
