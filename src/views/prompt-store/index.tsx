@@ -189,7 +189,7 @@ const PromptStoreView = () => {
         <div
           className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-full max-w-[450px] shrink-0 h-40 md:h-auto px-8 py-10"
           style={{
-            backgroundImage: `url(/images/bg-collection.jpg)`,
+            backgroundImage: `url(/images/bg-collection.avif)`,
             WebkitBackgroundSize: 'cover',
           }}
         >
