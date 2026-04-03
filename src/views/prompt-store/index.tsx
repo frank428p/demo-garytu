@@ -152,7 +152,7 @@ const PromptStoreView = () => {
   return (
     <div className="min-h-screen lg:rounded-tl-[32px] lg:rounded-tr-[32px] overflow-hidden lg:px-4">
       {/* Hero */}
-      {/* <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
+      <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
         <div
           className="absolute inset-0 opacity-[0.15]"
           style={{
@@ -182,11 +182,11 @@ const PromptStoreView = () => {
             Elevate your generation workflow instantly.
           </p>
         </div>
-      </section> */}
+      </section>
 
       {/* Collection */}
       <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 pt-5 md:flex-row ">
-        <div className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-[420px] shrink-0 h-40 md:h-auto px-8 py-10">
+        <div className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-full max-w-[450px] shrink-0 h-40 md:h-auto px-8 py-10">
           <h2 className="text-2xl font-bold leading-snug">
             Curated Collections
           </h2>
