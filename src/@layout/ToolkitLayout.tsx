@@ -38,7 +38,7 @@ export default function ToolkitLayout({ children }: ToolkitLayoutProps) {
       <main
         className={cn(
           'flex-1 min-w-0 px-4 pb-20 lg:pb-0',
-          pathname === '/toolkit/store' ? 'px-0' : 'px-4',
+          pathname === '/toolkit/store' ? 'px-0' : 'px-4 lg:px-6',
         )}
       >
         {children}

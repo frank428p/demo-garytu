@@ -150,7 +150,7 @@ const PromptStoreView = () => {
   const loading = isLoading || isFetchingNextPage;
 
   return (
-    <div className="min-h-screen lg:rounded-tl-[32px] lg:rounded-tr-[32px] overflow-hidden lg:px-4">
+    <div className="min-h-screen lg:rounded-tl-[32px] lg:rounded-tr-[32px] overflow-hidden lg:px-6">
       {/* Hero */}
       <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
         <div
@@ -185,9 +185,9 @@ const PromptStoreView = () => {
       </section>
 
       {/* Collection */}
-      <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 pt-5 md:flex-row ">
+      <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 md:flex-row px-4 lg:px-0 ">
         <div
-          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/5 min-w-[360px] max-w-[450px] shrink-0 px-4"
+          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
           style={{
             backgroundImage: `url(/images/bg-collection.avif)`,
             WebkitBackgroundSize: 'cover',

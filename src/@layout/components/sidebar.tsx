@@ -17,10 +17,10 @@ const generateNav = [ImageGenerateNav, VideoGenerateNav];
 
 export function Sidebar() {
   const pathname = usePathname();
-
+  // w-17
   return (
     <aside className="sticky top-14 left-0 h-[calc(100vh-68px)] w-17 flex-col bg-background z-40 hidden lg:flex">
-      <nav className="flex flex-1 flex-col overflow-y-auto p-3">
+      <nav className="flex flex-1 flex-col overflow-y-auto pl-6">
         {mainNav.map((item) => (
           <SidebarNavLink
             key={item.url}

@@ -243,7 +243,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       <button
         aria-label="Previous"
         className={cn(
-          'absolute cursor-pointer left-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/70',
+          'absolute cursor-pointer left-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/20',
           'transition-[opacity,transform] duration-300 ease-in-out',
           containerHovered && startIndex > 0
             ? 'opacity-100'
@@ -258,7 +258,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       <button
         aria-label="Next"
         className={cn(
-          'absolute cursor-pointer right-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent backdrop-blur-sm text-white hover:bg-secondary',
+          'absolute cursor-pointer right-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/20',
           'transition-[opacity,transform] duration-300 ease-in-out',
           containerHovered && startIndex < maxStart
             ? 'opacity-100'
