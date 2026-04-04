@@ -187,16 +187,16 @@ const PromptStoreView = () => {
       {/* Collection */}
       <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 pt-5 md:flex-row ">
         <div
-          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-full max-w-[450px] shrink-0 h-40 md:h-auto px-8 py-10"
+          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/5 min-w-[360px] max-w-[450px] shrink-0 px-4"
           style={{
             backgroundImage: `url(/images/bg-collection.avif)`,
             WebkitBackgroundSize: 'cover',
           }}
         >
-          <h2 className="text-2xl font-bold leading-snug">
+          <h2 className="text-3xl font-bold leading-snug">
             Curated Collections
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-relaxed">
             Handpicked prompt collections crafted by top AI artists. Each set is
             designed to elevate your creative workflow instantly.
           </p>

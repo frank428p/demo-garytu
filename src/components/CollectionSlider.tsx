@@ -19,7 +19,6 @@ const BADGE_STYLE: Record<CollectionItem['badge'], string> = {
 };
 
 const GAP = 16;
-const EXPAND_RATIO = 1.2;
 
 export function CollectionSlider({ items }: { items: CollectionItem[] }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null); // relative to startIndex
@@ -27,6 +26,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
   const [startIndex, setStartIndex] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [itemHeight, setItemHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStartX = useRef<number | null>(null);
   const isDragging = useRef(false);
@@ -35,24 +35,25 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([entry]) =>
-      setContainerWidth(entry.contentRect.width),
-    );
+    const ro = new ResizeObserver(([entry]) => {
+      setContainerWidth(entry.contentRect.width);
+      // measure item height from first child of track
+      const firstItem = el.querySelector<HTMLElement>('[data-slider-item]');
+      if (firstItem) setItemHeight(firstItem.offsetHeight);
+    });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
-  const { isMobile, isTablet, isDesktop, isXlDesktop, is2XlDesktop } =
-    useBreakpoint();
+  const { isTablet, isDesktop, isXlDesktop, is2XlDesktop } = useBreakpoint();
 
   const VISIBLE = useMemo(() => {
-    if (is2XlDesktop) return 4;
+    if (is2XlDesktop) return 5;
     if (isXlDesktop) return 4;
     if (isDesktop) return 3;
-    if (isMobile || isTablet) return 2;
-
-    return 3;
-  }, [isMobile, isTablet, isDesktop, isXlDesktop, is2XlDesktop]);
+    if (isTablet) return 2;
+    return 2;
+  }, [isTablet, isDesktop, isXlDesktop, is2XlDesktop]);
 
   const maxStart = items.length - VISIBLE;
 
@@ -61,6 +62,12 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
     ? (containerWidth - GAP * (VISIBLE - 1)) / VISIBLE
     : 0;
 
+  // expanded width = full 16:9 of item height, capped at available width
+  const expandedWidth = useMemo(() => {
+    const available = containerWidth - GAP * (VISIBLE - 1);
+    return itemHeight > 0 ? itemHeight * (16 / 9) : available / VISIBLE;
+  }, [itemHeight, containerWidth, VISIBLE]);
+
   // per-item widths accounting for hover expand
   const itemWidths = useMemo(() => {
     if (!baseItemWidth) return items.map(() => 0);
@@ -68,17 +75,19 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       const relIdx = i - startIndex;
       if (hoveredIdx === null || relIdx < 0 || relIdx >= VISIBLE)
         return baseItemWidth;
-      const normalParts = (VISIBLE - EXPAND_RATIO) / (VISIBLE - 1);
       const available = containerWidth - GAP * (VISIBLE - 1);
-      const expandedPx =
-        (available * EXPAND_RATIO) /
-        (EXPAND_RATIO + normalParts * (VISIBLE - 1));
-      const normalPx =
-        (available * normalParts) /
-        (EXPAND_RATIO + normalParts * (VISIBLE - 1));
-      return relIdx === hoveredIdx ? expandedPx : normalPx;
+      const n = (available - expandedWidth) / (VISIBLE - 1);
+      return relIdx === hoveredIdx ? expandedWidth : n;
     });
-  }, [baseItemWidth, hoveredIdx, startIndex, VISIBLE, containerWidth, items]);
+  }, [
+    baseItemWidth,
+    hoveredIdx,
+    startIndex,
+    VISIBLE,
+    containerWidth,
+    items,
+    expandedWidth,
+  ]);
 
   // track offset = sum of widths + gaps for items before startIndex
   const trackOffset = useMemo(() => {
@@ -113,21 +122,37 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       {/* Track */}
       <div
         className="overflow-hidden cursor-grab active:cursor-grabbing"
-        onMouseDown={(e) => { dragStartX.current = e.clientX; isDragging.current = false; }}
-        onMouseMove={(e) => { if (dragStartX.current !== null && Math.abs(e.clientX - dragStartX.current) > 5) isDragging.current = true; }}
+        onMouseDown={(e) => {
+          dragStartX.current = e.clientX;
+          isDragging.current = false;
+        }}
+        onMouseMove={(e) => {
+          if (
+            dragStartX.current !== null &&
+            Math.abs(e.clientX - dragStartX.current) > 5
+          )
+            isDragging.current = true;
+        }}
         onMouseUp={(e) => {
           if (dragStartX.current === null) return;
           const dx = e.clientX - dragStartX.current;
-          if (Math.abs(dx) >= DRAG_THRESHOLD) navigate(dx < 0 ? 'next' : 'prev');
+          if (Math.abs(dx) >= DRAG_THRESHOLD)
+            navigate(dx < 0 ? 'next' : 'prev');
           dragStartX.current = null;
           isDragging.current = false;
         }}
-        onMouseLeave={() => { dragStartX.current = null; isDragging.current = false; }}
-        onTouchStart={(e) => { dragStartX.current = e.touches[0].clientX; }}
+        onMouseLeave={() => {
+          dragStartX.current = null;
+          isDragging.current = false;
+        }}
+        onTouchStart={(e) => {
+          dragStartX.current = e.touches[0].clientX;
+        }}
         onTouchEnd={(e) => {
           if (dragStartX.current === null) return;
           const dx = e.changedTouches[0].clientX - dragStartX.current;
-          if (Math.abs(dx) >= DRAG_THRESHOLD) navigate(dx < 0 ? 'next' : 'prev');
+          if (Math.abs(dx) >= DRAG_THRESHOLD)
+            navigate(dx < 0 ? 'next' : 'prev');
           dragStartX.current = null;
         }}
       >
@@ -150,10 +175,12 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
                 key={item.id}
                 style={{
                   width: `${itemWidths[i] || baseItemWidth}px`,
+                  height: `${Math.max(180, Math.min(containerWidth * 0.22, 420))}px`,
                   flexShrink: 0,
                   transition: 'width 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
-                className="relative overflow-hidden rounded-xl cursor-pointer h-56 lg:h-64"
+                data-slider-item
+                className="relative overflow-hidden rounded-xl cursor-pointer"
                 onMouseEnter={() => isVisible && setHoveredIdx(relIdx)}
                 onMouseLeave={() => setHoveredIdx(null)}
               >
@@ -216,7 +243,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       <button
         aria-label="Previous"
         className={cn(
-          'absolute left-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent backdrop-blur-sm text-white hover:bg-secondary',
+          'absolute cursor-pointer left-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/70',
           'transition-[opacity,transform] duration-300 ease-in-out',
           containerHovered && startIndex > 0
             ? 'opacity-100'
@@ -231,7 +258,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
       <button
         aria-label="Next"
         className={cn(
-          'absolute right-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent backdrop-blur-sm text-white hover:bg-secondary',
+          'absolute cursor-pointer right-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent backdrop-blur-sm text-white hover:bg-secondary',
           'transition-[opacity,transform] duration-300 ease-in-out',
           containerHovered && startIndex < maxStart
             ? 'opacity-100'
