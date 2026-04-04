@@ -20,14 +20,23 @@ export async function apiFetch<T>(
     },
   });
 
-  console.log(res);
-
   if (!res.ok) {
-    if ((res.status === 401 || res.status === 403) && typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('auth-error', { detail: { status: res.status } }));
+    if (
+      (res.status === 401 || res.status === 403) &&
+      typeof window !== 'undefined'
+    ) {
+      window.dispatchEvent(
+        new CustomEvent('auth-error', { detail: { status: res.status } }),
+      );
     }
     throw new ApiError(res.status, path);
   }
 
-  return res.json() as Promise<T>;
+  const body = await res.json();
+
+  if (body?.code !== undefined && body.code !== 0) {
+    throw new ApiError(body.code, path);
+  }
+
+  return body as T;
 }

@@ -126,7 +126,8 @@ const PromptStoreView = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     usePromptsList();
 
-  const items = data?.pages.flatMap((p) => p.data) ?? [];
+  const items = data?.pages?.flatMap((p) => p.data) ?? [];
+  console.log('itemsitems', data);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Infinite scroll
@@ -365,7 +366,7 @@ const PromptStoreView = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {items.map((prompt) => (
-            <MediaCard key={prompt.uuid} prompt={prompt} />
+            <MediaCard key={prompt?.uuid} prompt={prompt} />
           ))}
         </div>
 
