@@ -89,7 +89,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 {prompt?.name}
               </h2>
             ) : (
-              <Skeleton className="h-8 w-2/3 rounded-lg" />
+              <Skeleton className="h-10 w-2/3 rounded-lg" />
             )}
           </div>
 
@@ -139,7 +139,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               NT$&nbsp;{prompt?.price?.toLocaleString()}
             </span>
           ) : (
-            <Skeleton className="h-5 w-1/3" />
+            <Skeleton className="h-8 w-1/3" />
           )}
           {/* <span className="text-sm text-muted-foreground line-through">
             NT$&nbsp;2,000
@@ -192,77 +192,84 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
 
         {/* CTA buttons */}
         <div className="flex flex-row gap-2.5 mb-8">
-          {prompt?.user_state?.purchased ? (
-            <Button
-              size="lg"
-              className="px-4 md:px-8 md:w-[160px] font-semibold"
-              // onClick={() => {
-              //   if (!requireAuthWithDialog()) return;
-              //   if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
-              // }}
-            >
-              Open PDF
-            </Button>
-          ) : (
+          {prompt ? (
             <>
-              <Button
-                size="lg"
-                className="px-4 md:px-8 md:w-[160px] font-semibold"
-                onClick={() => {
-                  if (!requireAuthWithDialog()) return;
-                  if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
-                }}
-              >
-                Buy Now
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="px-4 md:px-8 md:w-[160px]"
-                disabled={
-                  inCart || isAddingToCart || isPromptPending || isCartFetching
-                }
-                onClick={() => {
-                  if (!requireAuthWithDialog()) return;
-                  addItem(id);
-                }}
-              >
-                {inCart ? 'Added to Cart' : 'Add to Cart'}
-              </Button>
+              {prompt?.user_state?.purchased ? (
+                <Button
+                  size="lg"
+                  className="px-4 md:px-8 md:w-[160px] font-semibold"
+                >
+                  Open PDF
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    size="lg"
+                    className="px-4 md:px-8 md:w-[160px] font-semibold"
+                    onClick={() => {
+                      if (!requireAuthWithDialog()) return;
+                      if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
+                    }}
+                  >
+                    Buy Now
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="px-4 md:px-8 md:w-[160px]"
+                    disabled={
+                      inCart ||
+                      isAddingToCart ||
+                      isPromptPending ||
+                      isCartFetching
+                    }
+                    onClick={() => {
+                      if (!requireAuthWithDialog()) return;
+                      addItem(id);
+                    }}
+                  >
+                    {inCart ? 'Added to Cart' : 'Add to Cart'}
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={cn(
+                      'rounded-full !h-10 !w-10',
+                      isBookmarked && 'border-primary',
+                    )}
+                    onClick={() => {
+                      if (!requireAuthWithDialog()) return;
+                      if (isBookmarked) removeFavorite.mutate();
+                      else addFavorite.mutate();
+                    }}
+                  >
+                    {isBookmarked ? (
+                      <IconBookmarkFilled size={18} color="var(--primary)" />
+                    ) : (
+                      <IconBookmark size={18} color="var(--muted-foreground)" />
+                    )}
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full h-10 w-10"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast.success('Share link copied!', {
+                        position: 'top-center',
+                      });
+                    }}
+                  >
+                    <IconShare3 size={18} color="var(--muted-foreground)" />
+                  </Button>
+                </>
+              )}
             </>
+          ) : (
+            <Skeleton className="h-10 w-[160px]"></Skeleton>
           )}
-
-          <Button
-            variant="outline"
-            size="icon"
-            className={cn(
-              'rounded-full !h-10 !w-10',
-              isBookmarked && 'border-primary',
-            )}
-            onClick={() => {
-              if (!requireAuthWithDialog()) return;
-              if (isBookmarked) removeFavorite.mutate();
-              else addFavorite.mutate();
-            }}
-          >
-            {isBookmarked ? (
-              <IconBookmarkFilled size={18} color="var(--primary)" />
-            ) : (
-              <IconBookmark size={18} color="var(--muted-foreground)" />
-            )}
-          </Button>
-
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full h-10 w-10"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              toast.success('Share link copied!', { position: 'top-center' });
-            }}
-          >
-            <IconShare3 size={18} color="var(--muted-foreground)" />
-          </Button>
         </div>
 
         <Accordion type="single" collapsible className="w-full">
