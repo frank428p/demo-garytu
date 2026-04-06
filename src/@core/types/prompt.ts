@@ -15,6 +15,7 @@ export type PromptUserState = {
 
 export type Prompt = {
   uuid: string;
+  media_type: MediaType;
   name: string;
   description: string;
   price: number;

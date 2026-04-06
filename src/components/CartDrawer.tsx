@@ -66,24 +66,24 @@ export function CartDrawer() {
             <div className="flex flex-col">
               {items.map((item) => (
                 <Link
-                  key={item.id}
-                  href={`/toolkit/store/${item.item.uuid}`}
+                  key={item?.id}
+                  href={`/toolkit/store/${item?.item?.uuid}`}
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 py-4 border-b border-border last:border-b-0"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={item.item.files[0].url}
-                    alt={item.item.name}
+                    src={item?.item?.files[0]?.url}
+                    alt={item.item?.name}
                     className="h-20 w-20 shrink-0 rounded-lg object-cover"
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">
-                      {item.item.name}
+                      {item?.item?.name}
                     </p>
                     <div className="inline-flex flex gap-1 mt-1">
                       <Tag className="gap-1">
-                        {item.item.files[0].file_type === 'VIDEO' ? (
+                        {item?.item?.media_type === 'VIDEO' ? (
                           <>
                             <IconVideo size={14} />
                             Video

@@ -69,7 +69,7 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
         <div className="flex items-center gap-1.5">
           <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
             <div className="flex items-center gap-1">
-              {mainFile?.file_type === 'VIDEO' ? (
+              {prompt?.media_type === 'VIDEO' ? (
                 <>
                   <IconVideo size={14} />
                   Video

@@ -230,42 +230,42 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                   >
                     {inCart ? 'Added to Cart' : 'Add to Cart'}
                   </Button>
-
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className={cn(
-                      'rounded-full !h-10 !w-10',
-                      isBookmarked && 'border-primary',
-                    )}
-                    onClick={() => {
-                      if (!requireAuthWithDialog()) return;
-                      if (isBookmarked) removeFavorite.mutate();
-                      else addFavorite.mutate();
-                    }}
-                  >
-                    {isBookmarked ? (
-                      <IconBookmarkFilled size={18} color="var(--primary)" />
-                    ) : (
-                      <IconBookmark size={18} color="var(--muted-foreground)" />
-                    )}
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-10 w-10"
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href);
-                      toast.success('Share link copied!', {
-                        position: 'top-center',
-                      });
-                    }}
-                  >
-                    <IconShare3 size={18} color="var(--muted-foreground)" />
-                  </Button>
                 </>
               )}
+
+              <Button
+                variant="outline"
+                size="icon"
+                className={cn(
+                  'rounded-full !h-10 !w-10',
+                  isBookmarked && 'border-primary',
+                )}
+                onClick={() => {
+                  if (!requireAuthWithDialog()) return;
+                  if (isBookmarked) removeFavorite.mutate();
+                  else addFavorite.mutate();
+                }}
+              >
+                {isBookmarked ? (
+                  <IconBookmarkFilled size={18} color="var(--primary)" />
+                ) : (
+                  <IconBookmark size={18} color="var(--muted-foreground)" />
+                )}
+              </Button>
+
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full h-10 w-10"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast.success('Share link copied!', {
+                    position: 'top-center',
+                  });
+                }}
+              >
+                <IconShare3 size={18} color="var(--muted-foreground)" />
+              </Button>
             </>
           ) : (
             <Skeleton className="h-10 w-[160px]"></Skeleton>
