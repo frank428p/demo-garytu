@@ -127,7 +127,7 @@ const PromptStoreView = () => {
     usePromptsList();
 
   const items = data?.pages?.flatMap((p) => p.data) ?? [];
-  console.log('itemsitems', data);
+
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Infinite scroll

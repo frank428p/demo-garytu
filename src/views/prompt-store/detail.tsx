@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { PdfViewerDialog } from '@/components/PdfViewerDialog';
 import {
   IconBookmarkFilled,
   IconBookmark,
@@ -33,6 +35,7 @@ type PromptDetailViewProps = {
 const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const { data, isPending: isPromptPending } = usePrompt(id);
   const prompt = data?.data;
+  const [pdfOpen, setPdfOpen] = useState(false);
 
   const router = useRouter();
   const requireAuthWithDialog = useRequireAuth(false);
@@ -95,10 +98,10 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
 
           {/* Category badges */}
           <div className="flex flex-wrap items-center gap-2">
-            {prompt?.files[0] ? (
+            {prompt?.media_type ? (
               <Tag>
                 <div className="flex items-center gap-1">
-                  {prompt?.files[0]?.file_type === 'VIDEO' ? (
+                  {prompt?.media_type === 'VIDEO' ? (
                     <>
                       <IconVideo size={14} />
                       Video
@@ -198,6 +201,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 <Button
                   size="lg"
                   className="px-4 md:px-8 md:w-[160px] font-semibold"
+                  onClick={() => setPdfOpen(true)}
                 >
                   Open PDF
                 </Button>
@@ -271,6 +275,13 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             <Skeleton className="h-10 w-[160px]"></Skeleton>
           )}
         </div>
+
+        <PdfViewerDialog
+          open={pdfOpen}
+          onOpenChange={setPdfOpen}
+          url={prompt?.pdf?.url ?? ''}
+          title={prompt?.name}
+        />
 
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="shipping">

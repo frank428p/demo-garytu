@@ -1,6 +1,8 @@
 import { MediaType } from './index';
 
 export type PromptFile = {
+  uuid: string;
+  category: string;
   file_type: MediaType;
   position: number;
   url: string;
@@ -24,6 +26,8 @@ export type Prompt = {
   files: Array<PromptFile>;
   bonus_credit: number;
   user_state: PromptUserState;
+  cover: PromptFile;
+  pdf: PromptFile;
 };
 
 export type PromptsPaginationParams = {
