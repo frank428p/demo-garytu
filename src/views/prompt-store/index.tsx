@@ -22,34 +22,27 @@ import { CollectionSlider } from '@/components/CollectionSlider';
 function MediaCard({ prompt }: { prompt: Prompt }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const sortedFiles = [...prompt.files].sort((a, b) => a.position - b.position);
-  const mainFile = sortedFiles[0];
-  const posterFile =
-    mainFile?.file_type === 'VIDEO'
-      ? sortedFiles.find((f) => f.file_type === 'IMAGE')
-      : undefined;
-
   const handleMouseEnter = () => {
-    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
+    if (prompt?.media_type === 'VIDEO' && videoRef.current) {
       videoRef.current.play();
     }
   };
 
   const handleMouseLeave = () => {
-    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
+    if (prompt?.media_type === 'VIDEO' && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
   };
 
   const handleTouchStart = () => {
-    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
+    if (prompt?.media_type === 'VIDEO' && videoRef.current) {
       videoRef.current.play();
     }
   };
 
   const handleTouchEnd = () => {
-    if (mainFile?.file_type === 'VIDEO' && videoRef.current) {
+    if (prompt?.media_type === 'VIDEO' && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -68,11 +61,11 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {mainFile?.file_type === 'VIDEO' ? (
+        {prompt?.media_type === 'VIDEO' ? (
           <video
             ref={videoRef}
-            src={mainFile.url}
-            poster={posterFile?.url}
+            src={prompt?.cover.url}
+            poster={prompt?.cover?.thumbnail_url}
             muted
             loop
             playsInline
@@ -80,7 +73,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
           />
         ) : (
           <img
-            src={mainFile?.url}
+            src={prompt?.cover?.url}
             alt={prompt.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

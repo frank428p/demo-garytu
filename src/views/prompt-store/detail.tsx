@@ -152,7 +152,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
         {/* Description */}
 
         {prompt ? (
-          <p className="text-sm leading-relaxed text-muted-foreground">
+          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
             {prompt.description}
           </p>
         ) : (
@@ -198,13 +198,22 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
           {prompt ? (
             <>
               {prompt?.user_state?.purchased ? (
-                <Button
-                  size="lg"
-                  className="px-4 md:px-8 md:w-[160px] font-semibold"
-                  onClick={() => setPdfOpen(true)}
-                >
-                  Open PDF
-                </Button>
+                <>
+                  <Button
+                    size="lg"
+                    className="px-4 md:px-8 md:w-[160px] font-semibold"
+                    onClick={() => setPdfOpen(true)}
+                  >
+                    Open PDF
+                  </Button>
+                  <Button
+                    size="lg"
+                    className="px-4 md:px-8 font-semibold"
+                    onClick={() => setPdfOpen(true)}
+                  >
+                    Download Media Resource
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button
