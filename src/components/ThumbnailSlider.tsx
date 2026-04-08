@@ -136,12 +136,37 @@ function ThumbnailSliderInner({
           >
             {files.map((item, index) => (
               <SwiperSlide key={index}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.url}
-                  alt={`Slide ${index + 1}`}
-                  className="block w-full rounded-xl"
-                />
+                {mediaType === 'VIDEO' ? (
+                  <video
+                    src={item.url}
+                    poster={item.thumbnail_url}
+                    controls
+                    controlsList="nodownload noremoteplayback"
+                    disablePictureInPicture
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="h-full w-full object-contain"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLVideoElement).style.display =
+                        'none';
+                    }}
+                  />
+                ) : (
+                  <PhotoView src={item.url}>
+                    <Image
+                      src={item.url}
+                      alt={`Slide ${index + 1}`}
+                      width={1120}
+                      height={1120}
+                      className="block w-full !rounded-xl cursor-zoom-in"
+                      sizes="100vw"
+                    />
+                  </PhotoView>
+                )}
               </SwiperSlide>
             ))}
           </Swiper>
@@ -160,7 +185,7 @@ function ThumbnailSliderInner({
               <SwiperSlide key={index} className="cursor-pointer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={item.url}
+                  src={item.thumbnail_url}
                   alt={`Thumbnail ${index + 1}`}
                   className="block w-full rounded-md object-cover aspect-video opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
                 />
