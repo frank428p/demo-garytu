@@ -66,9 +66,9 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             <div className="space-y-2 md:hidden">
               <Skeleton className="aspect-square w-full rounded-3xl" />
               <div className="overflow-hidden flex gap-2">
-                <Skeleton className="aspect-square w-full h-12 rounded-xl" />
-                <Skeleton className="aspect-square w-full h-12 rounded-xl" />
-                <Skeleton className="aspect-square w-full h-12 rounded-xl" />
+                <Skeleton className="aspect-square w-24 h-24 rounded-xl" />
+                <Skeleton className="aspect-square w-24 h-24 rounded-xl" />
+                <Skeleton className="aspect-square w-24 h-24 rounded-xl" />
               </div>
             </div>
             {/* Desktop skeleton */}
