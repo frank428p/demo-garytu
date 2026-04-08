@@ -17,7 +17,15 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
-function VideoSlide({ src, poster, isActive }: { src: string; poster: string; isActive: boolean }) {
+function VideoSlide({
+  src,
+  poster,
+  isActive,
+}: {
+  src: string;
+  poster: string;
+  isActive: boolean;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
 
   // Sync play/pause with active state via ref
@@ -75,7 +83,11 @@ function ThumbnailSliderInner({
     files.map((item, index) => (
       <SwiperSlide key={index}>
         {mediaType === 'VIDEO' ? (
-          <VideoSlide src={item.url} poster={item.thumbnail_url} isActive={index === activeIndex} />
+          <VideoSlide
+            src={item.url}
+            poster={item.thumbnail_url}
+            isActive={index === activeIndex}
+          />
         ) : (
           <PhotoView src={item.url}>
             <Image
@@ -158,7 +170,7 @@ function ThumbnailSliderInner({
                 <img
                   src={item.thumbnail_url}
                   alt={`Thumbnail ${index + 1}`}
-                  className="block w-full rounded-md object-cover aspect-video opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
+                  className="block w-full rounded-md object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
                 />
               </SwiperSlide>
             ))}
@@ -186,3 +198,7 @@ export function ThumbnailSlider({
     />
   );
 }
+
+const a = {
+  'zh-TW': '',
+};
