@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import type { Swiper as SwiperType } from 'swiper';
 
@@ -17,21 +17,40 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
-const images = [
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_2.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_2.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_2.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-  '/images/gallery/1-to-1_1.jpg',
-];
+function VideoSlide({ src, poster, isActive }: { src: string; poster: string; isActive: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  // Sync play/pause with active state via ref
+  const handleRef = (el: HTMLVideoElement | null) => {
+    (ref as { current: HTMLVideoElement | null }).current = el;
+    if (!el) return;
+    if (isActive) {
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  };
+
+  return (
+    <video
+      ref={handleRef}
+      src={src}
+      poster={poster}
+      controls
+      controlsList="nodownload noremoteplayback"
+      disablePictureInPicture
+      loop
+      muted
+      playsInline
+      preload="metadata"
+      className="h-full w-full object-contain"
+      onPointerDown={(e) => e.stopPropagation()}
+      onError={(e) => {
+        (e.currentTarget as HTMLVideoElement).style.display = 'none';
+      }}
+    />
+  );
+}
 
 function ThumbnailSliderInner({
   isMobile,
@@ -43,6 +62,34 @@ function ThumbnailSliderInner({
   files: PromptFile[];
 }) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const mainSwiperProps = {
+    modules: [FreeMode, Thumbs],
+    spaceBetween: 10,
+    thumbs: { swiper: thumbsSwiper },
+    onSlideChange: (swiper: SwiperType) => setActiveIndex(swiper.activeIndex),
+  };
+
+  const renderSlides = (rounded: string) =>
+    files.map((item, index) => (
+      <SwiperSlide key={index}>
+        {mediaType === 'VIDEO' ? (
+          <VideoSlide src={item.url} poster={item.thumbnail_url} isActive={index === activeIndex} />
+        ) : (
+          <PhotoView src={item.url}>
+            <Image
+              src={item.url}
+              alt={`Slide ${index + 1}`}
+              width={1120}
+              height={1120}
+              className={`block w-full cursor-zoom-in ${rounded}`}
+              sizes="(min-width: 768px) 40vw, 100vw"
+            />
+          </PhotoView>
+        )}
+      </SwiperSlide>
+    ));
 
   return (
     <div className="w-full max-w-full overflow-hidden [&_.swiper-button-next]:text-white [&_.swiper-button-next]:w-6 [&_.swiper-button-next]:h-6 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:w-6 [&_.swiper-button-prev]:h-6 [&_.swiper-button-next:after]:text-2xl [&_.swiper-button-prev:after]:text-2xl">
@@ -80,47 +127,8 @@ function ThumbnailSliderInner({
           {/* 主圖：grid 第 2 欄，決定父容器高度 */}
           <div className="min-w-0" style={{ gridColumn: 2 }}>
             <PhotoProvider>
-              <Swiper
-                modules={[FreeMode, Thumbs]}
-                spaceBetween={10}
-                thumbs={{ swiper: thumbsSwiper }}
-                className="rounded-3xl"
-              >
-                {files.map((item, index) => (
-                  <SwiperSlide key={index}>
-                    {mediaType === 'VIDEO' ? (
-                      <video
-                        src={item.url}
-                        poster={item.thumbnail_url}
-                        controls
-                        controlsList="nodownload noremoteplayback"
-                        disablePictureInPicture
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="h-full w-full object-contain"
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onError={(e) => {
-                          (e.currentTarget as HTMLVideoElement).style.display =
-                            'none';
-                        }}
-                      />
-                    ) : (
-                      <PhotoView src={item.url}>
-                        <Image
-                          src={item.url}
-                          alt={`Slide ${index + 1}`}
-                          width={1120}
-                          height={1120}
-                          className="block w-full !rounded-xl cursor-zoom-in"
-                          sizes="(min-width: 768px) 40vw, 100vw"
-                        />
-                      </PhotoView>
-                    )}
-                  </SwiperSlide>
-                ))}
+              <Swiper {...mainSwiperProps} className="rounded-3xl">
+                {renderSlides('!rounded-xl')}
               </Swiper>
             </PhotoProvider>
           </div>
@@ -128,50 +136,13 @@ function ThumbnailSliderInner({
       ) : (
         <div className="space-y-2">
           {/* 主圖 */}
-          <Swiper
-            modules={[FreeMode, Thumbs]}
-            spaceBetween={10}
-            thumbs={{ swiper: thumbsSwiper }}
-            className="rounded-lg"
-          >
-            {files.map((item, index) => (
-              <SwiperSlide key={index}>
-                {mediaType === 'VIDEO' ? (
-                  <video
-                    src={item.url}
-                    poster={item.thumbnail_url}
-                    controls
-                    controlsList="nodownload noremoteplayback"
-                    disablePictureInPicture
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="h-full w-full object-contain"
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLVideoElement).style.display =
-                        'none';
-                    }}
-                  />
-                ) : (
-                  <PhotoView src={item.url}>
-                    <Image
-                      src={item.url}
-                      alt={`Slide ${index + 1}`}
-                      width={1120}
-                      height={1120}
-                      className="block w-full !rounded-xl cursor-zoom-in"
-                      sizes="100vw"
-                    />
-                  </PhotoView>
-                )}
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <PhotoProvider>
+            <Swiper {...mainSwiperProps} className="rounded-lg">
+              {renderSlides('!rounded-xl')}
+            </Swiper>
+          </PhotoProvider>
 
-          {/* lg 以下：下方水平縮圖 */}
+          {/* 下方水平縮圖 */}
           <Swiper
             onSwiper={setThumbsSwiper}
             modules={[FreeMode, Thumbs]}

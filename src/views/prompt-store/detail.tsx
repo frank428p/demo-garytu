@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { PdfViewerDialog } from '@/components/PdfViewerDialog';
+import dynamic from 'next/dynamic';
+
+const PdfViewerDialog = dynamic(
+  () => import('@/components/PdfViewerDialog').then((m) => m.PdfViewerDialog),
+  { ssr: false },
+);
 import {
   IconBookmarkFilled,
   IconBookmark,
