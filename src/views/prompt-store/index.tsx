@@ -357,7 +357,7 @@ const PromptStoreView = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
           {items.map((prompt) => (
             <MediaCard key={prompt?.uuid} prompt={prompt} />
           ))}
@@ -366,8 +366,8 @@ const PromptStoreView = () => {
         <div ref={sentinelRef} className="h-1" />
 
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-3">
-            {Array.from({ length: 8 }).map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 mt-3">
+            {Array.from({ length: 12 }).map((_, i) => (
               <div
                 key={i}
                 className="flex flex-col rounded-xl overflow-hidden bg-background p-1"
