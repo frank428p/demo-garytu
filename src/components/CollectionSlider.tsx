@@ -30,6 +30,8 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStartX = useRef<number | null>(null);
   const isDragging = useRef(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const isTouching = useRef(false);
   const DRAG_THRESHOLD = 50;
 
   useEffect(() => {
@@ -147,10 +149,19 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
         }}
         onTouchStart={(e) => {
           dragStartX.current = e.touches[0].clientX;
+          isTouching.current = true;
+          setDragOffset(0);
+        }}
+        onTouchMove={(e) => {
+          if (dragStartX.current === null) return;
+          const dx = e.touches[0].clientX - dragStartX.current;
+          setDragOffset(dx);
         }}
         onTouchEnd={(e) => {
           if (dragStartX.current === null) return;
           const dx = e.changedTouches[0].clientX - dragStartX.current;
+          setDragOffset(0);
+          isTouching.current = false;
           if (Math.abs(dx) >= DRAG_THRESHOLD)
             navigate(dx < 0 ? 'next' : 'prev');
           dragStartX.current = null;
@@ -160,8 +171,8 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
           style={{
             display: 'flex',
             gap: `${GAP}px`,
-            transform: `translateX(-${trackOffset}px)`,
-            transition: 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: `translateX(${-trackOffset + dragOffset}px)`,
+            transition: dragOffset !== 0 ? 'none' : 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
             willChange: 'transform',
           }}
         >
