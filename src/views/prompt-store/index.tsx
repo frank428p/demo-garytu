@@ -95,7 +95,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
       </div>
 
       {/* Info */}
-      <div className="flex flex-col gap-1 px-3 pt-2 pb-1">
+      <div className="flex flex-col gap-1 px-1.5 pt-2">
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm font-semibold text-foreground leading-snug line-clamp-1">
             {prompt.name}
@@ -179,7 +179,7 @@ const PromptStoreView = () => {
       </section>
 
       {/* Collection */}
-      <section className="pb-4 pt-4 flex flex-col items-stretch gap-6 md:flex-row px-4 lg:px-0 ">
+      <section className="pb-4 pt-8 flex flex-col items-stretch gap-6 md:flex-row px-4 lg:px-0 ">
         <div
           className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
           style={{

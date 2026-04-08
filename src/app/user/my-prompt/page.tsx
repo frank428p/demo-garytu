@@ -20,6 +20,7 @@ import {
 } from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
 import { IconExternalLink, IconPhoto, IconVideo } from '@tabler/icons-react';
+import { Tag } from '@/components/ui/tag';
 
 function getPageItems(current: number, total: number): (number | 'ellipsis')[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
@@ -34,14 +35,6 @@ function getPageItems(current: number, total: number): (number | 'ellipsis')[] {
 }
 
 function PromptCard({ prompt }: { prompt: Prompt }) {
-  const sortedFiles = [...prompt.files].sort((a, b) => a.position - b.position);
-  const mainFile = sortedFiles[0];
-  const posterFile =
-    mainFile?.file_type === 'VIDEO'
-      ? sortedFiles.find((f) => f.file_type === 'IMAGE')
-      : undefined;
-  const thumb = posterFile?.url ?? mainFile?.url;
-
   return (
     <Link
       href={`/toolkit/store/${prompt.uuid}`}
@@ -49,17 +42,10 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
     >
       <div className="relative shrink-0 w-20 md:w-24 aspect-video overflow-hidden rounded-xl">
         <img
-          src={thumb}
+          src={prompt?.cover?.thumbnail_url}
           alt={prompt.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {mainFile?.file_type === 'VIDEO' && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-            <div className="size-6 rounded-full bg-white/90 flex items-center justify-center">
-              <span className="block w-0 h-0 border-y-[5px] border-y-transparent border-l-[8px] border-l-foreground ml-0.5" />
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col gap-1 min-w-0 flex-1">
@@ -67,7 +53,7 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
           {prompt.name}
         </span>
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+          <Tag>
             <div className="flex items-center gap-1">
               {prompt?.media_type === 'VIDEO' ? (
                 <>
@@ -81,10 +67,8 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
                 </>
               )}
             </div>
-          </span>
-          <span className="inline-flex items-center rounded-md bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
-            AI Prompt
-          </span>
+          </Tag>
+          <Tag variant="primary">AI Prompt</Tag>
         </div>
       </div>
 
