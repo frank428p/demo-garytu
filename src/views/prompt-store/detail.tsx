@@ -52,7 +52,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
       <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-18">
         {prompt ? (
           <ThumbnailSlider
-            mediaType={prompt.files[0]?.file_type ?? 'IMAGE'}
+            mediaType={prompt.media_type ?? 'IMAGE'}
             files={prompt.files}
           />
         ) : (

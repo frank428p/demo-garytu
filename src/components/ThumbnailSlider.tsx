@@ -68,7 +68,7 @@ function ThumbnailSliderInner({
                 <SwiperSlide key={index} className="!h-auto cursor-pointer">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={item.url}
+                    src={item.thumbnail_url}
                     alt={`Thumbnail ${index + 1}`}
                     className="block w-full rounded-xl object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
                   />
@@ -91,6 +91,7 @@ function ThumbnailSliderInner({
                     {mediaType === 'VIDEO' ? (
                       <video
                         src={item.url}
+                        poster={item.thumbnail_url}
                         controls
                         controlsList="nodownload noremoteplayback"
                         disablePictureInPicture
