@@ -29,6 +29,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
   const [itemHeight, setItemHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStartX = useRef<number | null>(null);
+  const dragStartY = useRef<number | null>(null);
   const isDragging = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
   const isTouching = useRef(false);
@@ -46,6 +47,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
 
   const { isTablet, isDesktop, isXlDesktop, is2XlDesktop } = useBreakpoint();
 
@@ -123,7 +125,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
     >
       {/* Track */}
       <div
-        className="overflow-hidden cursor-grab active:cursor-grabbing"
+        className="overflow-hidden cursor-grab active:cursor-grabbing touch-pan-y"
         onMouseDown={(e) => {
           dragStartX.current = e.clientX;
           isDragging.current = false;
@@ -149,6 +151,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
         }}
         onTouchStart={(e) => {
           dragStartX.current = e.touches[0].clientX;
+          dragStartY.current = e.touches[0].clientY;
           isTouching.current = true;
           setDragOffset(0);
         }}
