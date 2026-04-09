@@ -2,7 +2,6 @@
 
 import {
   IconWorld,
-  IconShoppingBag,
   IconCurrencyEthereum,
   IconShoppingCart,
   IconPhoto,

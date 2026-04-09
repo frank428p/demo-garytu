@@ -8,181 +8,7 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PromptDetailView from '@/views/explore/detail';
 import 'react-photo-album/masonry.css';
 import { AspectRatioType, MediaType } from '@/@core/types';
-
-const photos = [
-  {
-    src: '/images/gallery/1-to-1_1.jpg',
-    width: 1024,
-    height: 1024,
-    id: '1',
-    aspectRatio: '1:1',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/1-to-1_2.jpg',
-    width: 1024,
-    height: 1024,
-    id: '2',
-    aspectRatio: '1:1',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/1-to-1_3.jpg',
-    width: 1024,
-    height: 1024,
-    id: '3',
-    aspectRatio: '1:1',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/9-to-16_1.jpg',
-    width: 1040,
-    height: 1572,
-    id: '4',
-    aspectRatio: '9:16',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/16-to-9_1.jpg',
-    width: 5440,
-    height: 3072,
-    id: '5',
-    aspectRatio: '16:9',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/16-to-9_2.jpg',
-    width: 1376,
-    height: 768,
-    id: '6',
-    aspectRatio: '16:9',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/1-to-1_1.mp4',
-    poster: '/images/gallery/1-to-1-cover_1.avif',
-    width: 1440,
-    height: 1440,
-    id: '7',
-    aspectRatio: '1:1',
-    mediaType: 'video',
-  },
-  {
-    src: '/images/gallery/9-to-16_1.jpg',
-    width: 1040,
-    height: 1572,
-    id: '8',
-    aspectRatio: '9:16',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/1-to-1_2.jpg',
-    width: 1024,
-    height: 1024,
-    id: '9',
-    aspectRatio: '1:1',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/16-to-9_1.mp4',
-    poster: '/images/gallery/16-to-9-cover_1.avif',
-    width: 1344,
-    height: 768,
-    id: '10',
-    aspectRatio: '16:9',
-    mediaType: 'video',
-  },
-  {
-    src: '/images/gallery/16-to-9_1.jpg',
-    width: 5440,
-    height: 3072,
-    id: '11',
-    aspectRatio: '16:9',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/1-to-1_3.jpg',
-    width: 1024,
-    height: 1024,
-    id: '12',
-    aspectRatio: '1:1',
-    mediaType: 'image',
-  },
-  {
-    src: '/images/gallery/9-to-16_2.mp4',
-    poster: '/images/gallery/9-to-16-cover_2.avif',
-    width: 1080,
-    height: 1920,
-    id: '13',
-    aspectRatio: '9:16',
-    mediaType: 'video',
-  },
-  {
-    src: '/images/gallery/9-to-16_1.jpg',
-    width: 1040,
-    height: 1572,
-    id: '14',
-    aspectRatio: '9:16',
-    mediaType: 'image',
-  },
-
-  {
-    src: '/images/gallery/1-to-1_1.mp4',
-    poster: '/images/gallery/1-to-1-cover_1.avif',
-    width: 1440,
-    height: 1440,
-    id: '15',
-    aspectRatio: '1:1',
-    mediaType: 'video',
-  },
-
-  {
-    src: '/images/gallery/1-to-1_2.mp4',
-    poster: '/images/gallery/1-to-1-cover_2.avif',
-    width: 1440,
-    height: 1440,
-    id: '16',
-    aspectRatio: '1:1',
-    mediaType: 'video',
-  },
-
-  {
-    src: '/images/gallery/16-to-9_1.mp4',
-    poster: '/images/gallery/16-to-9-cover_1.avif',
-    width: 1344,
-    height: 768,
-    id: '17',
-    aspectRatio: '16:9',
-    mediaType: 'video',
-  },
-  {
-    src: '/images/gallery/16-to-9_2.mp4',
-    poster: '/images/gallery/16-to-9-cover_2.avif',
-    width: 1344,
-    height: 768,
-    id: '18',
-    aspectRatio: '16:9',
-    mediaType: 'video',
-  },
-  {
-    src: '/images/gallery/9-to-16_1.mp4',
-    poster: '/images/gallery/9-to-16-cover_1.avif',
-    width: 1080,
-    height: 1920,
-    id: '19',
-    aspectRatio: '9:16',
-    mediaType: 'video',
-  },
-  {
-    src: '/images/gallery/9-to-16_2.mp4',
-    poster: '/images/gallery/9-to-16-cover_2.avif',
-    width: 1080,
-    height: 1920,
-    id: '20',
-    aspectRatio: '9:16',
-    mediaType: 'video',
-  },
-];
+import { photos } from './photos';
 
 type ExploreViewProps = {
   initialSelectedId?: string;
@@ -202,6 +28,8 @@ const ExploreView = ({ initialSelectedId }: ExploreViewProps) => {
     setSelectedId(null);
     window.history.pushState(null, '', '/toolkit/explore');
   };
+
+  const selectedPhoto = selectedId ? photos.find((p) => p.id === selectedId) : null;
 
   return (
     <div className="py-6">
@@ -275,14 +103,8 @@ const ExploreView = ({ initialSelectedId }: ExploreViewProps) => {
           {selectedId && (
             <PromptDetailView
               id={selectedId}
-              mediaType={(() => {
-                const photo = photos.find((p) => p.id === selectedId);
-                return photo?.mediaType as MediaType;
-              })()}
-              aspectRatio={(() => {
-                const photo = photos.find((p) => p.id === selectedId);
-                return photo?.aspectRatio as AspectRatioType;
-              })()}
+              mediaType={selectedPhoto?.mediaType as MediaType}
+              aspectRatio={selectedPhoto?.aspectRatio as AspectRatioType}
             />
           )}
         </DialogContent>

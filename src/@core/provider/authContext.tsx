@@ -6,6 +6,20 @@ import { authDialogAtom, userAtom } from '@/@core/store/authAtoms';
 import { cartItemsAtom } from '@/@core/store/cartAtoms';
 import { useCartItems } from '@/@core/useQuery/useCart';
 
+// 獨立元件訂閱 userAtom，避免 user 變更時 re-render 所有子元件
+function CartRefetcher() {
+  const user = useAtomValue(userAtom);
+  const { refetch: refetchCart } = useCartItems();
+
+  // 登入後強制重新 fetch cart（避免 stale cache 問題）
+  useEffect(() => {
+    if (!user) return;
+    refetchCart();
+  }, [user, refetchCart]);
+
+  return null;
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useSetAtom(userAtom);
   const setCartItems = useSetAtom(cartItemsAtom);
@@ -25,16 +39,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('auth-error', handleAuthError);
   }, [setUser, setCartItems]);
 
-  const user = useAtomValue(userAtom);
-  const { refetch: refetchCart } = useCartItems();
-
-  // 登入後強制重新 fetch cart（避免 stale cache 問題）
-  useEffect(() => {
-    if (!user) return;
-    refetchCart();
-  }, [user, refetchCart]);
-
-  return <>{children}</>;
+  return (
+    <>
+      <CartRefetcher />
+      {children}
+    </>
+  );
 }
 
 export function useAuth() {

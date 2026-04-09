@@ -1,7 +1,4 @@
-'use client';
-
 import { Header } from '@/@layout/components/header';
-import { Sidebar } from '@/@layout/components/sidebar';
 import { CartDrawer } from '@/components/CartDrawer';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
