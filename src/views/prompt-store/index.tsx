@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { H2, Muted, Small } from '@/components/ui/typography';
 import {
@@ -21,6 +22,7 @@ import { CollectionSlider } from '@/components/CollectionSlider';
 
 function MediaCard({ prompt }: { prompt: Prompt }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   const handleMouseEnter = () => {
     if (prompt?.media_type === 'VIDEO' && videoRef.current) {
@@ -72,11 +74,22 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <img
-            src={prompt?.cover?.url}
-            alt={prompt.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          <>
+            {!imgLoaded && (
+              <div className="absolute inset-0 bg-muted animate-pulse" />
+            )}
+            <Image
+              src={prompt?.cover?.url}
+              alt={prompt.name}
+              fill
+              sizes="(min-width: 1536px) 20vw, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
+              className={cn(
+                'object-cover transition-[transform,opacity] duration-500 group-hover:scale-105',
+                imgLoaded ? 'opacity-100' : 'opacity-0',
+              )}
+              onLoad={() => setImgLoaded(true)}
+            />
+          </>
         )}
 
         {prompt?.media_type === 'VIDEO' && (
