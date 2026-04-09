@@ -75,9 +75,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
           />
         ) : (
           <>
-            {!imgLoaded && (
-              <div className="absolute inset-0 bg-muted animate-pulse" />
-            )}
+            {!imgLoaded && <Skeleton className="absolute inset-0 rounded-xl" />}
             <Image
               src={prompt?.cover?.url}
               alt={prompt.name}

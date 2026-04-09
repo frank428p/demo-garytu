@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { Skeleton } from '@/components/ui/skeleton';
@@ -21,6 +22,7 @@ import {
 import type { Prompt } from '@/@core/types/prompt';
 import { IconExternalLink, IconPhoto, IconVideo } from '@tabler/icons-react';
 import { Tag } from '@/components/ui/tag';
+import { cn } from '@/lib/utils';
 
 function getPageItems(current: number, total: number): (number | 'ellipsis')[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
@@ -35,16 +37,25 @@ function getPageItems(current: number, total: number): (number | 'ellipsis')[] {
 }
 
 function PromptCard({ prompt }: { prompt: Prompt }) {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <Link
       href={`/toolkit/store/${prompt.uuid}`}
       className="group flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3 hover:border-border hover:bg-secondary/50 transition-all duration-200"
     >
       <div className="relative shrink-0 w-20 md:w-24 aspect-video overflow-hidden rounded-xl">
-        <img
+        {!imgLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
+        <Image
           src={prompt?.cover?.thumbnail_url}
           alt={prompt.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          sizes="(min-width: 768px) 96px, 80px"
+          className={cn(
+            'object-cover transition-[transform,opacity] duration-500 group-hover:scale-105',
+            imgLoaded ? 'opacity-100' : 'opacity-0',
+          )}
+          onLoad={() => setImgLoaded(true)}
         />
       </div>
 

@@ -16,10 +16,36 @@ import {
   IconPhoto,
   IconCurrencyEthereum,
 } from '@tabler/icons-react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/@core/provider/cartContext';
 import { Tag } from './ui/tag';
+import { Skeleton } from './ui/skeleton';
+import { cn } from '@/lib/utils';
+
+function CartItemImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useCallback((el: HTMLImageElement | null) => {
+    if (el?.complete && el.naturalWidth > 0) setLoaded(true);
+  }, []);
+  return (
+    <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
+      {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        className={cn(
+          'h-full w-full object-cover transition-opacity duration-300',
+          loaded ? 'opacity-100' : 'opacity-0',
+        )}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+}
 
 export function CartDrawer() {
   const { items, removeItem, total, isOpen, setIsOpen } = useCart();
@@ -71,11 +97,9 @@ export function CartDrawer() {
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 py-4 border-b border-border last:border-b-0"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <CartItemImage
                     src={item?.item?.cover?.thumbnail_url}
-                    alt={item.item?.name}
-                    className="h-20 w-20 shrink-0 rounded-lg object-cover"
+                    alt={item.item?.name ?? ''}
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">
