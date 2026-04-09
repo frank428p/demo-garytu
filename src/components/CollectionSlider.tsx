@@ -48,7 +48,6 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
     return () => ro.disconnect();
   }, []);
 
-
   const { isTablet, isDesktop, isXlDesktop, is2XlDesktop } = useBreakpoint();
 
   const VISIBLE = useMemo(() => {
@@ -175,7 +174,10 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
             display: 'flex',
             gap: `${GAP}px`,
             transform: `translateX(${-trackOffset + dragOffset}px)`,
-            transition: dragOffset !== 0 ? 'none' : 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition:
+              dragOffset !== 0
+                ? 'none'
+                : 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
             willChange: 'transform',
           }}
         >
@@ -243,7 +245,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
                     {item.badge}
                     {item.id}
                   </span>
-                  <p className="text-white text-lg font-semibold leading-snug drop-shadow">
+                  <p className="text-white text-sm xl:text-lg font-semibold leading-snug drop-shadow">
                     {item.title}
                   </p>
                 </div>
