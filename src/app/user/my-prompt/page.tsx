@@ -42,9 +42,9 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
   return (
     <Link
       href={`/toolkit/store/${prompt.uuid}`}
-      className="group flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3 hover:border-border hover:bg-secondary/50 transition-all duration-200"
+      className="media-item group flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3 hover:border-border hover:bg-secondary/50 transition-all duration-200"
     >
-      <div className="relative shrink-0 w-20 md:w-24 aspect-video overflow-hidden rounded-xl">
+      <div className="media-thumb relative shrink-0 w-20 md:w-24 aspect-video overflow-hidden rounded-xl">
         {!imgLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
         <Image
           src={prompt?.cover?.thumbnail_url}
@@ -52,7 +52,7 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
           fill
           sizes="(min-width: 768px) 96px, 80px"
           className={cn(
-            'object-cover transition-[transform,opacity] duration-500 group-hover:scale-105',
+            'object-cover transition-opacity duration-300',
             imgLoaded ? 'opacity-100' : 'opacity-0',
           )}
           onLoad={() => setImgLoaded(true)}
@@ -103,11 +103,12 @@ function PromptGrid({
   const loading = isLoading || isFetchingNextPage;
 
   const goToPage = async (page: number) => {
-    // Fetch any pages not yet loaded
     const fetchedCount = data?.pages.length ?? 0;
-    for (let i = fetchedCount; i < page; i++) {
-      await fetchNextPage();
-    }
+    const fetches = Array.from(
+      { length: Math.max(0, page - fetchedCount) },
+      () => fetchNextPage(),
+    );
+    await Promise.all(fetches);
     setCurrentPage(page);
   };
 

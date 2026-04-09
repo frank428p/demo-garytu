@@ -35,17 +35,43 @@
   --sidebar-border: oklch(0.92 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  /* Semantic colors */
+  --success: oklch(0.62 0.17 145);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.79 0.17 75);
+  --warning-foreground: oklch(0.15 0 0);
+  --info: oklch(0.58 0.14 240);
+  --info-foreground: oklch(0.99 0 0);
+
+  /* Animation system */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 450ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-index system */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+
   --font-sans:
-    'Geist', 'Geist Fallback', ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
+    var(--font-inter), var(--font-noto-sans-tc), ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
   --font-serif:
-    'Geist', 'Geist Fallback', ui-serif, Georgia, Cambria, 'Times New Roman',
+    var(--font-noto-sans-tc), ui-serif, Georgia, Cambria, 'Times New Roman',
     Times, serif;
   --font-mono:
-    'Geist Mono', 'Geist Mono Fallback', ui-monospace, SFMono-Regular, Menlo,
-    Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
 
   --radius: 0.625rem;
 
@@ -98,6 +124,14 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.56 0 0);
 
+  /* Semantic colors (dark) */
+  --success: oklch(0.55 0.15 145);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.72 0.15 75);
+  --warning-foreground: oklch(0.15 0 0);
+  --info: oklch(0.52 0.13 240);
+  --info-foreground: oklch(0.99 0 0);
+
   --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
   --shadow-sm:
@@ -146,6 +180,33 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* Semantic colors */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Animation tokens */
+  --duration-fast: var(--duration-fast);
+  --duration-normal: var(--duration-normal);
+  --duration-slow: var(--duration-slow);
+  --ease-default: var(--ease-default);
+  --ease-out: var(--ease-out);
+  --ease-in: var(--ease-in);
+  --ease-spring: var(--ease-spring);
+
+  /* Z-index tokens */
+  --z-base: var(--z-base);
+  --z-raised: var(--z-raised);
+  --z-dropdown: var(--z-dropdown);
+  --z-sticky: var(--z-sticky);
+  --z-overlay: var(--z-overlay);
+  --z-modal: var(--z-modal);
+  --z-toast: var(--z-toast);
+  --z-tooltip: var(--z-tooltip);
+
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
@@ -170,13 +231,25 @@
 }
 
 @keyframes accordion-down {
-  from { height: 0; overflow: hidden; }
-  to { height: var(--radix-accordion-content-height); overflow: hidden; }
+  from {
+    height: 0;
+    overflow: hidden;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    overflow: hidden;
+  }
 }
 
 @keyframes accordion-up {
-  from { height: var(--radix-accordion-content-height); overflow: hidden; }
-  to { height: 0; overflow: hidden; }
+  from {
+    height: var(--radix-accordion-content-height);
+    overflow: hidden;
+  }
+  to {
+    height: 0;
+    overflow: hidden;
+  }
 }
 
 body {
@@ -197,25 +270,60 @@ body {
    點擊穿透到 dialog backdrop 而觸發關閉。
    此規則讓 PhotoView portal 恢復可互動狀態。 */
 @keyframes aurora-drift-1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(140px, -80px) scale(1.15); }
-  66% { transform: translate(-80px, 100px) scale(0.9); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(140px, -80px) scale(1.15);
+  }
+  66% {
+    transform: translate(-80px, 100px) scale(0.9);
+  }
 }
 @keyframes aurora-drift-2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-120px, 100px) scale(1.12); }
-  66% { transform: translate(100px, -70px) scale(0.88); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-120px, 100px) scale(1.12);
+  }
+  66% {
+    transform: translate(100px, -70px) scale(0.88);
+  }
 }
 @keyframes aurora-drift-3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(80px, -120px) scale(1.2); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(80px, -120px) scale(1.2);
+  }
 }
-.aurora-1 { animation: aurora-drift-1 10s ease-in-out infinite; }
-.aurora-2 { animation: aurora-drift-2 13s ease-in-out infinite; }
-.aurora-3 { animation: aurora-drift-3 8s ease-in-out infinite; }
+.aurora-1 {
+  animation: aurora-drift-1 10s var(--ease-default) infinite;
+}
+.aurora-2 {
+  animation: aurora-drift-2 13s var(--ease-default) infinite;
+}
+.aurora-3 {
+  animation: aurora-drift-3 8s var(--ease-default) infinite;
+}
 
 .PhotoView-Portal {
   pointer-events: auto;
+}
+
+/* MediaCard image zoom */
+.media-thumb img {
+  transform: scale(1);
+  transition: transform 0.3s ease-out;
+}
+.media-thumb:hover img,
+.media-item:hover .media-thumb img {
+  transform: scale(1.08);
 }
 
 /* 隱藏原生 video 控制列的「更多選項」三點按鈕與播放速度按鈕 */
@@ -225,8 +333,8 @@ video::-webkit-media-controls-playback-speed-button {
 }
 
 body {
-  --sb-track-color: #0a0a0a;
-  --sb-thumb-color: #0a0a0a;
+  --sb-track-color: var(--background);
+  --sb-thumb-color: var(--secondary);
   --sb-size: 6px;
 }
 
@@ -242,7 +350,7 @@ body {
 *::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
   border-radius: 24px;
-  border: 6px solid #262626;
+  border: 3px solid var(--sb-track-color);
 }
 
 @supports not selector(::-webkit-scrollbar) {

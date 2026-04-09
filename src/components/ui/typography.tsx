@@ -107,3 +107,27 @@ export const Quote = createComponent<HTMLQuoteElement>(
   'mt-6 border-l-2 pl-6 italic text-muted-foreground',
   'Quote',
 );
+
+export const Body = createComponent<HTMLParagraphElement>(
+  'p',
+  'text-base leading-relaxed',
+  'Body',
+);
+
+export const Caption = createComponent<HTMLSpanElement>(
+  'span',
+  'text-xs text-muted-foreground leading-normal',
+  'Caption',
+);
+
+export const Strong = createComponent<HTMLSpanElement>(
+  'strong',
+  'font-semibold text-foreground',
+  'Strong',
+);
+
+export const Em = createComponent<HTMLSpanElement>(
+  'em',
+  'italic text-muted-foreground',
+  'Em',
+);

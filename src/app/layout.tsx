@@ -37,8 +37,6 @@ export default async function RootLayout({
     ? JSON.parse(userDataHeader)
     : null;
 
-  console.log('initialUser', initialUser);
-
   return (
     <html lang="zh-TW" className="dark">
       <body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>

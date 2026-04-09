@@ -30,7 +30,7 @@ function CartItemImage({ src, alt }: { src: string; alt: string }) {
     if (el?.complete && el.naturalWidth > 0) setLoaded(true);
   }, []);
   return (
-    <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
+    <div className="media-thumb relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
       {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -95,7 +95,7 @@ export function CartDrawer() {
                   key={item?.id}
                   href={`/toolkit/store/${item?.item?.uuid}`}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 py-4 border-b border-border last:border-b-0"
+                  className="media-item flex items-center gap-3 py-4 border-b border-border last:border-b-0"
                 >
                   <CartItemImage
                     src={item?.item?.cover?.thumbnail_url}

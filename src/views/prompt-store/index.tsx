@@ -16,7 +16,7 @@ import type { Prompt } from '@/@core/types/prompt';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { CollectionSlider } from '@/components/CollectionSlider';
+import { CollectionSlider, type CollectionItem } from '@/components/CollectionSlider';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
@@ -57,7 +57,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
     >
       {/* Thumbnail */}
       <div
-        className="relative w-full aspect-video overflow-hidden rounded-xl"
+        className="media-thumb relative w-full aspect-video overflow-hidden rounded-xl"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
@@ -82,7 +82,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
               fill
               sizes="(min-width: 1536px) 20vw, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
               className={cn(
-                'object-cover transition-[transform,opacity] duration-500 group-hover:scale-105',
+                'object-cover transition-opacity duration-300',
                 imgLoaded ? 'opacity-100' : 'opacity-0',
               )}
               onLoad={() => setImgLoaded(true)}
@@ -122,6 +122,57 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
 
 // ─── PromptStoreView ──────────────────────────────────────────────────────────
 
+const DOT_PATTERN_STYLE = {
+  backgroundImage:
+    'radial-gradient(circle, currentColor 1px, transparent 1px)',
+  backgroundSize: '28px 28px',
+} as const;
+
+const COLLECTION_ITEMS: CollectionItem[] = [
+  {
+    id: '1',
+    badge: 'STORY',
+    title: 'Between lights',
+    image: '/images/gallery/16-to-9_1.jpg',
+    video: '/images/gallery/16-to-9_1.mp4',
+  },
+  {
+    id: '2',
+    badge: 'COLLECTION',
+    title: 'POV',
+    image: '/images/gallery/16-to-9_2.jpg',
+    video: '/images/gallery/16-to-9_1.mp4',
+  },
+  {
+    id: '3',
+    badge: 'STORY',
+    title: 'Unbound',
+    image: '/images/gallery/16-to-9_1.jpg',
+    video: '/images/gallery/16-to-9_1.mp4',
+  },
+  {
+    id: '4',
+    badge: 'COLLECTION',
+    title: 'Golden Hour',
+    image: '/images/gallery/16-to-9_2.jpg',
+    video: '/images/gallery/16-to-9_1.mp4',
+  },
+  {
+    id: '5',
+    badge: 'STORY',
+    title: 'Solitude',
+    image: '/images/gallery/16-to-9_1.jpg',
+    video: '/images/gallery/16-to-9_1.mp4',
+  },
+  {
+    id: '6',
+    badge: 'COLLECTION',
+    title: 'Neon Dreams',
+    image: '/images/gallery/16-to-9_2.jpg',
+    video: '/images/gallery/16-to-9_1.mp4',
+  },
+] as const;
+
 const PromptStoreView = () => {
   const [mediaTypeOpen, setMediaTypeOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
@@ -160,11 +211,7 @@ const PromptStoreView = () => {
       <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
         <div
           className="absolute inset-0 opacity-[0.15]"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle, currentColor 1px, transparent 1px)',
-            backgroundSize: '28px 28px',
-          }}
+          style={DOT_PATTERN_STYLE}
         />
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -207,52 +254,7 @@ const PromptStoreView = () => {
           </p>
         </div>
         <div className="w-full min-w-0">
-          <CollectionSlider
-            items={[
-              {
-                id: '1',
-                badge: 'STORY',
-                title: 'Between lights',
-                image: '/images/gallery/16-to-9_1.jpg',
-                video: '/images/gallery/16-to-9_1.mp4',
-              },
-              {
-                id: '2',
-                badge: 'COLLECTION',
-                title: 'POV',
-                image: '/images/gallery/16-to-9_2.jpg',
-                video: '/images/gallery/16-to-9_1.mp4',
-              },
-              {
-                id: '3',
-                badge: 'STORY',
-                title: 'Unbound',
-                image: '/images/gallery/16-to-9_1.jpg',
-                video: '/images/gallery/16-to-9_1.mp4',
-              },
-              {
-                id: '4',
-                badge: 'COLLECTION',
-                title: 'Golden Hour',
-                image: '/images/gallery/16-to-9_2.jpg',
-                video: '/images/gallery/16-to-9_1.mp4',
-              },
-              {
-                id: '5',
-                badge: 'STORY',
-                title: 'Solitude',
-                image: '/images/gallery/16-to-9_1.jpg',
-                video: '/images/gallery/16-to-9_1.mp4',
-              },
-              {
-                id: '6',
-                badge: 'COLLECTION',
-                title: 'Neon Dreams',
-                image: '/images/gallery/16-to-9_2.jpg',
-                video: '/images/gallery/16-to-9_1.mp4',
-              },
-            ]}
-          />
+          <CollectionSlider items={COLLECTION_ITEMS} />
         </div>
       </section>
 

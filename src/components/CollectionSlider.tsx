@@ -6,11 +6,11 @@ import { cn } from '@/lib/utils';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 
 export type CollectionItem = {
-  id: string;
+  id?: string;
   badge: 'STORY' | 'COLLECTION';
-  title: string;
-  image: string;
-  video: string;
+  title?: string;
+  image?: string;
+  video?: string;
 };
 
 const BADGE_STYLE: Record<CollectionItem['badge'], string> = {
