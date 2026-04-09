@@ -1,6 +1,7 @@
+import { CartItem } from './cart';
 import type { Prompt } from './prompt';
 
-export type OrderStatus = 'pending' | 'paid' | 'failed';
+export type OrderStatus = 'PENDING' | 'PAID' | 'FAILED';
 
 export type OrderItem = {
   id: string;
@@ -18,7 +19,16 @@ export type Order = {
 };
 
 export type CheckoutResponse = {
-  checkout_url: string;
+  uuid: string;
+  status: OrderStatus;
+  amount: number;
+  currency: string;
+  items: CartItem;
+  payment: {
+    checkout_url: string;
+    expires_at: string;
+  };
+  created_at: string;
 };
 
 export type OrdersListParams = {

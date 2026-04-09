@@ -175,14 +175,14 @@ const CheckoutView = ({ type }: CheckoutViewProps) => {
     if (type === 'CART') {
       checkoutCart(undefined, {
         onSuccess: (res) => {
-          window.location.href = res.data.checkout_url;
+          window.location.href = res.data?.payment?.checkout_url;
         },
       });
     } else {
       if (!prompt) return;
       checkoutDirect(prompt.uuid, {
         onSuccess: (res) => {
-          window.location.href = res.data.checkout_url;
+          window.location.href = res.data?.payment?.checkout_url;
         },
       });
     }

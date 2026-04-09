@@ -15,14 +15,18 @@ import {
   IconVideo,
   IconPhoto,
   IconCurrencyEthereum,
+  IconSparkles,
+  IconLock,
 } from '@tabler/icons-react';
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/@core/provider/cartContext';
-import { Tag } from './ui/tag';
 import { Skeleton } from './ui/skeleton';
 import { cn } from '@/lib/utils';
+import { Tag } from './ui/tag';
+
+// ─── Image ────────────────────────────────────────────────────────────────────
 
 function CartItemImage({ src, alt }: { src: string; alt: string }) {
   const [loaded, setLoaded] = useState(false);
@@ -30,7 +34,7 @@ function CartItemImage({ src, alt }: { src: string; alt: string }) {
     if (el?.complete && el.naturalWidth > 0) setLoaded(true);
   }, []);
   return (
-    <div className="media-thumb relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
+    <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl bg-white/5">
       {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -38,8 +42,8 @@ function CartItemImage({ src, alt }: { src: string; alt: string }) {
         src={src}
         alt={alt}
         className={cn(
-          'h-full w-full object-cover transition-opacity duration-300',
-          loaded ? 'opacity-100' : 'opacity-0',
+          'h-full w-full object-cover transition-all duration-500',
+          loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105',
         )}
         onLoad={() => setLoaded(true)}
       />
@@ -47,65 +51,97 @@ function CartItemImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+// ─── Empty State ──────────────────────────────────────────────────────────────
+
+function EmptyCart({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="flex flex-col h-full items-center justify-center text-center px-6 gap-6">
+      {/* Animated cart icon */}
+      {/* <div className="relative">
+        <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-150" />
+        <div className="relative w-20 h-20 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+          <IconShoppingCart size={32} className="text-white/20" />
+        </div>
+      </div> */}
+
+      <div className="flex flex-col gap-2">
+        <h3 className="text-base font-semibold text-foreground">
+          Your cart is empty
+        </h3>
+        <p className="text-sm text-muted-foreground leading-relaxed max-w-[200px]">
+          Discover curated AI prompt packs crafted by top creators.
+        </p>
+      </div>
+
+      <Link
+        href="/toolkit/store"
+        onClick={onClose}
+        className="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_oklch(0.51_0.17_28.14/0.4)] transition-all duration-300 hover:shadow-[0_0_36px_oklch(0.51_0.17_28.14/0.55)] hover:scale-105"
+      >
+        Browse Store
+        <IconArrowRight
+          size={14}
+          className="transition-transform group-hover:translate-x-0.5"
+        />
+      </Link>
+    </div>
+  );
+}
+
+// ─── CartDrawer ───────────────────────────────────────────────────────────────
+
 export function CartDrawer() {
   const { items, removeItem, total, isOpen, setIsOpen } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetPopup side="right" variant="inset">
-        {/* Header */}
-        <SheetHeader className="flex-row items-center gap-2 px-5 py-4">
-          <SheetTitle>Shopping Cart</SheetTitle>
-          {items.length > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-bold text-primary-foreground">
+      <SheetPopup side="right" variant="inset" className="bg-background">
+        {/* ── Header ─────────────────────────────────────────────────────── */}
+        <SheetHeader className="flex-row items-center gap-3 px-5 py-4">
+          {/* <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 border border-primary/20">
+            <IconShoppingCart size={15} className="text-primary" />
+          </div> */}
+          <div className="flex items-center gap-2 flex-1">
+            <SheetTitle className="text-base text-white">Cart</SheetTitle>
+            {items.length > 0 && (
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-white">
+                {items.length}
+              </span>
+            )}
+          </div>
+          {/* {items.length > 0 && (
+            <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-white">
               {items.length}
             </span>
-          )}
+          )} */}
         </SheetHeader>
 
-        {/* Items list */}
-        <SheetPanel className="px-5 h-full">
+        {/* ── Items ──────────────────────────────────────────────────────── */}
+        <SheetPanel className="px-4 h-full">
           {items.length === 0 ? (
-            <div className="flex flex-col h-full items-center justify-center text-center px-4">
-              {/* Icon */}
-              <div className="flex flex-col">
-                <h3 className="text-base font-semibold mb-2">
-                  Your cart is empty
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-8">
-                  Discover curated AI prompt packs crafted by top creators.
-                </p>
-              </div>
-
-              <Button
-                asChild
-                className="gap-1.5"
-                onClick={() => setIsOpen(false)}
-              >
-                <Link href="/toolkit/store">
-                  Browse Store
-                  <IconArrowRight size={15} />
-                </Link>
-              </Button>
-            </div>
+            <EmptyCart onClose={() => setIsOpen(false)} />
           ) : (
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1 py-2">
               {items.map((item) => (
                 <Link
                   key={item?.id}
                   href={`/toolkit/store/${item?.item?.uuid}`}
                   onClick={() => setIsOpen(false)}
-                  className="media-item flex items-center gap-3 py-4 border-b border-border last:border-b-0"
+                  className="group relative flex items-center gap-3.5 rounded-2xl p-3 transition-all duration-200 hover:bg-white/[0.04]"
                 >
                   <CartItemImage
                     src={item?.item?.cover?.thumbnail_url}
                     alt={item.item?.name ?? ''}
                   />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">
+
+                  <div className="min-w-0 flex-1 flex flex-col gap-1.5">
+                    <p className="truncate text-md font-bold text-white/90 leading-tight">
                       {item?.item?.name}
                     </p>
-                    <div className="inline-flex flex gap-1 mt-1">
+
+                    {/* Tags row */}
+                    <div className="flex items-center gap-1.5">
+                      {/* Media type */}
                       <Tag className="gap-1">
                         {item?.item?.media_type === 'VIDEO' ? (
                           <>
@@ -120,31 +156,30 @@ export function CartDrawer() {
                         )}
                       </Tag>
 
-                      {/* <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-0.5 text-xs font-medium text-primary">
-                        AI Prompt
-                      </span> */}
-
-                      <Tag variant="secondary" className="gap-1">
+                      {/* Credits */}
+                      <Tag variant="primary" className="gap-0.5">
                         <IconCurrencyEthereum size={14} />
                         {item?.item?.bonus_credit}
                       </Tag>
                     </div>
-                    {/* <p className="mt-0.5 text-xs text-muted-foreground">
-                      {item.item.files[0].file_type.charAt(0).toUpperCase() +
-                        item.item.files[0].file_type.slice(1).toLowerCase()}
-                    </p> */}
-                    <p className="mt-1 text-sm font-semibold">
+
+                    {/* Price */}
+                    <span className="text-sm font-bold text-white">
                       NT$&nbsp;{item.item.price.toLocaleString()}
-                    </p>
+                    </span>
                   </div>
+
+                  {/* Delete */}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       removeItem(item.id);
                     }}
-                    className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                    className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-primary cursor-pointer"
+                    aria-label="Remove item"
                   >
-                    <IconTrash size={18} />
+                    <IconTrash size={15} />
                   </button>
                 </Link>
               ))}
@@ -152,19 +187,24 @@ export function CartDrawer() {
           )}
         </SheetPanel>
 
-        {/* Footer */}
+        {/* ── Footer ─────────────────────────────────────────────────────── */}
         {items.length > 0 && (
           <SheetFooter
             variant="bare"
-            className="border-t border-border px-5 py-4"
+            className="border-t border-border px-5 pt-4 pb-5"
           >
-            <div className="w-full">
-              <div className="mb-4 flex items-baseline justify-between">
-                <span className="text-sm text-muted-foreground">Subtotal</span>
-                <span className="text-xl font-bold">
+            <div className="w-full flex flex-col gap-3">
+              {/* Summary */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-white/40 uppercase tracking-widest">
+                  total
+                </span>
+                <span className="text-lg font-bold text-white">
                   NT$&nbsp;{total.toLocaleString()}
                 </span>
               </div>
+
+              {/* Checkout button */}
               <Button
                 size="lg"
                 className="w-full font-semibold"
@@ -173,6 +213,12 @@ export function CartDrawer() {
               >
                 <Link href="/checkout/cart">Checkout</Link>
               </Button>
+              {/* <div className="flex items-center justify-center">
+                <div className="flex items-center gap-1.5 text-[11px] text-white/30">
+                  <IconLock size={14} />
+                  Secure checkout · SSL encrypted
+                </div>
+              </div> */}
             </div>
           </SheetFooter>
         )}
