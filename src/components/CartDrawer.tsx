@@ -121,7 +121,7 @@ export function CartDrawer() {
           {items.length === 0 ? (
             <EmptyCart onClose={() => setIsOpen(false)} />
           ) : (
-            <div className="flex flex-col gap-1 py-2">
+            <div className="flex flex-col gap-1 pb-2">
               {items.map((item) => (
                 <Link
                   key={item?.id}
@@ -176,7 +176,7 @@ export function CartDrawer() {
                       e.stopPropagation();
                       removeItem(item.id);
                     }}
-                    className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-primary cursor-pointer"
+                    className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground opacity-100 hover:text-primary cursor-pointer"
                     aria-label="Remove item"
                   >
                     <IconTrash size={15} />

@@ -124,13 +124,13 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             )}
 
             {prompt?.name ? (
-              <Tag variant="primary">AI Prompt</Tag>
+              <Tag variant="default">AI Prompt</Tag>
             ) : (
               <Skeleton className="h-4 w-[48px]" />
             )}
 
             {prompt?.bonus_credit != null ? (
-              <Tag variant="secondary" className="items-center">
+              <Tag variant="primary" className="items-center">
                 Bonus Credit <IconCurrencyEthereum size={14} />{' '}
                 {prompt?.bonus_credit}
               </Tag>
