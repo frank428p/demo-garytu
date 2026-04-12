@@ -38,3 +38,10 @@ export type PromptsPaginationParams = {
 export type PromptsListParams = PromptsPaginationParams & {
   search?: string;
 };
+
+export type FeaturedPromptsParams = PromptsPaginationParams & {
+  search?: string;
+  media_type?: string;
+  category?: string;
+  all?: boolean;
+};

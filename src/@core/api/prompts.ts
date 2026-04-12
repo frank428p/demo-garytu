@@ -1,6 +1,6 @@
 import { apiFetch } from './fetchClient';
 import { ApiResponse } from '../types/apiConfig';
-import type { Prompt, PromptsListParams, PromptsPaginationParams } from '../types/prompt';
+import type { Prompt, PromptsListParams, PromptsPaginationParams, FeaturedPromptsParams } from '../types/prompt';
 
 export const promptsApi = {
   list: (params: PromptsListParams = {}) => {
@@ -31,6 +31,19 @@ export const promptsApi = {
       query.set('page_size', String(params.page_size));
 
     return apiFetch<ApiResponse<Prompt[]>>(`/prompts/purchased?${query.toString()}`);
+  },
+
+  listFeatured: (params: FeaturedPromptsParams = {}) => {
+    const query = new URLSearchParams();
+    if (params.page !== undefined) query.set('page', String(params.page));
+    if (params.page_size !== undefined)
+      query.set('page_size', String(params.page_size));
+    if (params.search) query.set('search', params.search);
+    if (params.media_type) query.set('media_type', params.media_type);
+    if (params.category) query.set('category', params.category);
+    if (params.all !== undefined) query.set('all', String(params.all));
+
+    return apiFetch<ApiResponse<Prompt[]>>(`/prompts/featured?${query.toString()}`);
   },
 
   addFavorite: (uuid: string) =>

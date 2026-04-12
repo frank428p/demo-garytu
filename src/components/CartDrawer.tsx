@@ -135,7 +135,7 @@ export function CartDrawer() {
                   />
 
                   <div className="min-w-0 flex-1 flex flex-col gap-1.5">
-                    <p className="truncate text-md font-bold text-white/90 leading-tight">
+                    <p className="truncate text-[14px] font-semibold leading-tight">
                       {item?.item?.name}
                     </p>
 
@@ -145,12 +145,12 @@ export function CartDrawer() {
                       <Tag className="gap-1">
                         {item?.item?.media_type === 'VIDEO' ? (
                           <>
-                            <IconVideo size={14} />
+                            <IconVideo size={12} />
                             Video
                           </>
                         ) : (
                           <>
-                            <IconPhoto size={14} />
+                            <IconPhoto size={12} />
                             Image
                           </>
                         )}
@@ -164,7 +164,7 @@ export function CartDrawer() {
                     </div>
 
                     {/* Price */}
-                    <span className="text-sm font-bold text-white">
+                    <span className="text-[13px] font-normal text-foreground/60">
                       NT$&nbsp;{item.item.price.toLocaleString()}
                     </span>
                   </div>

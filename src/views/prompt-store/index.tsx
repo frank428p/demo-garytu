@@ -16,7 +16,10 @@ import type { Prompt } from '@/@core/types/prompt';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { CollectionSlider, type CollectionItem } from '@/components/CollectionSlider';
+import {
+  CollectionSlider,
+  type CollectionItem,
+} from '@/components/CollectionSlider';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
@@ -107,11 +110,11 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
 
       {/* Info */}
       <div className="flex flex-col gap-1 px-1.5 pt-2">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-semibold text-foreground leading-snug line-clamp-1">
+        <div className="flex flex-col items-start justify-between gap-0.5">
+          <span className="text-[14px] font-semibold text-foreground leading-snug line-clamp-1">
             {prompt.name}
           </span>
-          <Small className="font-bold text-foreground/60">
+          <Small className="text-[12px] font-normal text-foreground/60">
             NT${prompt.price.toLocaleString()}
           </Small>
         </div>
@@ -123,8 +126,7 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
 // ─── PromptStoreView ──────────────────────────────────────────────────────────
 
 const DOT_PATTERN_STYLE = {
-  backgroundImage:
-    'radial-gradient(circle, currentColor 1px, transparent 1px)',
+  backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
   backgroundSize: '28px 28px',
 } as const;
 
