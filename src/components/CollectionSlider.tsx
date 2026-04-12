@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
@@ -14,6 +15,7 @@ const BADGE_STYLE: Record<string, string> = {
 const GAP = 16;
 
 export function CollectionSlider({ items }: { items: Prompt[] }) {
+  const router = useRouter();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null); // relative to startIndex
   const [containerHovered, setContainerHovered] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
@@ -192,6 +194,10 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
                 className="relative overflow-hidden rounded-xl cursor-pointer"
                 onMouseEnter={() => isVisible && setHoveredIdx(relIdx)}
                 onMouseLeave={() => setHoveredIdx(null)}
+                onClick={() => {
+                  if (!isDragging.current)
+                    router.push(`/toolkit/store/${item.uuid}`);
+                }}
               >
                 {/* Poster image */}
                 <div
@@ -240,7 +246,7 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
 
                 {item?.media_type === 'VIDEO' && (
                   <div className="absolute top-2 right-2 rounded-md bg-black/60 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
-                    <span className="text-[10px] text-white/90 font-medium">
+                    <span className="text-[12px] text-white/90 font-medium">
                       Video
                     </span>
                   </div>
@@ -250,13 +256,14 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 {/* Info */}
                 <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col gap-1.5">
-                  {/* <span
+                  <span
                     className={cn(
                       'inline-flex bg-white/20 text-white w-fit items-center rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase backdrop-blur-sm',
                     )}
                   >
-                    {item.media_type}
-                  </span> */}
+                    {/* {item.media_type} */}
+                    Director collaboration
+                  </span>
                   <p className="text-white text-sm xl:text-lg font-semibold leading-snug drop-shadow truncate">
                     {item.name}
                   </p>

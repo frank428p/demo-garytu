@@ -11,7 +11,10 @@ import {
   IconVideo,
 } from '@tabler/icons-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useFeaturedPrompts, usePromptsList } from '@/@core/useQuery/usePrompts';
+import {
+  useFeaturedPrompts,
+  usePromptsList,
+} from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
@@ -92,13 +95,13 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
 
         {prompt?.media_type === 'VIDEO' && (
           <div className="absolute top-2 right-2 rounded-md bg-black/60 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
-            <span className="text-[10px] text-white/90 font-medium">Video</span>
+            <span className="text-[12px] text-white/90 font-medium">Video</span>
           </div>
         )}
 
         {prompt?.user_state.purchased && (
           <div className="absolute bottom-2 right-2 rounded-md bg-primary/70 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
-            <span className="text-[10px] text-white/90 font-medium">
+            <span className="text-[12px] text-white/90 font-medium">
               Purchased
             </span>
           </div>
