@@ -11,15 +11,12 @@ import {
   IconVideo,
 } from '@tabler/icons-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { usePromptsList } from '@/@core/useQuery/usePrompts';
+import { useFeaturedPrompts, usePromptsList } from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import {
-  CollectionSlider,
-  type CollectionItem,
-} from '@/components/CollectionSlider';
+import { CollectionSlider } from '@/components/CollectionSlider';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
@@ -130,51 +127,6 @@ const DOT_PATTERN_STYLE = {
   backgroundSize: '28px 28px',
 } as const;
 
-const COLLECTION_ITEMS: CollectionItem[] = [
-  {
-    id: '1',
-    badge: 'STORY',
-    title: 'Between lights',
-    image: '/images/gallery/16-to-9_1.jpg',
-    video: '/images/gallery/16-to-9_1.mp4',
-  },
-  {
-    id: '2',
-    badge: 'COLLECTION',
-    title: 'POV',
-    image: '/images/gallery/16-to-9_2.jpg',
-    video: '/images/gallery/16-to-9_1.mp4',
-  },
-  {
-    id: '3',
-    badge: 'STORY',
-    title: 'Unbound',
-    image: '/images/gallery/16-to-9_1.jpg',
-    video: '/images/gallery/16-to-9_1.mp4',
-  },
-  {
-    id: '4',
-    badge: 'COLLECTION',
-    title: 'Golden Hour',
-    image: '/images/gallery/16-to-9_2.jpg',
-    video: '/images/gallery/16-to-9_1.mp4',
-  },
-  {
-    id: '5',
-    badge: 'STORY',
-    title: 'Solitude',
-    image: '/images/gallery/16-to-9_1.jpg',
-    video: '/images/gallery/16-to-9_1.mp4',
-  },
-  {
-    id: '6',
-    badge: 'COLLECTION',
-    title: 'Neon Dreams',
-    image: '/images/gallery/16-to-9_2.jpg',
-    video: '/images/gallery/16-to-9_1.mp4',
-  },
-] as const;
-
 const PromptStoreView = () => {
   const [mediaTypeOpen, setMediaTypeOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
@@ -182,6 +134,8 @@ const PromptStoreView = () => {
   const [selectedStyle, setSelectedStyle] = useState('');
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     usePromptsList();
+  const { data: featuredData } = useFeaturedPrompts();
+  const collectionItems = featuredData?.data ?? [];
 
   const items = data?.pages?.flatMap((p) => p.data) ?? [];
 
@@ -256,7 +210,7 @@ const PromptStoreView = () => {
           </p>
         </div>
         <div className="w-full min-w-0">
-          <CollectionSlider items={COLLECTION_ITEMS} />
+          <CollectionSlider items={collectionItems} />
         </div>
       </section>
 

@@ -4,23 +4,16 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
+import type { Prompt } from '@/@core/types/prompt';
 
-export type CollectionItem = {
-  id?: string;
-  badge: 'STORY' | 'COLLECTION';
-  title?: string;
-  image?: string;
-  video?: string;
-};
-
-const BADGE_STYLE: Record<CollectionItem['badge'], string> = {
-  STORY: 'bg-white/20 text-white',
-  COLLECTION: 'bg-white/20 text-white',
+const BADGE_STYLE: Record<string, string> = {
+  VIDEO: 'bg-white/20 text-white',
+  IMAGE: 'bg-white/20 text-white',
 };
 
 const GAP = 16;
 
-export function CollectionSlider({ items }: { items: CollectionItem[] }) {
+export function CollectionSlider({ items }: { items: Prompt[] }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null); // relative to startIndex
   const [containerHovered, setContainerHovered] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
@@ -188,7 +181,7 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
 
             return (
               <div
-                key={item.id}
+                key={item.uuid}
                 style={{
                   width: `${itemWidths[i] || baseItemWidth}px`,
                   height: `${Math.max(180, Math.min(containerWidth * 0.22, 420))}px`,
@@ -204,16 +197,16 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
                 <div
                   className="absolute inset-0 transition-opacity duration-500"
                   style={{
-                    backgroundImage: `url(${item.image})`,
+                    backgroundImage: `url(${item.cover?.thumbnail_url})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center center',
                     opacity: isHovered ? 0 : 1,
                   }}
                 />
                 {/* Video */}
-                {item.video && (
+                {item.media_type === 'VIDEO' && item.cover?.url && (
                   <video
-                    src={item.video}
+                    src={item.cover.url}
                     className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
                     style={{ opacity: isHovered ? 1 : 0 }}
                     autoPlay
@@ -232,21 +225,40 @@ export function CollectionSlider({ items }: { items: CollectionItem[] }) {
                     }}
                   />
                 )}
+                {/* Image (full) */}
+                {item.media_type === 'IMAGE' && item.cover?.url && (
+                  <div
+                    className="absolute inset-0 transition-opacity duration-500"
+                    style={{
+                      backgroundImage: `url(${item.cover.url})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center center',
+                      opacity: isHovered ? 1 : 0,
+                    }}
+                  />
+                )}
+
+                {item?.media_type === 'VIDEO' && (
+                  <div className="absolute top-2 right-2 rounded-md bg-black/60 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
+                    <span className="text-[10px] text-white/90 font-medium">
+                      Video
+                    </span>
+                  </div>
+                )}
+
                 {/* Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 {/* Info */}
-                <div className="absolute bottom-0 left-0 p-5 flex flex-col gap-1.5">
-                  <span
+                <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col gap-1.5">
+                  {/* <span
                     className={cn(
-                      'inline-flex w-fit items-center rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase backdrop-blur-sm',
-                      BADGE_STYLE[item.badge],
+                      'inline-flex bg-white/20 text-white w-fit items-center rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase backdrop-blur-sm',
                     )}
                   >
-                    {item.badge}
-                    {item.id}
-                  </span>
-                  <p className="text-white text-sm xl:text-lg font-semibold leading-snug drop-shadow">
-                    {item.title}
+                    {item.media_type}
+                  </span> */}
+                  <p className="text-white text-sm xl:text-lg font-semibold leading-snug drop-shadow truncate">
+                    {item.name}
                   </p>
                 </div>
               </div>

@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { promptsApi } from '@/@core/api/prompts';
-import type { PromptsListParams, PromptsPaginationParams } from '@/@core/types/prompt';
+import type { FeaturedPromptsParams, PromptsListParams, PromptsPaginationParams } from '@/@core/types/prompt';
 
 export function usePromptsList(params: Omit<PromptsListParams, 'page'> = {}) {
   return useInfiniteQuery({
@@ -15,6 +15,13 @@ export function usePromptsList(params: Omit<PromptsListParams, 'page'> = {}) {
       return meta.page < meta.total_pages ? meta.page + 1 : undefined;
     },
     initialPageParam: 1,
+  });
+}
+
+export function useFeaturedPrompts(params: Omit<FeaturedPromptsParams, 'page' | 'page_size'> = {}) {
+  return useQuery({
+    queryKey: ['prompts', 'featured', params],
+    queryFn: () => promptsApi.listFeatured({ ...params, all: true }),
   });
 }
 
