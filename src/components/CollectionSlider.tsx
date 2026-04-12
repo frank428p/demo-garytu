@@ -1,16 +1,69 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { Prompt } from '@/@core/types/prompt';
 
-const BADGE_STYLE: Record<string, string> = {
-  VIDEO: 'bg-white/20 text-white',
-  IMAGE: 'bg-white/20 text-white',
-};
+function SlideItem({ item, isHovered }: { item: Prompt; isHovered: boolean }) {
+  const [posterLoaded, setPosterLoaded] = useState(false);
+
+  return (
+    <>
+      {!posterLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
+
+      {/* Poster image */}
+      <Image
+        src={item.cover?.thumbnail_url ?? ''}
+        alt={item.name}
+        fill
+        sizes="(min-width: 1536px) 20vw, (min-width: 1280px) 25vw, 33vw"
+        className={cn(
+          'object-cover transition-opacity duration-500',
+          posterLoaded ? (isHovered ? 'opacity-0' : 'opacity-100') : 'opacity-0',
+        )}
+        onLoad={() => setPosterLoaded(true)}
+      />
+
+      {/* Video (VIDEO type) */}
+      {item.media_type === 'VIDEO' && item.cover?.url && (
+        <video
+          src={item.cover.url}
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+          style={{ opacity: isHovered ? 1 : 0 }}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          ref={(el) => {
+            if (!el) return;
+            if (isHovered) el.play().catch(() => {});
+            else { el.pause(); el.currentTime = 0; }
+          }}
+        />
+      )}
+
+      {/* Full image (IMAGE type) */}
+      {item.media_type === 'IMAGE' && item.cover?.url && (
+        <Image
+          src={item.cover.url}
+          alt={item.name}
+          fill
+          sizes="(min-width: 1536px) 20vw, (min-width: 1280px) 25vw, 33vw"
+          className={cn(
+            'object-cover transition-opacity duration-500',
+            isHovered ? 'opacity-100' : 'opacity-0',
+          )}
+        />
+      )}
+    </>
+  );
+}
 
 const GAP = 16;
 
@@ -199,50 +252,7 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
                     router.push(`/toolkit/store/${item.uuid}`);
                 }}
               >
-                {/* Poster image */}
-                <div
-                  className="absolute inset-0 transition-opacity duration-500"
-                  style={{
-                    backgroundImage: `url(${item.cover?.thumbnail_url})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center center',
-                    opacity: isHovered ? 0 : 1,
-                  }}
-                />
-                {/* Video */}
-                {item.media_type === 'VIDEO' && item.cover?.url && (
-                  <video
-                    src={item.cover.url}
-                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-                    style={{ opacity: isHovered ? 1 : 0 }}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="none"
-                    ref={(el) => {
-                      if (!el) return;
-                      if (isHovered) {
-                        el.play().catch(() => {});
-                      } else {
-                        el.pause();
-                        el.currentTime = 0;
-                      }
-                    }}
-                  />
-                )}
-                {/* Image (full) */}
-                {item.media_type === 'IMAGE' && item.cover?.url && (
-                  <div
-                    className="absolute inset-0 transition-opacity duration-500"
-                    style={{
-                      backgroundImage: `url(${item.cover.url})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center center',
-                      opacity: isHovered ? 1 : 0,
-                    }}
-                  />
-                )}
+                <SlideItem item={item} isHovered={isHovered} />
 
                 {item?.media_type === 'VIDEO' && (
                   <div className="absolute top-2 right-2 rounded-md bg-black/60 backdrop-blur-sm px-2 py-0.5 flex items-center gap-1">
