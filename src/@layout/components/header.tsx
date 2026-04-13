@@ -28,13 +28,11 @@ import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 import { HeaderMenu } from '@/@layout/components/headerMenu';
 import { UserMenu } from '@/@layout/components/userMenu';
 import { Badge } from '@/components/ui/badge';
-
-const LOCALES = [
-  { value: 'en', label: 'English' },
-  { value: 'zh-TW', label: '繁體中文' },
-] as const;
+import { useTranslations } from 'next-intl';
+import { useLocaleSwitcher, LOCALES } from '@/@core/hooks/useLocaleSwitcher';
 
 export function Header() {
+  const t = useTranslations();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export function Header() {
   const { isMobile, isTablet, isDesktop } = useBreakpoint();
   const { items, setIsOpen } = useCart();
   const { openLogin, openSignup } = useAuth();
-  const [locale, setLocale] = useState<'en' | 'zh-TW'>('en');
+  const { locale, switchLocale } = useLocaleSwitcher();
 
   const user = useAtomValue(userAtom);
   const isAuth = !!user;
@@ -79,7 +77,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Link href={RouterUrl.Explore} className="py-1 px-2">
               <Muted className="font-normal text-base hover:text-primary">
-                {'Explore'}
+                {t('Explore')}
               </Muted>
             </Link>
 
@@ -187,14 +185,14 @@ export function Header() {
                 className="text-muted-foreground font-normal text-base hover:text-primary h-auto py-1 px-2 rounded-lg focus-visible:ring-0 focus-visible:outline-none"
               >
                 <IconWorld />
-                English
+                {LOCALES.find((l) => l.value === locale)?.label}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="p-3">
               {LOCALES.map((l) => (
                 <DropdownMenuItem
                   key={l.value}
-                  onClick={() => setLocale(l.value)}
+                  onClick={() => switchLocale(l.value)}
                   className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ''}`}
                 >
                   {l.label}

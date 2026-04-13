@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { NavigationType } from '@/@layout/types';
+import { useTranslations } from 'next-intl';
 
 interface SidebarNavLinkProps {
   item: NavigationType;
@@ -15,6 +16,7 @@ export function SidebarNavLink({
   isActive,
   className,
 }: SidebarNavLinkProps) {
+  const t = useTranslations();
   const Icon = isActive && item.activeIcon ? item.activeIcon : item.icon;
 
   return (
@@ -51,7 +53,7 @@ export function SidebarNavLink({
             : 'text-muted-foreground',
         )}
       >
-        {item.i18nKey}
+        {t(item.i18nKey)}
       </span>
     </Link>
   );

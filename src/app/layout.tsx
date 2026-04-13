@@ -9,6 +9,8 @@ import { ReactQueryProvider } from '@/@core/provider/ReactQueryProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { headers } from 'next/headers';
 import type { User } from '@/@core/types/user';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -37,18 +39,23 @@ export default async function RootLayout({
     ? JSON.parse(userDataHeader)
     : null;
 
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="zh-TW" className="dark">
+    <html lang={locale} className="dark">
       <body className={`${inter.variable} ${notoSansTC.variable} antialiased`}>
-        <ReactQueryProvider>
-          <JotaiProvider initialUser={initialUser}>
-            <AuthProvider>
-              <MainLayout>{children}</MainLayout>
-              <AuthDialog />
-              <Toaster />
-            </AuthProvider>
-          </JotaiProvider>
-        </ReactQueryProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ReactQueryProvider>
+            <JotaiProvider initialUser={initialUser}>
+              <AuthProvider>
+                <MainLayout>{children}</MainLayout>
+                <AuthDialog />
+                <Toaster />
+              </AuthProvider>
+            </JotaiProvider>
+          </ReactQueryProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

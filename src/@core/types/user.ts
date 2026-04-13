@@ -3,8 +3,10 @@ export type User = {
   name: string;
   email: string;
   image?: string;
+  locale?: string | null;
 };
 
 export type UpdateUserInfoRequest = {
-  name: string;
+  name?: string;
+  locale?: string;
 };

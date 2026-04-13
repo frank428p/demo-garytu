@@ -12,10 +12,15 @@ export async function apiFetch<T>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
+  const locale = typeof document !== 'undefined'
+    ? document.cookie.match(/(?:^|;\s*)locale=([^;]+)/)?.[1] ?? ''
+    : '';
+
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(locale && { 'X-Locale': locale }),
       ...options?.headers,
     },
   });

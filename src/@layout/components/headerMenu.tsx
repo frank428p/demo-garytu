@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLocaleSwitcher } from '@/@core/hooks/useLocaleSwitcher';
 import Link from 'next/link';
 import {
   IconMenu2,
@@ -43,7 +44,7 @@ export function HeaderMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [toolkitOpen, setToolkitOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [locale, setLocale] = useState<'en' | 'zh-TW'>('en');
+  const { locale, switchLocale } = useLocaleSwitcher();
 
   return (
     <>
@@ -184,8 +185,9 @@ export function HeaderMenu() {
                       <button
                         key={val}
                         onClick={() => {
-                          setLocale(val);
+                          switchLocale(val);
                           setLangOpen(false);
+                          setIsOpen(false);
                         }}
                         className={cn(
                           'flex w-full items-center rounded-lg px-3 py-2.5 text-base font-medium transition-colors',
