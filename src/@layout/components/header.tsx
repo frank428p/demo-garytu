@@ -9,8 +9,6 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
-import { useAtomValue } from 'jotai';
-import { userAtom } from '@/@core/store/authAtoms';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -22,7 +20,7 @@ import { RouterUrl } from '@/@core/constants/routerUrl';
 import { cn } from '@/lib/utils';
 import { Muted, Small } from '@/components/ui/typography';
 import { useCart } from '@/@core/provider/cartContext';
-import { useAuth } from '@/@core/provider/authContext';
+import { useAuth, useIsAuth } from '@/@core/provider/authContext';
 import { Separator } from '@/components/ui/separator';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 import { HeaderMenu } from '@/@layout/components/headerMenu';
@@ -46,8 +44,7 @@ export function Header() {
   const { openLogin, openSignup } = useAuth();
   const { locale, switchLocale } = useLocaleSwitcher();
 
-  const user = useAtomValue(userAtom);
-  const isAuth = !!user;
+  const isAuth = useIsAuth();
   const [toolkitOpen, setToolkitOpen] = useState(false);
   const toolkitCloseTimer = useRef<ReturnType<typeof setTimeout>>(null);
 

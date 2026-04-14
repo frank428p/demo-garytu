@@ -32,7 +32,11 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.25);
 
-  const proxyUrl = `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
+  const token = typeof document !== 'undefined'
+    ? document.cookie.split('; ').find(r => r.startsWith('access_token='))?.split('=')[1]
+    : undefined;
+
+  const file = { url, httpHeaders: token ? { Authorization: `Bearer ${token}` } : {} };
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -46,7 +50,7 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
 
         <div className="flex-1 overflow-auto flex justify-center bg-muted/30 p-4">
           <Document
-            file={proxyUrl}
+            file={file}
             onLoadSuccess={onDocumentLoadSuccess}
             loading={
               <div className="flex items-center justify-center h-full text-muted-foreground text-sm">

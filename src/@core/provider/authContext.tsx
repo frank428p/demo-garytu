@@ -1,33 +1,38 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { authDialogAtom, userAtom } from '@/@core/store/authAtoms';
 import { cartItemsAtom } from '@/@core/store/cartAtoms';
-import { useCartItems } from '@/@core/useQuery/useCart';
-
-// 獨立元件訂閱 userAtom，避免 user 變更時 re-render 所有子元件
-function CartRefetcher() {
-  const user = useAtomValue(userAtom);
-  const { refetch: refetchCart } = useCartItems();
-
-  // 登入後強制重新 fetch cart（避免 stale cache 問題）
-  useEffect(() => {
-    if (!user) return;
-    refetchCart();
-  }, [user, refetchCart]);
-
-  return null;
-}
+import { userApi } from '@/@core/api/user';
+import { cartApi } from '@/@core/api/cart';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useSetAtom(userAtom);
   const setCartItems = useSetAtom(cartItemsAtom);
+  const [initialized, setInitialized] = useState(false);
 
-  // 全域監聽 401/403，清除 session
+  // 初始化：有 token 同時呼叫 /users/me 和 /cart，都完成後才 render children
   useEffect(() => {
-    const handleAuthError = async () => {
-      await fetch('/api/auth/set-token', { method: 'DELETE' });
+    const init = async () => {
+      const token = document.cookie.match(/(?:^|;\s*)access_token=([^;]+)/)?.[1];
+      if (!token) return;
+
+      const userRes = await userApi.getMe();
+      setUser(userRes.data);
+
+      const cartRes = await cartApi.get();
+      setCartItems(cartRes.data);
+    };
+
+    init().finally(() => setInitialized(true));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 全域監聽 401/403 與登出，清除 session
+  useEffect(() => {
+    const handleAuthError = () => {
+      document.cookie = 'access_token=; path=/; max-age=0';
       setUser(null);
       setCartItems([]);
       if (window.location.pathname.startsWith('/user')) {
@@ -39,12 +44,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('auth-error', handleAuthError);
   }, [setUser, setCartItems]);
 
-  return (
-    <>
-      <CartRefetcher />
-      {children}
-    </>
-  );
+  if (!initialized) return null;
+
+  return <>{children}</>;
 }
 
 export function useAuth() {
@@ -56,6 +58,14 @@ export function useAuth() {
     openSignup: () => setAuthMode('signup'),
     closeAuth: () => setAuthMode(null),
   };
+}
+
+export function useIsAuth() {
+  const user = useAtomValue(userAtom);
+  const hasToken = typeof document !== 'undefined'
+    ? /(?:^|;\s*)access_token=([^;]+)/.test(document.cookie)
+    : false;
+  return !!user && hasToken;
 }
 
 export function useRequireAuth(skipLoginDialog: boolean) {

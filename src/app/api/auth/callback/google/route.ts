@@ -50,8 +50,7 @@ export async function GET(req: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === 'production',
     };
-    response.cookies.set('access_token', accessToken, { ...cookieOpts, httpOnly: true });
-    response.cookies.set('auth_status', '1', { ...cookieOpts, httpOnly: false });
+    response.cookies.set('access_token', accessToken, { ...cookieOpts, httpOnly: false });
   }
 
   return response;

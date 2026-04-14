@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { authApi } from '@/@core/api/auth';
 import { userApi } from '@/@core/api/user';
+import { cartApi } from '@/@core/api/cart';
 import { userAtom } from '@/@core/store/authAtoms';
 import { cartItemsAtom } from '@/@core/store/cartAtoms';
 import type {
@@ -12,22 +13,22 @@ import type {
   LoginRequest,
 } from '../types/auth';
 
-async function saveAccessToken(token: string) {
-  await fetch('/api/auth/set-token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ access_token: token }),
-  });
+function saveAccessToken(token: string) {
+  const maxAge = 60 * 60 * 24 * 14;
+  const secure = location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `access_token=${token}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
 }
 
 export function useEmailLogin() {
   const setUser = useSetAtom(userAtom);
+  const setCartItems = useSetAtom(cartItemsAtom);
   return useMutation({
     mutationFn: (data: LoginRequest) => authApi.emailLogin(data),
     onSuccess: async (res) => {
-      await saveAccessToken(res.data.access_token);
-      const userRes = await userApi.getMe();
+      saveAccessToken(res.data.access_token);
+      const [userRes, cartRes] = await Promise.all([userApi.getMe(), cartApi.get()]);
       setUser(userRes.data);
+      setCartItems(cartRes.data);
     },
   });
 }
@@ -47,25 +48,20 @@ export function useVerifyEmailRegister() {
 
 export function useGoogleLogin() {
   const setUser = useSetAtom(userAtom);
+  const setCartItems = useSetAtom(cartItemsAtom);
   return useMutation({
     mutationFn: (idToken: string) => authApi.googleLogin(idToken),
     onSuccess: async (res) => {
-      await saveAccessToken(res.data.access_token);
-      const userRes = await userApi.getMe();
+      saveAccessToken(res.data.access_token);
+      const [userRes, cartRes] = await Promise.all([userApi.getMe(), cartApi.get()]);
       setUser(userRes.data);
+      setCartItems(cartRes.data);
     },
   });
 }
 
 export function useLogout() {
-  const setUser = useSetAtom(userAtom);
-  const setCartItems = useSetAtom(cartItemsAtom);
-  return async () => {
-    await fetch('/api/auth/set-token', { method: 'DELETE' });
-    setUser(null);
-    setCartItems([]);
-    if (window.location.pathname.startsWith('/user')) {
-      window.location.href = '/';
-    }
+  return () => {
+    window.dispatchEvent(new CustomEvent('auth-error'));
   };
 }

@@ -1,4 +1,4 @@
-const BASE_URL = '/api/proxy';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export class ApiError extends Error {
   status: number;
@@ -12,15 +12,16 @@ export async function apiFetch<T>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
-  const locale = typeof document !== 'undefined'
-    ? document.cookie.match(/(?:^|;\s*)locale=([^;]+)/)?.[1] ?? ''
-    : '';
+  const cookie = typeof document !== 'undefined' ? document.cookie : '';
+  const locale = cookie.match(/(?:^|;\s*)locale=([^;]+)/)?.[1] ?? '';
+  const token = cookie.match(/(?:^|;\s*)access_token=([^;]+)/)?.[1] ?? '';
 
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
       ...(locale && { 'X-Locale': locale }),
+      ...(token && { 'Authorization': `Bearer ${token}` }),
       ...options?.headers,
     },
   });

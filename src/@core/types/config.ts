@@ -1,5 +1,17 @@
-// ─── Kling AI Model Config ────────────────────────────────────────────────────
+type Tag = {
+  code: string;
+  name: string;
+};
 
+export type PromptLabel = Tag;
+export type PromptCategory = Tag;
+
+export type WebConfig = {
+  prompt_labels: PromptLabel[];
+  prompt_categories: PromptCategory[];
+};
+
+// ─── Kling AI Model Config ────────────────────────────────────────────────────
 export type AspectRatio = '16:9' | '9:16' | '1:1';
 export type KlingMode = 'std' | 'pro' | 'master';
 export type CameraPreset =
