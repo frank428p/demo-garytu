@@ -7,6 +7,7 @@ import { userApi } from '@/@core/api/user';
 import { cartApi } from '@/@core/api/cart';
 import { userAtom } from '@/@core/store/authAtoms';
 import { cartItemsAtom } from '@/@core/store/cartAtoms';
+import { syncLocaleFromUser } from '@/@core/hooks/useLocaleSwitcher';
 import type {
   EmailRegisterRequest,
   EmailRegisterVerifyRequest,
@@ -29,6 +30,7 @@ export function useEmailLogin() {
       const [userRes, cartRes] = await Promise.all([userApi.getMe(), cartApi.get()]);
       setUser(userRes.data);
       setCartItems(cartRes.data);
+      syncLocaleFromUser(userRes.data.locale);
     },
   });
 }
@@ -56,6 +58,7 @@ export function useGoogleLogin() {
       const [userRes, cartRes] = await Promise.all([userApi.getMe(), cartApi.get()]);
       setUser(userRes.data);
       setCartItems(cartRes.data);
+      syncLocaleFromUser(userRes.data.locale);
     },
   });
 }

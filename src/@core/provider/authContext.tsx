@@ -6,6 +6,7 @@ import { authDialogAtom, userAtom } from '@/@core/store/authAtoms';
 import { cartItemsAtom } from '@/@core/store/cartAtoms';
 import { userApi } from '@/@core/api/user';
 import { cartApi } from '@/@core/api/cart';
+import { syncLocaleFromUser } from '@/@core/hooks/useLocaleSwitcher';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useSetAtom(userAtom);
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const userRes = await userApi.getMe();
       setUser(userRes.data);
+      syncLocaleFromUser(userRes.data.locale);
 
       const cartRes = await cartApi.get();
       setCartItems(cartRes.data);

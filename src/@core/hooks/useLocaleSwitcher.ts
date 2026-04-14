@@ -12,6 +12,17 @@ export const LOCALES: { value: Locale; label: string }[] = [
   { value: 'zh-TW', label: '繁體中文' },
 ];
 
+export function syncLocaleFromUser(userLocale: string | null | undefined) {
+  if (!userLocale) return;
+  const validLocales: string[] = LOCALES.map((l) => l.value);
+  if (!validLocales.includes(userLocale)) return;
+  const currentLocale = document.cookie.match(/(?:^|;\s*)locale=([^;]+)/)?.[1] ?? 'zh-TW';
+  if (userLocale !== currentLocale) {
+    document.cookie = `locale=${userLocale}; path=/; max-age=31536000`;
+    window.location.reload();
+  }
+}
+
 export function useLocaleSwitcher() {
   const locale = useLocale() as Locale;
   const user = useAtomValue(userAtom);
