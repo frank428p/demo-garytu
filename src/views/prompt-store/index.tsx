@@ -135,7 +135,7 @@ const DOT_PATTERN_STYLE = {
 } as const;
 
 const PromptStoreView = () => {
-  const t = useTranslations();
+  const t = useTranslations('common');
   const webConfig = useAtomValue(webConfigAtom);
   const categories = webConfig?.prompt_categories ?? [];
   const [mediaTypeOpen, setMediaTypeOpen] = useState(false);

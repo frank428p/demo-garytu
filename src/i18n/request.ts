@@ -12,8 +12,16 @@ export default getRequestConfig(async () => {
     ? (raw as Locale)
     : defaultLocale;
 
+  const [common, error] = await Promise.all([
+    import(`../../i18n/common/${locale}.json`),
+    import(`../../i18n/error/${locale}.json`),
+  ]);
+
   return {
     locale,
-    messages: (await import(`../../i18n/common/${locale}.json`)).default,
+    messages: {
+      common: common.default,
+      error: error.default,
+    },
   };
 });

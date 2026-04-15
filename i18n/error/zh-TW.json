@@ -1,0 +1,7 @@
+{
+  "network": "網路錯誤，請再試一次",
+  "unauthorized": "請先登入",
+  "forbidden": "您沒有權限執行此操作",
+  "notFound": "找不到資源",
+  "server": "伺服器錯誤，請稍後再試"
+}

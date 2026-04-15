@@ -26,7 +26,7 @@ import { useLogout } from '@/@core/useQuery/useAuth';
 import { useTranslations } from 'next-intl';
 
 export function UserMenu() {
-  const t = useTranslations();
+  const t = useTranslations('common');
   const user = useAtomValue(userAtom);
   const logout = useLogout();
 

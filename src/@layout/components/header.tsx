@@ -30,7 +30,7 @@ import { useTranslations } from 'next-intl';
 import { useLocaleSwitcher, LOCALES } from '@/@core/hooks/useLocaleSwitcher';
 
 export function Header() {
-  const t = useTranslations();
+  const t = useTranslations('common');
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {

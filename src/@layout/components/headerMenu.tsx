@@ -42,7 +42,7 @@ const navLinkClass = cn(
 );
 
 export function HeaderMenu() {
-  const t = useTranslations();
+  const t = useTranslations('common');
   const [isOpen, setIsOpen] = useState(false);
   const [toolkitOpen, setToolkitOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);

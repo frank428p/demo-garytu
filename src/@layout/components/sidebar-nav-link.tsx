@@ -16,7 +16,7 @@ export function SidebarNavLink({
   isActive,
   className,
 }: SidebarNavLinkProps) {
-  const t = useTranslations();
+  const t = useTranslations('common');
   const Icon = isActive && item.activeIcon ? item.activeIcon : item.icon;
 
   return (
