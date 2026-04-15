@@ -15,6 +15,7 @@ import {
   IconVideo,
   IconPhoto,
   IconCurrencyEthereum,
+  IconDownload,
 } from '@tabler/icons-react';
 import { ThumbnailSlider } from '@/components/ThumbnailSlider';
 import { useCart } from '@/@core/provider/cartContext';
@@ -32,12 +33,14 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Tag } from '@/components/ui/tag';
+import { useTranslations } from 'next-intl';
 
 type PromptDetailViewProps = {
   id: string;
 };
 
 const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
+  const t = useTranslations('common');
   const { data, isPending: isPromptPending } = usePrompt(id);
   const prompt = data?.data;
   const [pdfOpen, setPdfOpen] = useState(false);
@@ -109,12 +112,12 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                   {prompt?.media_type === 'VIDEO' ? (
                     <>
                       <IconVideo size={14} />
-                      Video
+                      {t('Video')}
                     </>
                   ) : (
                     <>
                       <IconPhoto size={14} />
-                      Image
+                      {t('Image')}
                     </>
                   )}
                 </div>
@@ -123,35 +126,35 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               <Skeleton className="h-4 w-[48px]" />
             )}
 
-            {prompt?.name ? (
-              <Tag variant="default">AI Prompt</Tag>
+            {prompt?.category ? (
+              <Tag variant="default">{prompt?.category?.name}</Tag>
             ) : (
               <Skeleton className="h-4 w-[48px]" />
             )}
 
             {prompt?.bonus_credit != null ? (
               <Tag variant="primary" className="items-center">
-                Bonus Credit <IconCurrencyEthereum size={14} />{' '}
+                {t('Bonus Credit')} <IconCurrencyEthereum size={14} />{' '}
                 {prompt?.bonus_credit}
               </Tag>
             ) : (
               <Skeleton className="h-4 w-[48px]" />
             )}
           </div>
-        </div>
 
-        {/* Price */}
-        <div className="flex items-center gap-2.5">
-          {prompt ? (
-            <span className="text-2xl font-bold tracking-tight">
-              NT$&nbsp;{prompt?.price?.toLocaleString()}
-            </span>
-          ) : (
-            <Skeleton className="h-8 w-1/3" />
-          )}
-          {/* <span className="text-sm text-muted-foreground line-through">
+          {/* Price */}
+          <div className="flex items-center gap-2.5">
+            {prompt ? (
+              <span className="text-lg lg:text-2xl font-normal">
+                NT$&nbsp;{prompt?.price?.toLocaleString()}
+              </span>
+            ) : (
+              <Skeleton className="h-8 w-1/3" />
+            )}
+            {/* <span className="text-sm text-muted-foreground line-through">
             NT$&nbsp;2,000
           </span> */}
+          </div>
         </div>
 
         {/* Description */}
@@ -169,7 +172,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
         {/* Compatible with */}
         <div className="space-y-2.5">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Compatible with
+            {t('Compatible with')}
           </p>
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -209,15 +212,37 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                     className="px-4 md:px-8 md:w-[160px] font-semibold"
                     onClick={() => setPdfOpen(true)}
                   >
-                    Open PDF
+                    {t('Open PDF')}
                   </Button>
-                  <Button
-                    size="lg"
-                    className="px-4 md:px-8 font-semibold"
-                    onClick={() => setPdfOpen(true)}
-                  >
-                    Download Media Resource
-                  </Button>
+                  {prompt?.zip?.url && (
+                    <Button
+                      size="lg"
+                      className="px-4 md:px-8 font-semibold"
+                      onClick={async () => {
+                        const token =
+                          document.cookie.match(
+                            /(?:^|;\s*)access_token=([^;]+)/,
+                          )?.[1] ?? '';
+                        const res = await fetch(prompt.zip.url, {
+                          headers: token
+                            ? { Authorization: `Bearer ${token}` }
+                            : {},
+                        });
+                        const blob = await res.blob();
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${prompt.name ?? 'media'}.zip`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                    >
+                      <IconDownload />
+                      <span className="hidden min-[410px]:inline">
+                        {t('Media Pack')}
+                      </span>
+                    </Button>
+                  )}
                 </>
               ) : (
                 <>
@@ -229,7 +254,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                       if (prompt?.uuid) router.push(`/checkout/${prompt.uuid}`);
                     }}
                   >
-                    Buy Now
+                    {t('Buy Now')}
                   </Button>
                   <Button
                     variant="secondary"
@@ -246,7 +271,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                       addItem(id);
                     }}
                   >
-                    {inCart ? 'Added to Cart' : 'Add to Cart'}
+                    {inCart ? t('Added to Cart') : t('Add to Cart')}
                   </Button>
                 </>
               )}

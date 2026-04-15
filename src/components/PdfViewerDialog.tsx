@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -36,7 +36,10 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
     ? document.cookie.split('; ').find(r => r.startsWith('access_token='))?.split('=')[1]
     : undefined;
 
-  const file = { url, httpHeaders: token ? { Authorization: `Bearer ${token}` } : {} };
+  const file = useMemo(
+    () => ({ url, httpHeaders: token ? { Authorization: `Bearer ${token}` } : {} }),
+    [url, token],
+  );
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages);

@@ -1,3 +1,4 @@
+import { Tag } from './config';
 import { MediaType } from './index';
 
 export type PromptFile = {
@@ -28,6 +29,8 @@ export type Prompt = {
   user_state: PromptUserState;
   cover: PromptFile;
   pdf: PromptFile;
+  zip: PromptFile;
+  category: Tag;
 };
 
 export type PromptsPaginationParams = {
