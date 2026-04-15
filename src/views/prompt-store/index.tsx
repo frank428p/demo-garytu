@@ -143,7 +143,10 @@ const PromptStoreView = () => {
   const [selectedMediaType, setSelectedMediaType] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    usePromptsList();
+    usePromptsList({
+      media_type: (selectedMediaType as MediaType) || undefined,
+      category: selectedStyle || undefined,
+    });
   const { data: featuredData } = useFeaturedPrompts();
   const collectionItems = featuredData?.data ?? [];
 

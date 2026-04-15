@@ -9,6 +9,8 @@ export const promptsApi = {
     if (params.page_size !== undefined)
       query.set('page_size', String(params.page_size));
     if (params.search) query.set('search', params.search);
+    if (params.media_type) query.set('media_type', params.media_type);
+    if (params.category) query.set('category', params.category);
 
     return apiFetch<ApiResponse<Prompt[]>>(`/prompts?${query.toString()}`);
   },

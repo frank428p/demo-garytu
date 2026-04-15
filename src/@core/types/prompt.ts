@@ -37,6 +37,8 @@ export type PromptsPaginationParams = {
 
 export type PromptsListParams = PromptsPaginationParams & {
   search?: string;
+  media_type?: MediaType;
+  category?: string;
 };
 
 export type FeaturedPromptsParams = PromptsPaginationParams & {
