@@ -23,8 +23,10 @@ import { RouterUrl } from '@/@core/constants/routerUrl';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/@core/store/authAtoms';
 import { useLogout } from '@/@core/useQuery/useAuth';
+import { useTranslations } from 'next-intl';
 
 export function UserMenu() {
+  const t = useTranslations();
   const user = useAtomValue(userAtom);
   const logout = useLogout();
 
@@ -64,13 +66,13 @@ export function UserMenu() {
                 className="cursor-pointer"
               >
                 <IconCrown />
-                Subscription
+                {t('Subscription')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={RouterUrl.UserMyPrompt} className="cursor-pointer">
                 <IconArchive />
-                My Prompt
+                {t('My Prompt')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -79,7 +81,7 @@ export function UserMenu() {
                 className="cursor-pointer"
               >
                 <IconHistory />
-                Order History
+                {t('Order History')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -88,7 +90,7 @@ export function UserMenu() {
                 className="cursor-pointer"
               >
                 <IconSettings />
-                Manage Account
+                {t('Manage Account')}
               </Link>
             </DropdownMenuItem>
           </div>
@@ -98,7 +100,7 @@ export function UserMenu() {
           <div className="px-1 pt-2 pb-2">
             <DropdownMenuItem className="cursor-pointer" onClick={logout}>
               <IconLogout />
-              Logout
+              {t('Logout')}
             </DropdownMenuItem>
           </div>
         </div>

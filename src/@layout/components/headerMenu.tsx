@@ -17,6 +17,7 @@ import { RouterUrl } from '@/@core/constants/routerUrl';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Muted, Small } from '@/components/ui/typography';
+import { useTranslations } from 'next-intl';
 
 const mainNav = [
   { label: 'Enterprise', url: RouterUrl.Business },
@@ -41,6 +42,7 @@ const navLinkClass = cn(
 );
 
 export function HeaderMenu() {
+  const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
   const [toolkitOpen, setToolkitOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -100,21 +102,21 @@ export function HeaderMenu() {
                   'text-destructive hover:bg-destructive/10',
                 )}
               >
-                Logout
+                {t('Logout')}
               </button>
 
               <Separator className="my-2" />
 
               <DrawerPrimitive.Close asChild>
                 <Link href={RouterUrl.Explore} className={navLinkClass}>
-                  Explore
+                  {t('Explore')}
                 </Link>
               </DrawerPrimitive.Close>
 
               {/* Prompt Store */}
               <DrawerPrimitive.Close asChild>
                 <Link href={RouterUrl.Store} className={navLinkClass}>
-                  Prompt Store
+                  {t('Prompt Store')}
                 </Link>
               </DrawerPrimitive.Close>
 
@@ -123,7 +125,7 @@ export function HeaderMenu() {
                 onClick={() => setToolkitOpen((v) => !v)}
                 className={navLinkClass}
               >
-                AI Toolkit
+                {t('AI Toolkit')}
                 <IconChevronDown
                   size={16}
                   className={cn(
@@ -164,7 +166,7 @@ export function HeaderMenu() {
                 onClick={() => setLangOpen((v) => !v)}
                 className={navLinkClass}
               >
-                Language
+                {t('Language')}
                 <IconChevronDown
                   size={16}
                   className={cn(

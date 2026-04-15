@@ -80,7 +80,7 @@ export function Header() {
 
             <Link href={RouterUrl.Store} className="py-1 px-2">
               <Muted className="font-normal text-base hover:text-primary">
-                {'Prompt Store'}
+                {t('Prompt Store')}
               </Muted>
             </Link>
 
@@ -99,7 +99,7 @@ export function Header() {
                   asChild
                   className="text-muted-foreground font-normal text-base hover:text-primary h-auto py-1 px-2 rounded-lg"
                 >
-                  <Muted>AI Toolkit</Muted>
+                  <Muted>{t('AI Toolkit')}</Muted>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -120,8 +120,8 @@ export function Header() {
                       <IconPhoto size={48} className="!size-6 shrink-0" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <Small>Create Image</Small>
-                      <Muted>Generate AI Images</Muted>
+                      <Small>{t('Create Image')}</Small>
+                      <Muted>{t('Generate AI Images')}</Muted>
                     </div>
                   </Link>
                 </DropdownMenuItem>
@@ -138,8 +138,8 @@ export function Header() {
                       <IconVideo size={48} className="!size-6 shrink-0" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <Small>Create Video</Small>
-                      <Muted>Generate AI Videos</Muted>
+                      <Small>{t('Create Video')}</Small>
+                      <Muted>{t('Generate AI Videos')}</Muted>
                     </div>
                   </Link>
                 </DropdownMenuItem>
