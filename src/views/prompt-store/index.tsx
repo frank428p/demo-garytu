@@ -1,6 +1,8 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { webConfigAtom } from '@/@core/store/configAtoms';
 import Image from 'next/image';
 import Link from 'next/link';
 import { H2, Muted, Small } from '@/components/ui/typography';
@@ -16,10 +18,12 @@ import {
   usePromptsList,
 } from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
+import type { MediaType } from '@/@core/types';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { CollectionSlider } from '@/components/CollectionSlider';
+import { useTranslations } from 'next-intl';
 
 // ─── MediaCard ────────────────────────────────────────────────────────────────
 
@@ -131,6 +135,9 @@ const DOT_PATTERN_STYLE = {
 } as const;
 
 const PromptStoreView = () => {
+  const t = useTranslations();
+  const webConfig = useAtomValue(webConfigAtom);
+  const categories = webConfig?.prompt_categories ?? [];
   const [mediaTypeOpen, setMediaTypeOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
   const [selectedMediaType, setSelectedMediaType] = useState('');
@@ -237,7 +244,7 @@ const PromptStoreView = () => {
                 setStyleOpen(false);
               }}
             >
-              Media Type
+              {t('Media Type')}
             </Button>
 
             {/* Style trigger */}
@@ -254,7 +261,7 @@ const PromptStoreView = () => {
                 setMediaTypeOpen(false);
               }}
             >
-              Style
+              {t('Style')}
             </Button>
           </div>
 
@@ -271,13 +278,18 @@ const PromptStoreView = () => {
                 onValueChange={setSelectedMediaType}
                 className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
               >
-                {(['Image', 'Video'] as const).map((style) => (
+                {(
+                  [
+                    { code: 'IMAGE', name: t('Image') },
+                    { code: 'VIDEO', name: t('Video') },
+                  ] as { code: MediaType; name: string }[]
+                ).map((type) => (
                   <ToggleGroupItem
                     className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
-                    key={style}
-                    value={style}
+                    key={type.code}
+                    value={type.code}
                   >
-                    {style}
+                    {type.name}
                   </ToggleGroupItem>
                 ))}
               </ToggleGroup>
@@ -297,31 +309,13 @@ const PromptStoreView = () => {
                 onValueChange={setSelectedStyle}
                 className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
               >
-                {(
-                  [
-                    'Photorealistic',
-                    'Cinematic',
-                    'Anime',
-                    'Manga',
-                    '3D Render',
-                    'Digital Painting',
-                    'Oil Painting',
-                    'Watercolor',
-                    'Sketch',
-                    'Minimalist',
-                    'Flat Illustration',
-                    'Isometric',
-                    'Cyberpunk',
-                    'Fantasy Art',
-                    'Pixel Art',
-                  ] as const
-                ).map((style) => (
+                {categories.map((category) => (
                   <ToggleGroupItem
                     className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
-                    key={style}
-                    value={style}
+                    key={category.code}
+                    value={category.code}
                   >
-                    {style}
+                    {category.name}
                   </ToggleGroupItem>
                 ))}
               </ToggleGroup>
