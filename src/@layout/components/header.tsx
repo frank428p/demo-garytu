@@ -156,13 +156,13 @@ export function Header() {
             <div className="flex items-center gap-2">
               <Link href={RouterUrl.Business} className="py-1 px-2">
                 <Muted className="font-normal text-base hover:text-primary">
-                  {'Enterprise'}
+                  {t('Enterprise')}
                 </Muted>
               </Link>
 
               <Link href={RouterUrl.Store} className="py-1 px-2">
                 <Muted className="font-normal text-base hover:text-primary">
-                  {'Pricing'}
+                  {t('Pricing')}
                 </Muted>
               </Link>
             </div>
