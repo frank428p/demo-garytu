@@ -79,7 +79,9 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
               )}
             </div>
           </Tag>
-          <Tag variant="primary">AI Prompt</Tag>
+          {prompt?.category && (
+            <Tag variant="default">{prompt?.category?.name}</Tag>
+          )}
         </div>
       </div>
 

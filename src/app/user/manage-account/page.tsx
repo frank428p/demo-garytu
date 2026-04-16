@@ -76,46 +76,9 @@ export default function ManageAccountPage() {
             </p>
           </div>
           <div className="flex justify-end">
-            <Button>Save Changes</Button>
-          </div>
-        </div>
-      </section>
-
-      <Separator className="mb-8" />
-
-      {/* Change password */}
-      <section className="mb-8">
-        <h2 className="text-base font-semibold mb-4">Change Password</h2>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Current Password</label>
-            <Input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              placeholder="Enter current password"
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">New Password</label>
-            <Input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter new password"
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Confirm New Password</label>
-            <Input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password"
-            />
-          </div>
-          <div className="flex justify-end">
-            <Button variant="outline">Update Password</Button>
+            <Button variant="default" size="sm">
+              Save Changes
+            </Button>
           </div>
         </div>
       </section>
