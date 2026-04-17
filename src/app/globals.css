@@ -124,6 +124,8 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.56 0 0);
 
+  --secondary-muted: oklch(1 0 0 / 60%);
+
   /* Semantic colors (dark) */
   --success: oklch(0.55 0.15 145);
   --success-foreground: oklch(0.99 0 0);
@@ -158,6 +160,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-muted: var(--secondary-muted);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);

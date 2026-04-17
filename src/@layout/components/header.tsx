@@ -73,15 +73,15 @@ export function Header() {
         {isDesktop && (
           <div className="flex items-center gap-2">
             <Link href={RouterUrl.Explore} className="py-1 px-2">
-              <Muted className="font-normal text-base hover:text-primary">
+              <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
                 {t('Explore')}
-              </Muted>
+              </Small>
             </Link>
 
             <Link href={RouterUrl.Store} className="py-1 px-2">
-              <Muted className="font-normal text-base hover:text-primary">
+              <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
                 {t('Prompt Store')}
-              </Muted>
+              </Small>
             </Link>
 
             <DropdownMenu
@@ -97,7 +97,7 @@ export function Header() {
                 <Button
                   variant="ghost"
                   asChild
-                  className="text-muted-foreground font-normal text-base hover:text-primary h-auto py-1 px-2 rounded-lg"
+                  className="text-foreground font-medium text-base hover:text-foreground text-secondary-muted h-auto py-1 px-2 rounded-lg "
                 >
                   <Muted>{t('AI Toolkit')}</Muted>
                 </Button>
@@ -145,6 +145,18 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* <Link href={RouterUrl.Business} className="py-1 px-2">
+              <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                {t('Enterprise')}
+              </Small>
+            </Link>
+
+            <Link href={RouterUrl.Store} className="py-1 px-2">
+              <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                {t('Pricing')}
+              </Small>
+            </Link> */}
           </div>
         )}
       </div>
@@ -155,15 +167,15 @@ export function Header() {
           <>
             <div className="flex items-center gap-2">
               <Link href={RouterUrl.Business} className="py-1 px-2">
-                <Muted className="font-normal text-base hover:text-primary">
+                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
                   {t('Enterprise')}
-                </Muted>
+                </Small>
               </Link>
 
               <Link href={RouterUrl.Store} className="py-1 px-2">
-                <Muted className="font-normal text-base hover:text-primary">
+                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
                   {t('Pricing')}
-                </Muted>
+                </Small>
               </Link>
             </div>
             <Separator orientation="vertical" />
@@ -179,7 +191,7 @@ export function Header() {
               </Button> */}
               <Button
                 variant="ghost"
-                className="text-muted-foreground font-normal text-base hover:text-primary h-auto py-1 px-2 rounded-lg focus-visible:ring-0 focus-visible:outline-none"
+                className="text-muted-foreground font-normal text-base hover:text-foreground text-secondary-muted h-auto py-1 px-2 rounded-lg focus-visible:ring-0 focus-visible:outline-none"
               >
                 <IconWorld />
                 {LOCALES.find((l) => l.value === locale)?.label}
@@ -190,7 +202,7 @@ export function Header() {
                 <DropdownMenuItem
                   key={l.value}
                   onClick={() => switchLocale(l.value)}
-                  className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ''}`}
+                  className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ' text-muted-foreground'}`}
                 >
                   {l.label}
                 </DropdownMenuItem>

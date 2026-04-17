@@ -6,7 +6,7 @@ const VideoGenerateView = () => {
 
   return (
     <div className="flex gap-4 h-full">
-      <div className="w-full lg:w-[480px] shrink-0">
+      <div className="w-full lg:w-[360px] shrink-0">
         <VideoGenerate />
       </div>
       {isDesktop && (

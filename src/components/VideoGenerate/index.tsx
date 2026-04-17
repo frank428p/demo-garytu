@@ -67,7 +67,7 @@ const VideoGenerate = () => {
         <div className="flex flex-col gap-2">
           <PromptInput />
 
-          <div className="flex flex-col md:flex-row lg:flex-row gap-2 p-2 bg-card rounded-xl">
+          <div className="flex flex-col gap-2 p-2 bg-card rounded-xl">
             {/* <div className="w-full md:w-[180px] lg:w-[180px] shrink-0"> */}
             <div className="flex-1 shrink-0">
               <AudioSelector />
@@ -87,8 +87,9 @@ const VideoGenerate = () => {
                 <IconChevronDown className="ml-auto group-data-[state=open]:rotate-180" />
               </Button>
             </CollapsibleTrigger>
-            <CollapsibleContent className="flex items-start gap-2 p-2 pt-0 text-sm">
-              <div className="flex-1 flex justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
+            <CollapsibleContent className="flex flex-col items-start gap-2 p-2 pt-0 text-sm">
+              {/* <div className="flex-1 flex justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer"> */}
+              <div className="flex w-full justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
                 <div className="flex gap-2 flex-1">
                   <div className="p-3 rounded-xl bg-ring/20">
                     <IconCamera className="!h-6 !w-6" />
@@ -102,7 +103,8 @@ const VideoGenerate = () => {
                 </div>
               </div>
 
-              <div className="flex-1 flex justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
+              {/* <div className="flex-1 flex justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer"> */}
+              <div className="flex w-full justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
                 <div className="flex gap-2 flex-1">
                   <div className="p-3 rounded-xl bg-ring/20">
                     <IconRun className="!h-6 !w-6" />

@@ -27,7 +27,10 @@ function GoogleButton({ label }: { label: string }) {
     const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/google`;
 
     const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-    authUrl.searchParams.set('client_id', process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!);
+    authUrl.searchParams.set(
+      'client_id',
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+    );
     authUrl.searchParams.set('redirect_uri', redirectUri);
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('scope', 'openid email profile');
@@ -39,7 +42,7 @@ function GoogleButton({ label }: { label: string }) {
   return (
     <Button
       variant="outline"
-      className="w-full gap-2"
+      className="w-full gap-2 bg-card"
       type="button"
       onClick={handleClick}
     >
@@ -189,7 +192,9 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
   return (
     <div className="flex flex-col gap-4">
       <DialogHeader>
-        <DialogTitle className="text-center text-xl">Welcome back</DialogTitle>
+        <DialogTitle className="text-center text-xl">
+          Welcome to GARYTU AI
+        </DialogTitle>
         <DialogDescription className="text-center">
           Sign in to your account to continue
         </DialogDescription>
@@ -224,16 +229,21 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
         {isPending ? 'Signing in…' : 'Login'}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{' '}
-        <button
-          type="button"
-          onClick={onSwitchToSignup}
-          className="font-medium text-foreground underline-offset-4 hover:underline"
-        >
-          Sign up
-        </button>
-      </p>
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground cursor-pointer hover:underline hover:text-foreground">
+          Forgot password?
+        </p>
+        <p className="text-sm text-muted-foreground">
+          Don&apos;t have an account?{' '}
+          <button
+            type="button"
+            onClick={onSwitchToSignup}
+            className="font-medium text-foreground cursor-pointer hover:underline"
+          >
+            Sign up
+          </button>
+        </p>
+      </div>
     </div>
   );
 }
@@ -309,6 +319,17 @@ function SignupMethodView({ onNext }: { onNext: (data: SignupData) => void }) {
       >
         {isPending ? 'Sending code…' : 'Next'}
       </Button>
+
+      <p className="text-center text-sm text-muted-foreground">
+        Already have an account?{' '}
+        <button
+          type="button"
+          // onClick={onSwitchToSignup}
+          className="font-medium text-foreground cursor-pointer hover:underline"
+        >
+          Log in
+        </button>
+      </p>
     </div>
   );
 }
