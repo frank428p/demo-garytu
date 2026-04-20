@@ -82,7 +82,10 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
-      <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
+      <DialogContent
+        className="max-w-4xl w-full h-[90vh] flex flex-col gap-0 p-0 overflow-hidden"
+        variant="outline"
+      >
         <DialogTitle className="sr-only">{title}</DialogTitle>
         {open && url && <PdfViewerContent key={url} url={url} token={token} />}
       </DialogContent>

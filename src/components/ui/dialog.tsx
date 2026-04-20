@@ -5,6 +5,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '@/lib/utils';
 import { IconX } from '@tabler/icons-react';
 import { Button } from './button';
+import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -21,7 +22,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'fixed inset-0 z-50 bg-black/32 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className,
     )}
     {...props}
@@ -29,53 +30,94 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-const DialogContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => {
-  const closeRef = React.useRef<HTMLButtonElement>(null);
+type DialogContentProps = React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Content
+> & {
+  variant?: 'default' | 'outline';
+};
 
-  return (
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Content
-        onInteractOutside={(e) => e.preventDefault()}
-        onPointerDownOutside={(e) => e.preventDefault()}
-        className="fixed inset-0 z-50 overflow-y-auto outline-none"
-      >
-        <div
-          className="flex min-h-full items-center justify-center p-4 sm:p-8"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) {
-              closeRef.current?.click();
-            }
-          }}
+const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
+  ({ className, children, variant = 'default', ...props }, ref) => {
+    const closeRef = React.useRef<HTMLButtonElement>(null);
+    const { isMobile } = useBreakpoint();
+
+    return (
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogPrimitive.Content
+          onInteractOutside={(e) => e.preventDefault()}
+          onPointerDownOutside={(e) => e.preventDefault()}
+          className={cn(
+            'fixed inset-0 z-50 overflow-y-auto outline-none',
+            variant === 'outline' && 'bg-black/32 backdrop-blur-sm',
+          )}
         >
           <div
-            ref={ref}
             className={cn(
-              'relative max-w-lg border-[2px] border-input bg-card p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 rounded-[16px]',
-              className,
+              'flex min-h-full items-center justify-center p-4 sm:p-8',
+              variant === 'outline' && 'my-2',
             )}
-            {...props}
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) {
+                closeRef.current?.click();
+              }
+            }}
           >
-            {children}
-            <DialogPrimitive.Close asChild ref={closeRef}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute right-[6px] top-[6px] rounded-full"
+            {variant === 'outline' ? (
+              <div
+                ref={ref}
+                className={cn(
+                  'relative max-w-lg border-[2px] border-input bg-card shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 rounded-[16px]',
+                  className,
+                )}
+                style={{ overflow: 'visible' }}
+                {...props}
               >
-                <IconX stroke={3} />
-                <span className="sr-only">Close</span>
-              </Button>
-            </DialogPrimitive.Close>
+                <DialogPrimitive.Close asChild ref={closeRef}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cn(
+                      'absolute top-2 -right-11 z-10 rounded-lg border-input hover:bg-secondary',
+                      isMobile && 'right-0 -top-10',
+                    )}
+                  >
+                    <IconX stroke={3} />
+                    <span className="sr-only">Close</span>
+                  </Button>
+                </DialogPrimitive.Close>
+                <div className="flex-1 min-h-0 w-full h-full overflow-hidden rounded-[14px]">
+                  {children}
+                </div>
+              </div>
+            ) : (
+              <div
+                ref={ref}
+                className={cn(
+                  'relative max-w-lg border-[2px] border-input bg-card p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 rounded-[16px]',
+                  className,
+                )}
+                {...props}
+              >
+                {children}
+                <DialogPrimitive.Close asChild ref={closeRef}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-[6px] top-[6px] rounded-lg"
+                  >
+                    <IconX stroke={3} />
+                    <span className="sr-only">Close</span>
+                  </Button>
+                </DialogPrimitive.Close>
+              </div>
+            )}
           </div>
-        </div>
-      </DialogPrimitive.Content>
-    </DialogPortal>
-  );
-});
+        </DialogPrimitive.Content>
+      </DialogPortal>
+    );
+  },
+);
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({
