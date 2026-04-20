@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@tabler/icons-react'],
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.wasm$/,
+      type: 'asset/resource',
+    });
+    return config;
+  },
   images: {
     remotePatterns: [
       {

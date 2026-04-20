@@ -1,24 +1,8 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
+import { useRef, useEffect } from 'react';
+import { PDFViewer, PDFViewerRef } from '@embedpdf/react-pdf-viewer';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconZoomIn,
-  IconZoomOut,
-  IconZoomReset,
-} from '@tabler/icons-react';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
-const SCALE_STEP = 0.25;
-const SCALE_MIN = 0.5;
-const SCALE_MAX = 3;
 
 type Props = {
   open: boolean;
@@ -27,11 +11,67 @@ type Props = {
   title?: string;
 };
 
-export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
-  const [numPages, setNumPages] = useState<number>(0);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [scale, setScale] = useState(1.25);
+function PdfViewerContent({ url, token }: { url: string; token?: string }) {
+  const viewerRef = useRef<PDFViewerRef>(null);
 
+  useEffect(() => {
+    viewerRef.current?.container?.setTheme({ preference: 'dark' });
+  }, []);
+
+  return (
+    <PDFViewer
+      ref={viewerRef}
+      config={{
+        src: url,
+        wasmUrl: '/pdfium.wasm',
+        worker: false,
+        theme: {
+          preference: 'dark',
+          dark: {
+            accent: {
+              primary: 'oklch(0.51 0.17 28.14)',
+              primaryHover: 'oklch(0.58 0.17 28.14)',
+              primaryActive: 'oklch(0.44 0.17 28.14)',
+              primaryLight: 'oklch(0.27 0.06 28.14)',
+              primaryForeground: 'oklch(0.99 0 0)',
+            },
+            interactive: {
+              hover: 'oklch(1 0 0 / 8%)',
+              active: 'oklch(1 0 0 / 12%)',
+              selected: 'oklch(0.27 0.06 28.14)',
+              focus: 'oklch(0.51 0.17 28.14)',
+            },
+            background: {
+              app: 'oklch(0.14 0 0)',
+              surface: 'oklch(0.2 0 0)',
+              surfaceAlt: 'oklch(0.27 0 0)',
+              elevated: 'oklch(0.2 0 0)',
+              overlay: 'oklch(0 0 0 / 50%)',
+              input: 'oklch(1 0 0 / 15%)',
+            },
+          },
+        },
+        disabledCategories: ['document-menu'],
+        documentManager: token
+          ? {
+              initialDocuments: [
+                {
+                  url,
+                  autoActivate: true,
+                  requestOptions: {
+                    headers: { Authorization: `Bearer ${token}` },
+                  },
+                },
+              ],
+            }
+          : undefined,
+      }}
+      style={{ width: '100%', height: '100%' }}
+    />
+  );
+}
+
+export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
   const token =
     typeof document !== 'undefined'
       ? document.cookie
@@ -40,115 +80,11 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
           ?.split('=')[1]
       : undefined;
 
-  const file = useMemo(
-    () => ({
-      url,
-      httpHeaders: token ? { Authorization: `Bearer ${token}` } : {},
-    }),
-    [url, token],
-  );
-
-  const onDocumentLoadSuccess = useCallback(
-    ({ numPages }: { numPages: number }) => {
-      setNumPages(numPages);
-      setPageNumber(1);
-    },
-    [],
-  );
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
       <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col gap-0 p-0 overflow-hidden">
         <DialogTitle className="sr-only">{title}</DialogTitle>
-
-        <div className="flex-1 overflow-auto flex justify-center bg-muted/30 p-4">
-          <Document
-            file={file}
-            onLoadSuccess={onDocumentLoadSuccess}
-            loading={
-              <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
-                Loading...
-              </div>
-            }
-            error={
-              <div className="flex items-center justify-center h-full text-destructive text-sm">
-                Failed to load PDF.
-              </div>
-            }
-          >
-            <Page
-              className="rounded-xl shadow-[10px_10px_10px_-6px_white]"
-              pageNumber={pageNumber}
-              scale={scale}
-              renderTextLayer
-              renderAnnotationLayer
-            />
-          </Document>
-        </div>
-
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-card shrink-0">
-          {/* Page navigation */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={pageNumber <= 1}
-              onClick={() => setPageNumber((p) => p - 1)}
-            >
-              <IconChevronLeft className="size-5" />
-            </Button>
-            <span className="text-sm text-muted-foreground min-w-[60px] text-center">
-              {numPages > 0 ? `${pageNumber} / ${numPages}` : '—'}
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={pageNumber >= numPages}
-              onClick={() => setPageNumber((p) => p + 1)}
-            >
-              <IconChevronRight className="size-5" />
-            </Button>
-          </div>
-
-          {/* Zoom controls */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={scale <= SCALE_MIN}
-              onClick={() =>
-                setScale((s) =>
-                  Math.max(SCALE_MIN, +(s - SCALE_STEP).toFixed(2)),
-                )
-              }
-            >
-              <IconZoomOut className="size-5" />
-            </Button>
-            <span className="text-sm text-muted-foreground w-12 text-center">
-              {Math.round(scale * 100)}%
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={scale >= SCALE_MAX}
-              onClick={() =>
-                setScale((s) =>
-                  Math.min(SCALE_MAX, +(s + SCALE_STEP).toFixed(2)),
-                )
-              }
-            >
-              <IconZoomIn className="size-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={scale === 1.25}
-              onClick={() => setScale(1.25)}
-            >
-              <IconZoomReset className="size-5" />
-            </Button>
-          </div>
-        </div>
+        {open && url && <PdfViewerContent key={url} url={url} token={token} />}
       </DialogContent>
     </Dialog>
   );
