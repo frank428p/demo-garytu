@@ -12,6 +12,8 @@ import type {
   EmailRegisterRequest,
   EmailRegisterVerifyRequest,
   LoginRequest,
+  ForgotPasswordRequest,
+  ForgotPasswordVerifyRequest,
 } from '../types/auth';
 
 function saveAccessToken(token: string) {
@@ -53,6 +55,28 @@ export function useGoogleLogin() {
   const setCartItems = useSetAtom(cartItemsAtom);
   return useMutation({
     mutationFn: (idToken: string) => authApi.googleLogin(idToken),
+    onSuccess: async (res) => {
+      saveAccessToken(res.data.access_token);
+      const [userRes, cartRes] = await Promise.all([userApi.getMe(), cartApi.get()]);
+      setUser(userRes.data);
+      setCartItems(cartRes.data);
+      syncLocaleFromUser(userRes.data.locale);
+    },
+  });
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (data: ForgotPasswordRequest) => authApi.forgotPassword(data),
+  });
+}
+
+export function useVerifyForgotPassword() {
+  const setUser = useSetAtom(userAtom);
+  const setCartItems = useSetAtom(cartItemsAtom);
+  return useMutation({
+    mutationFn: (data: ForgotPasswordVerifyRequest) =>
+      authApi.verifyForgotPassword(data),
     onSuccess: async (res) => {
       saveAccessToken(res.data.access_token);
       const [userRes, cartRes] = await Promise.all([userApi.getMe(), cartApi.get()]);

@@ -22,11 +22,14 @@ import {
   useEmailLogin,
   useEmailRegister,
   useVerifyEmailRegister,
+  useForgotPassword,
+  useVerifyForgotPassword,
 } from '@/@core/useQuery/useAuth';
 import { useTranslations } from 'next-intl';
 import { ApiError } from '@/@core/api/fetchClient';
 
 type SignupStep = 'method' | 'otp';
+type LoginStep = 'login' | 'forgot-email' | 'forgot-otp';
 
 function GoogleButton({ label }: { label: string }) {
   const handleClick = () => {
@@ -178,7 +181,7 @@ function OtpInput({
 
 // ─── Login ────────────────────────────────────────────────────────────────────
 
-function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
+function LoginView({ onSwitchToSignup, onForgotPassword }: { onSwitchToSignup: () => void; onForgotPassword: () => void }) {
   const tError = useTranslations('error');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -282,9 +285,13 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
       </Button>
 
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground text-left cursor-pointer hover:underline hover:text-foreground">
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          className="text-sm text-muted-foreground text-left cursor-pointer hover:underline hover:text-foreground"
+        >
           Forgot password?
-        </p>
+        </button>
         <p className="text-sm text-muted-foreground text-right">
           Don&apos;t have an account?{' '}
           <button
@@ -296,6 +303,181 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
           </button>
         </p>
       </div>
+    </div>
+  );
+}
+
+// ─── Forgot Password ──────────────────────────────────────────────────────────
+
+function ForgotPasswordEmailView({ onNext, onBack }: { onNext: (email: string) => void; onBack: () => void }) {
+  const tError = useTranslations('error');
+  const [email, setEmail] = useState('');
+  const [formError, setFormError] = useState('');
+  const [error, setError] = useState('');
+  const { mutate: forgotPassword, isPending } = useForgotPassword();
+
+  const handleSubmit = () => {
+    setFormError('');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFormError(tError('error_email_regex'));
+      return;
+    }
+    setError('');
+    forgotPassword(
+      { email },
+      {
+        onSuccess: () => onNext(email),
+        onError: (err) => {
+          if (err instanceof ApiError) {
+            setError(tError(err.code.toString()));
+            return;
+          }
+          setError('Something went wrong. Please try again.');
+        },
+      },
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <IconArrowLeft size={18} />
+        </button>
+        <DialogTitle className="text-lg">Forgot password</DialogTitle>
+      </div>
+
+      <DialogDescription>
+        Enter your email address and we&apos;ll send you a verification code to reset your password.
+      </DialogDescription>
+
+      <Input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+      />
+
+      {formError && <p className="text-sm text-destructive">{formError}</p>}
+      {error && (
+        <div className="bg-primary/20 text-destructive rounded-md p-2 text-sm">
+          {error}
+        </div>
+      )}
+
+      <Button className="w-full" type="button" onClick={handleSubmit} disabled={isPending}>
+        {isPending ? 'Sending…' : 'Send verification code'}
+      </Button>
+    </div>
+  );
+}
+
+function ForgotPasswordOtpView({
+  email,
+  onBack,
+  onDone,
+}: {
+  email: string;
+  onBack: () => void;
+  onDone: () => void;
+}) {
+  const tError = useTranslations('error');
+  const [otp, setOtp] = useState(Array(6).fill(''));
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formError, setFormError] = useState('');
+  const [error, setError] = useState('');
+  const { mutate: verify, isPending } = useVerifyForgotPassword();
+
+  const isFull = otp.every((d) => d !== '');
+
+  const handleVerify = () => {
+    setFormError('');
+    if (newPassword.length < 8) {
+      setFormError(tError('error_password_min'));
+      return;
+    }
+    if (!/\d/.test(newPassword)) {
+      setFormError(tError('error_password_number'));
+      return;
+    }
+    if (!/[A-Z]/.test(newPassword)) {
+      setFormError(tError('error_password_uppercase'));
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setFormError(tError('error_password_confirm'));
+      return;
+    }
+    setError('');
+    verify(
+      { email, otp: otp.join(''), new_password: newPassword },
+      {
+        onSuccess: () => onDone(),
+        onError: (err) => {
+          if (err instanceof ApiError) {
+            setError(tError(err.code.toString()));
+            return;
+          }
+          setError('Invalid code. Please try again.');
+        },
+      },
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <IconArrowLeft size={18} />
+        </button>
+        <DialogTitle className="text-lg">Reset password</DialogTitle>
+      </div>
+
+      <DialogDescription>
+        Enter the 6-digit code sent to{' '}
+        <span className="font-medium text-foreground">{email}</span> and your new password.
+      </DialogDescription>
+
+      <OtpInput value={otp} onChange={setOtp} />
+
+      <div className="flex flex-col gap-3">
+        <PasswordInput
+          placeholder="New password"
+          value={newPassword}
+          onChange={setNewPassword}
+        />
+        <PasswordInput
+          placeholder="Confirm new password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+        />
+      </div>
+
+      {formError && <p className="text-sm text-destructive">{formError}</p>}
+      {error && (
+        <div className="bg-primary/20 text-destructive rounded-md p-2 text-sm">
+          {error}
+        </div>
+      )}
+
+      <Button
+        className="w-full"
+        type="button"
+        disabled={!isFull || isPending}
+        onClick={handleVerify}
+      >
+        {isPending ? 'Resetting…' : 'Reset password'}
+      </Button>
     </div>
   );
 }
@@ -505,6 +687,8 @@ function SignupOtpView({
 export function AuthDialog() {
   const { authMode, closeAuth, openLogin, openSignup } = useAuth();
 
+  const [loginStep, setLoginStep] = useState<LoginStep>('login');
+  const [forgotEmail, setForgotEmail] = useState('');
   const [signupStep, setSignupStep] = useState<SignupStep>('method');
   const [signupData, setSignupData] = useState<SignupData>({
     email: '',
@@ -514,6 +698,8 @@ export function AuthDialog() {
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       closeAuth();
+      setLoginStep('login');
+      setForgotEmail('');
       setSignupStep('method');
       setSignupData({ email: '', password: '' });
     }
@@ -527,8 +713,33 @@ export function AuthDialog() {
   return (
     <Dialog open={authMode !== null} onOpenChange={handleOpenChange}>
       <DialogContent className="w-[460px]">
-        {authMode === 'login' && (
-          <LoginView onSwitchToSignup={handleSwitchToSignup} />
+        {authMode === 'login' && loginStep === 'login' && (
+          <LoginView
+            onSwitchToSignup={handleSwitchToSignup}
+            onForgotPassword={() => setLoginStep('forgot-email')}
+          />
+        )}
+
+        {authMode === 'login' && loginStep === 'forgot-email' && (
+          <ForgotPasswordEmailView
+            onNext={(email) => {
+              setForgotEmail(email);
+              setLoginStep('forgot-otp');
+            }}
+            onBack={() => setLoginStep('login')}
+          />
+        )}
+
+        {authMode === 'login' && loginStep === 'forgot-otp' && (
+          <ForgotPasswordOtpView
+            email={forgotEmail}
+            onBack={() => setLoginStep('forgot-email')}
+            onDone={() => {
+              closeAuth();
+              setLoginStep('login');
+              setForgotEmail('');
+            }}
+          />
         )}
 
         {authMode === 'signup' && signupStep === 'method' && (

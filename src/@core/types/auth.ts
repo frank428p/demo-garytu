@@ -21,3 +21,13 @@ export type GoogleLoginRequest = {
 export type AuthTokenResponse = {
   access_token: string;
 };
+
+export type ForgotPasswordRequest = {
+  email: string;
+};
+
+export type ForgotPasswordVerifyRequest = {
+  email: string;
+  otp: string;
+  new_password: string;
+};

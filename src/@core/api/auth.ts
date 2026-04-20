@@ -5,6 +5,8 @@ import type {
   EmailRegisterRequest,
   EmailRegisterVerifyRequest,
   LoginRequest,
+  ForgotPasswordRequest,
+  ForgotPasswordVerifyRequest,
 } from '../types/auth';
 
 export const authApi = {
@@ -30,5 +32,17 @@ export const authApi = {
     apiFetch<ApiResponse<AuthTokenResponse>>('/auth/login/google', {
       method: 'POST',
       body: JSON.stringify({ token: idToken }),
+    }),
+
+  forgotPassword: (data: ForgotPasswordRequest) =>
+    apiFetch<ApiResponse<null>>('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  verifyForgotPassword: (data: ForgotPasswordVerifyRequest) =>
+    apiFetch<ApiResponse<AuthTokenResponse>>('/auth/forgot-password/verify', {
+      method: 'POST',
+      body: JSON.stringify(data),
     }),
 };

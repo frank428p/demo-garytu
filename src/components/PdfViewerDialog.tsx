@@ -32,19 +32,29 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.25);
 
-  const token = typeof document !== 'undefined'
-    ? document.cookie.split('; ').find(r => r.startsWith('access_token='))?.split('=')[1]
-    : undefined;
+  const token =
+    typeof document !== 'undefined'
+      ? document.cookie
+          .split('; ')
+          .find((r) => r.startsWith('access_token='))
+          ?.split('=')[1]
+      : undefined;
 
   const file = useMemo(
-    () => ({ url, httpHeaders: token ? { Authorization: `Bearer ${token}` } : {} }),
+    () => ({
+      url,
+      httpHeaders: token ? { Authorization: `Bearer ${token}` } : {},
+    }),
     [url, token],
   );
 
-  const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
-    setPageNumber(1);
-  }, []);
+  const onDocumentLoadSuccess = useCallback(
+    ({ numPages }: { numPages: number }) => {
+      setNumPages(numPages);
+      setPageNumber(1);
+    },
+    [],
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,6 +77,7 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
             }
           >
             <Page
+              className="rounded-xl shadow-[10px_10px_10px_-6px_white]"
               pageNumber={pageNumber}
               scale={scale}
               renderTextLayer
@@ -105,7 +116,11 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
               variant="ghost"
               size="icon"
               disabled={scale <= SCALE_MIN}
-              onClick={() => setScale((s) => Math.max(SCALE_MIN, +(s - SCALE_STEP).toFixed(2)))}
+              onClick={() =>
+                setScale((s) =>
+                  Math.max(SCALE_MIN, +(s - SCALE_STEP).toFixed(2)),
+                )
+              }
             >
               <IconZoomOut className="size-5" />
             </Button>
@@ -116,7 +131,11 @@ export function PdfViewerDialog({ open, onOpenChange, url, title }: Props) {
               variant="ghost"
               size="icon"
               disabled={scale >= SCALE_MAX}
-              onClick={() => setScale((s) => Math.min(SCALE_MAX, +(s + SCALE_STEP).toFixed(2)))}
+              onClick={() =>
+                setScale((s) =>
+                  Math.min(SCALE_MAX, +(s + SCALE_STEP).toFixed(2)),
+                )
+              }
             >
               <IconZoomIn className="size-5" />
             </Button>
