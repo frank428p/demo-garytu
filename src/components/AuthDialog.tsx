@@ -1,6 +1,12 @@
 'use client';
 
-import { useRef, useState, KeyboardEvent, ClipboardEvent } from 'react';
+import {
+  useRef,
+  useState,
+  useEffect,
+  KeyboardEvent,
+  ClipboardEvent,
+} from 'react';
 import { IconArrowLeft, IconEye, IconEyeOff } from '@tabler/icons-react';
 import {
   Dialog,
@@ -17,6 +23,8 @@ import {
   useEmailRegister,
   useVerifyEmailRegister,
 } from '@/@core/useQuery/useAuth';
+import { useTranslations } from 'next-intl';
+import { ApiError } from '@/@core/api/fetchClient';
 
 type SignupStep = 'method' | 'otp';
 
@@ -171,20 +179,58 @@ function OtpInput({
 // ─── Login ────────────────────────────────────────────────────────────────────
 
 function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
+  const tError = useTranslations('error');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
   const { closeAuth } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const authError = params.get('auth_error');
+    if (!authError) return;
+    if (authError === 'email_conflict') setError(tError('1008'));
+    params.delete('auth_error');
+    const newUrl =
+      window.location.pathname + (params.toString() ? '?' + params : '');
+    window.history.replaceState(null, '', newUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { mutate: login, isPending } = useEmailLogin();
 
   const handleLogin = () => {
-    if (!email || !password) return;
+    setFormError('');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFormError(tError('error_email_regex'));
+      return;
+    }
+    if (password.length < 8) {
+      setFormError(tError('error_password_min'));
+      return;
+    }
+    if (!/\d/.test(password)) {
+      setFormError(tError('error_password_number'));
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      setFormError(tError('error_password_uppercase'));
+      return;
+    }
     setError('');
     login(
       { email, password },
       {
         onSuccess: () => closeAuth(),
-        onError: () => setError('Email 或密碼錯誤，請再試一次'),
+        onError: (err) => {
+          if (err instanceof ApiError) {
+            console.log(err.code); // body.code（API 自定義錯誤碼）
+            console.log(err.status); // HTTP status code
+            setError(tError(err.code.toString()));
+            return;
+          }
+          setError('Email 或密碼錯誤，請再試一次');
+        },
       },
     );
   };
@@ -204,6 +250,12 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
 
       <Divider />
 
+      {error && (
+        <div className="bg-primary/20 text-destructive rounded-md p-2 text-sm">
+          {error}
+        </div>
+      )}
+
       <div className="flex flex-col gap-3">
         <Input
           type="email"
@@ -218,7 +270,7 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
         />
       </div>
 
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      {formError && <p className="text-sm text-destructive">{formError}</p>}
 
       <Button
         className="w-full"
@@ -230,10 +282,10 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
       </Button>
 
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground cursor-pointer hover:underline hover:text-foreground">
+        <p className="text-sm text-muted-foreground text-left cursor-pointer hover:underline hover:text-foreground">
           Forgot password?
         </p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground text-right">
           Don&apos;t have an account?{' '}
           <button
             type="button"
@@ -250,26 +302,54 @@ function LoginView({ onSwitchToSignup }: { onSwitchToSignup: () => void }) {
 
 // ─── Signup ───────────────────────────────────────────────────────────────────
 
-type SignupData = { name: string; email: string; password: string };
+type SignupData = { email: string; password: string };
 
-function SignupMethodView({ onNext }: { onNext: (data: SignupData) => void }) {
+function SignupMethodView({ onNext, onSwitchToLogin }: { onNext: (data: SignupData) => void; onSwitchToLogin: () => void }) {
+  const tError = useTranslations('error');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
   const { mutate: register, isPending } = useEmailRegister();
 
   const handleNext = () => {
-    if (!name) return setError('Please enter your name');
-    if (!email) return setError('Please enter your email');
-    if (password.length < 8)
-      return setError('Password must be at least 8 characters');
+    setFormError('');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFormError(tError('error_email_regex'));
+      return;
+    }
+    if (password.length < 8) {
+      setFormError(tError('error_password_min'));
+      return;
+    }
+    if (!/\d/.test(password)) {
+      setFormError(tError('error_password_number'));
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      setFormError(tError('error_password_uppercase'));
+      return;
+    }
+    if (password !== confirmPassword) {
+      setFormError(tError('error_password_confirm'));
+      return;
+    }
     setError('');
     register(
-      { name, email, password },
+      { email, password },
       {
-        onSuccess: () => onNext({ name, email, password }),
-        onError: () => setError('Registration failed. Please try again.'),
+        onSuccess: () => onNext({ email, password }),
+        onError: (err) => {
+          if (err instanceof ApiError) {
+            console.log(err.code); // body.code（API 自定義錯誤碼）
+            console.log(err.status); // HTTP status code
+            setError(tError(err.code.toString()));
+            return;
+          }
+          setError('Email 或密碼錯誤，請再試一次');
+        },
       },
     );
   };
@@ -289,13 +369,13 @@ function SignupMethodView({ onNext }: { onNext: (data: SignupData) => void }) {
 
       <Divider />
 
+      {error && (
+        <div className="bg-primary/20 text-destructive rounded-md p-2 text-sm">
+          {error}
+        </div>
+      )}
+
       <div className="flex flex-col gap-3">
-        <Input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
         <Input
           type="email"
           placeholder="Email"
@@ -303,13 +383,18 @@ function SignupMethodView({ onNext }: { onNext: (data: SignupData) => void }) {
           onChange={(e) => setEmail(e.target.value)}
         />
         <PasswordInput
-          placeholder="Password (min. 8 characters)"
+          placeholder="Password"
           value={password}
           onChange={setPassword}
         />
+        <PasswordInput
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+        />
       </div>
 
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      {formError && <p className="text-sm text-destructive">{formError}</p>}
 
       <Button
         className="w-full"
@@ -324,7 +409,7 @@ function SignupMethodView({ onNext }: { onNext: (data: SignupData) => void }) {
         Already have an account?{' '}
         <button
           type="button"
-          // onClick={onSwitchToSignup}
+          onClick={onSwitchToLogin}
           className="font-medium text-foreground cursor-pointer hover:underline"
         >
           Log in
@@ -418,11 +503,10 @@ function SignupOtpView({
 // ─── Root Dialog ──────────────────────────────────────────────────────────────
 
 export function AuthDialog() {
-  const { authMode, closeAuth, openSignup } = useAuth();
+  const { authMode, closeAuth, openLogin, openSignup } = useAuth();
 
   const [signupStep, setSignupStep] = useState<SignupStep>('method');
   const [signupData, setSignupData] = useState<SignupData>({
-    name: '',
     email: '',
     password: '',
   });
@@ -431,7 +515,7 @@ export function AuthDialog() {
     if (!open) {
       closeAuth();
       setSignupStep('method');
-      setSignupData({ name: '', email: '', password: '' });
+      setSignupData({ email: '', password: '' });
     }
   };
 
@@ -442,7 +526,7 @@ export function AuthDialog() {
 
   return (
     <Dialog open={authMode !== null} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[420px]">
+      <DialogContent className="w-[460px]">
         {authMode === 'login' && (
           <LoginView onSwitchToSignup={handleSwitchToSignup} />
         )}
@@ -453,6 +537,7 @@ export function AuthDialog() {
               setSignupData(data);
               setSignupStep('otp');
             }}
+            onSwitchToLogin={openLogin}
           />
         )}
 
@@ -463,7 +548,7 @@ export function AuthDialog() {
             onDone={() => {
               closeAuth();
               setSignupStep('method');
-              setSignupData({ name: '', email: '', password: '' });
+              setSignupData({ email: '', password: '' });
             }}
           />
         )}

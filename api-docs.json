@@ -170,6 +170,80 @@
         "tags": ["Auth"]
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "operationId": "AuthController_forgotPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ForgotPasswordRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RestResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "null", "nullable": true }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "summary": "Send forgot password OTP",
+        "tags": ["Auth"]
+      }
+    },
+    "/auth/forgot-password/verify": {
+      "post": {
+        "operationId": "AuthController_verifyForgotPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordVerifyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RestResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/AuthLoginResponse"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "summary": "Verify forgot password OTP and reset password",
+        "tags": ["Auth"]
+      }
+    },
     "/users/me": {
       "get": {
         "operationId": "UserController_getMe",
@@ -1904,13 +1978,7 @@
         "type": "object",
         "properties": {
           "email": { "type": "string", "example": "test@gmail.com" },
-          "password": { "type": "string", "example": "Aa123456@" },
-          "name": {
-            "type": "string",
-            "description": "Nickname",
-            "maxLength": 64,
-            "example": "Tom"
-          }
+          "password": { "type": "string", "example": "Aa123456@" }
         },
         "required": ["email", "password"]
       },
@@ -1944,6 +2012,22 @@
           }
         },
         "required": ["token"]
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "test@gmail.com" }
+        },
+        "required": ["email"]
+      },
+      "ForgotPasswordVerifyRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "test@gmail.com" },
+          "otp": { "type": "string", "example": "123456" },
+          "new_password": { "type": "string", "example": "Aa123456@" }
+        },
+        "required": ["email", "otp", "new_password"]
       },
       "UserInfoResponse": {
         "type": "object",

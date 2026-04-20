@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Noto_Sans_TC } from 'next/font/google';
+import { Suspense } from 'react';
 import './globals.css';
 import { MainLayout } from '@/@layout/MainLayout';
 import { InitProvider } from '@/@core/provider/initContext';
@@ -44,7 +45,7 @@ export default async function RootLayout({
               <InitProvider>
                 <AuthProvider>
                   <MainLayout>{children}</MainLayout>
-                  <AuthDialog />
+                  <Suspense><AuthDialog /></Suspense>
                   <Toaster />
                 </AuthProvider>
               </InitProvider>

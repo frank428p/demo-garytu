@@ -11,12 +11,15 @@ import { syncLocaleFromUser } from '@/@core/hooks/useLocaleSwitcher';
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useSetAtom(userAtom);
   const setCartItems = useSetAtom(cartItemsAtom);
+  const setAuthMode = useSetAtom(authDialogAtom);
   const [initialized, setInitialized] = useState(false);
 
   // 初始化：有 token 同時呼叫 /users/me 和 /cart，都完成後才 render children
   useEffect(() => {
     const init = async () => {
-      const token = document.cookie.match(/(?:^|;\s*)access_token=([^;]+)/)?.[1];
+      const token = document.cookie.match(
+        /(?:^|;\s*)access_token=([^;]+)/,
+      )?.[1];
       if (!token) return;
 
       const userRes = await userApi.getMe();
@@ -28,7 +31,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     init().finally(() => setInitialized(true));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('auth_error') === 'email_conflict') {
+      setAuthMode('login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 全域監聽 401/403 與登出，清除 session
@@ -64,9 +75,10 @@ export function useAuth() {
 
 export function useIsAuth() {
   const user = useAtomValue(userAtom);
-  const hasToken = typeof document !== 'undefined'
-    ? /(?:^|;\s*)access_token=([^;]+)/.test(document.cookie)
-    : false;
+  const hasToken =
+    typeof document !== 'undefined'
+      ? /(?:^|;\s*)access_token=([^;]+)/.test(document.cookie)
+      : false;
   return !!user && hasToken;
 }
 

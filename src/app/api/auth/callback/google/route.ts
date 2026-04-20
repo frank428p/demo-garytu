@@ -38,9 +38,15 @@ export async function GET(req: NextRequest) {
     body: JSON.stringify({ token: id_token }),
   });
 
-  if (!loginRes.ok) return response;
-
   const loginData = await loginRes.json();
+
+  if (loginData?.code === 1008) {
+    const errorUrl = new URL(returnTo, req.nextUrl.origin);
+    errorUrl.searchParams.set('auth_error', 'email_conflict');
+    return NextResponse.redirect(errorUrl);
+  }
+
+  if (!loginRes.ok) return response;
   const accessToken = loginData?.data?.access_token;
 
   if (accessToken) {
@@ -50,7 +56,10 @@ export async function GET(req: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === 'production',
     };
-    response.cookies.set('access_token', accessToken, { ...cookieOpts, httpOnly: false });
+    response.cookies.set('access_token', accessToken, {
+      ...cookieOpts,
+      httpOnly: false,
+    });
   }
 
   return response;

@@ -1,6 +1,5 @@
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 export type EmailRegisterRequest = {
-  name: string;
   email: string;
   password: string;
 };

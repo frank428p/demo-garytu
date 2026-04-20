@@ -2,9 +2,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export class ApiError extends Error {
   status: number;
-  constructor(status: number, path: string) {
+  code: number;
+  constructor(status: number, path: string, code?: number) {
     super(`API error ${status}: ${path}`);
     this.status = status;
+    this.code = code ?? status;
   }
 }
 
@@ -41,7 +43,7 @@ export async function apiFetch<T>(
   const body = await res.json();
 
   if (body?.code !== undefined && body.code !== 0) {
-    throw new ApiError(body.code, path);
+    throw new ApiError(res.status, path, body.code);
   }
 
   return body as T;

@@ -3,5 +3,15 @@
   "unauthorized": "Please login to continue",
   "forbidden": "You do not have permission to perform this action",
   "notFound": "Resource not found",
-  "server": "Server error, please try again later"
+  "server": "Server error, please try again later",
+  "error_email_regex": "Please enter a valid email address.",
+  "error_password_min": "Password must be at least 8 characters long.",
+  "error_password_number": "Password must contain at least one number.",
+  "error_password_uppercase": "Password must contain at least one uppercase letter.",
+  "error_password_confirm": "Passwords do not match.",
+  "401": "",
+  "1000": "User already exists",
+  "1001": "This email has been registered with Google. Please sign in with Google instead.",
+  "1008": "This email has been registered with email and password. Please sign in with email and password instead.",
+  "1009": "Email or Password is incorrect."
 }
