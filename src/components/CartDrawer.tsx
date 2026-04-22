@@ -135,12 +135,8 @@ export function CartDrawer() {
                   />
 
                   <div className="min-w-0 flex-1 flex flex-col gap-1.5">
-                    <p className="truncate text-[14px] font-semibold leading-tight">
-                      {item?.item?.name}
-                    </p>
-
                     {/* Tags row */}
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 ml-[-4px]">
                       {/* Media type */}
                       <Tag className="gap-1">
                         {item?.item?.media_type === 'VIDEO' ? (
@@ -162,6 +158,10 @@ export function CartDrawer() {
                         {item?.item?.bonus_credit}
                       </Tag>
                     </div>
+
+                    <p className="truncate text-[14px] font-semibold leading-tight">
+                      {item?.item?.name}
+                    </p>
 
                     {/* Price */}
                     <span className="text-[13px] font-normal text-foreground/60">

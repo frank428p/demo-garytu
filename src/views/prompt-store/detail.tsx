@@ -92,18 +92,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
 
       {/* Info panel */}
       <div className="flex w-full flex-col gap-5 pb-8 lg:flex-[5] lg:shrink-0">
-        {/* Title */}
         <div className="flex flex-col gap-2">
-          <div className="flex flex-row gap-2 items-center justify-between">
-            {prompt?.name ? (
-              <h2 className="text-xl lg:text-3xl font-bold leading-snug">
-                {prompt?.name}
-              </h2>
-            ) : (
-              <Skeleton className="h-10 w-2/3 rounded-lg" />
-            )}
-          </div>
-
           {/* Category badges */}
           <div className="flex flex-wrap items-center gap-2">
             {prompt?.media_type ? (
@@ -141,24 +130,35 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               <Skeleton className="h-4 w-[48px]" />
             )}
           </div>
+          {/* Title */}
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2 items-center justify-between">
+              {prompt?.name ? (
+                <h2 className="text-xl lg:text-3xl font-bold leading-snug">
+                  {prompt?.name}
+                </h2>
+              ) : (
+                <Skeleton className="h-10 w-2/3 rounded-lg" />
+              )}
+            </div>
 
-          {/* Price */}
-          <div className="flex items-center gap-2.5">
-            {prompt ? (
-              <span className="text-lg lg:text-2xl font-normal">
-                NT$&nbsp;{prompt?.price?.toLocaleString()}
-              </span>
-            ) : (
-              <Skeleton className="h-8 w-1/3" />
-            )}
-            {/* <span className="text-sm text-muted-foreground line-through">
+            {/* Price */}
+            <div className="flex items-center gap-2.5">
+              {prompt ? (
+                <span className="text-lg lg:text-2xl font-normal">
+                  NT$&nbsp;{prompt?.price?.toLocaleString()}
+                </span>
+              ) : (
+                <Skeleton className="h-8 w-1/3" />
+              )}
+              {/* <span className="text-sm text-muted-foreground line-through">
             NT$&nbsp;2,000
           </span> */}
+            </div>
           </div>
         </div>
 
         {/* Description */}
-
         {prompt ? (
           <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
             {prompt.description}
@@ -280,7 +280,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 variant="outline"
                 size="icon"
                 className={cn(
-                  'rounded-full !h-10 !w-10',
+                  'rounded-lg !h-10 !w-10',
                   isBookmarked && 'border-primary',
                 )}
                 onClick={() => {
@@ -299,7 +299,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full h-10 w-10"
+                className="rounded-lg h-10 w-10"
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
                   toast.success('Share link copied!', {
