@@ -342,6 +342,25 @@ body {
   transform: scale(1.08);
 }
 
+/* vidstack 主題色套用 --primary */
+/* [data-media-player][data-media-player] {
+  --media-brand: var(--primary);
+} */
+
+/* vidstack fill-container: 強制 player 填滿容器，不受 JS 動態設定的 --media-aspect-ratio 影響 */
+/* .media-player-fill[data-media-player] {
+  aspect-ratio: none !important;
+  height: 100% !important;
+  width: 100%;
+} */
+/* .media-player-fill [data-media-provider] {
+  height: 100%;
+  width: 100%;
+} */
+.media-player-fill [data-media-provider] video {
+  max-height: 640px !important;
+}
+
 /* 隱藏原生 video 控制列的「更多選項」三點按鈕與播放速度按鈕 */
 video::-webkit-media-controls-overflow-button,
 video::-webkit-media-controls-playback-speed-button {
@@ -374,3 +393,12 @@ body {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
 }
+
+.vds-video-layout {
+  --video-brand: var(--primary);
+}
+/* 
+.media-player[data-view-type='video'] {
+  aspect-ratio: 16 / 9;
+  height: 100%;
+} */
