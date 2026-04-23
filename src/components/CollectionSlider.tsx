@@ -24,7 +24,11 @@ function SlideItem({ item, isHovered }: { item: Prompt; isHovered: boolean }) {
         sizes="(min-width: 1536px) 20vw, (min-width: 1280px) 25vw, 33vw"
         className={cn(
           'object-cover transition-opacity duration-500',
-          posterLoaded ? (isHovered ? 'opacity-0' : 'opacity-100') : 'opacity-0',
+          posterLoaded
+            ? isHovered
+              ? 'opacity-0'
+              : 'opacity-100'
+            : 'opacity-0',
         )}
         onLoad={() => setPosterLoaded(true)}
       />
@@ -43,7 +47,10 @@ function SlideItem({ item, isHovered }: { item: Prompt; isHovered: boolean }) {
           ref={(el) => {
             if (!el) return;
             if (isHovered) el.play().catch(() => {});
-            else { el.pause(); el.currentTime = 0; }
+            else {
+              el.pause();
+              el.currentTime = 0;
+            }
           }}
         />
       )}
@@ -248,8 +255,7 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
                 onMouseEnter={() => isVisible && setHoveredIdx(relIdx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 onClick={() => {
-                  if (!isDragging.current)
-                    router.push(`/toolkit/store/${item.uuid}`);
+                  if (!isDragging.current) router.push(`/store/${item.uuid}`);
                 }}
               >
                 <SlideItem item={item} isHovered={isHovered} />

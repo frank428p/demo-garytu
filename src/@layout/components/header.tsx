@@ -28,9 +28,11 @@ import { UserMenu } from '@/@layout/components/userMenu';
 import { Badge } from '@/components/ui/badge';
 import { useTranslations } from 'next-intl';
 import { useLocaleSwitcher, LOCALES } from '@/@core/hooks/useLocaleSwitcher';
+import { useLayout } from '@/@core/hooks/useLayout';
 
 export function Header() {
   const t = useTranslations('common');
+  const { isFullContainer } = useLayout();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -60,93 +62,99 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center justify-between px-4 lg:px-6 transition-all duration-300',
+        'sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center  transition-all duration-300',
         scrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-background',
       )}
     >
-      {/* Left: Logo */}
-      <div className="flex items-center gap-6">
-        <Link href="/" className="flex items-center gap-2">
-          <img width={120} src="/images/logo.png" alt="GaryTu AI" />
-        </Link>
+      <div
+        className={cn(
+          'flex items-center justify-between w-full px-4 lg:px-6',
+          !isFullContainer && 'header-container',
+        )}
+      >
+        {/* Left: Logo */}
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center gap-2">
+            <img width={120} src="/images/logo.png" alt="GaryTu AI" />
+          </Link>
 
-        {isDesktop && (
-          <div className="flex items-center gap-2">
-            <Link href={RouterUrl.Explore} className="py-1 px-2">
-              <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
-                {t('Explore')}
-              </Small>
-            </Link>
+          {isDesktop && (
+            <div className="flex items-center gap-2">
+              <Link href={RouterUrl.Explore} className="py-1 px-2">
+                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                  {t('Explore')}
+                </Small>
+              </Link>
 
-            <Link href={RouterUrl.Store} className="py-1 px-2">
-              <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
-                {t('Prompt Store')}
-              </Small>
-            </Link>
+              <Link href={RouterUrl.Store} className="py-1 px-2">
+                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                  {t('Prompt Store')}
+                </Small>
+              </Link>
 
-            <DropdownMenu
-              open={toolkitOpen}
-              onOpenChange={setToolkitOpen}
-              modal={false}
-            >
-              <DropdownMenuTrigger
-                asChild
-                onMouseEnter={handleToolkitEnter}
-                onMouseLeave={handleToolkitLeave}
+              <DropdownMenu
+                open={toolkitOpen}
+                onOpenChange={setToolkitOpen}
+                modal={false}
               >
-                <Button
-                  variant="ghost"
+                <DropdownMenuTrigger
                   asChild
-                  className="text-foreground font-medium text-base hover:text-foreground text-secondary-muted h-auto py-1 px-2 rounded-lg "
+                  onMouseEnter={handleToolkitEnter}
+                  onMouseLeave={handleToolkitLeave}
                 >
-                  <Muted>{t('AI Toolkit')}</Muted>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                onMouseEnter={handleToolkitEnter}
-                onMouseLeave={handleToolkitLeave}
-                className="p-3"
-              >
-                <DropdownMenuItem
-                  asChild
-                  className="cursor-pointer w-[280px] p-2 rounded-xl"
-                >
-                  <Link
-                    href={RouterUrl.ImageGenerate}
-                    className="flex gap-3 items-center"
+                  <Button
+                    variant="ghost"
+                    asChild
+                    className="text-foreground font-medium text-base hover:text-foreground text-secondary-muted h-auto py-1 px-2 rounded-lg "
                   >
-                    <div className="p-3  bg-ring/20 rounded-lg">
-                      <IconPhoto size={48} className="!size-6 shrink-0" />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Small>{t('Create Image')}</Small>
-                      <Muted>{t('Generate AI Images')}</Muted>
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  asChild
-                  className="cursor-pointer w-[280px] p-2 rounded-xl"
+                    <Muted>{t('AI Toolkit')}</Muted>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  onMouseEnter={handleToolkitEnter}
+                  onMouseLeave={handleToolkitLeave}
+                  className="p-3"
                 >
-                  <Link
-                    href={RouterUrl.VideoGenerate}
-                    className="flex gap-3 items-center"
+                  <DropdownMenuItem
+                    asChild
+                    className="cursor-pointer w-[280px] p-2 rounded-xl"
                   >
-                    <div className="p-3  bg-ring/20 rounded-lg">
-                      <IconVideo size={48} className="!size-6 shrink-0" />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <Small>{t('Create Video')}</Small>
-                      <Muted>{t('Generate AI Videos')}</Muted>
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <Link
+                      href={RouterUrl.ImageGenerate}
+                      className="flex gap-3 items-center"
+                    >
+                      <div className="p-3  bg-ring/20 rounded-lg">
+                        <IconPhoto size={48} className="!size-6 shrink-0" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Small>{t('Create Image')}</Small>
+                        <Muted>{t('Generate AI Images')}</Muted>
+                      </div>
+                    </Link>
+                  </DropdownMenuItem>
 
-            {/* <Link href={RouterUrl.Business} className="py-1 px-2">
+                  <DropdownMenuItem
+                    asChild
+                    className="cursor-pointer w-[280px] p-2 rounded-xl"
+                  >
+                    <Link
+                      href={RouterUrl.VideoGenerate}
+                      className="flex gap-3 items-center"
+                    >
+                      <div className="p-3  bg-ring/20 rounded-lg">
+                        <IconVideo size={48} className="!size-6 shrink-0" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Small>{t('Create Video')}</Small>
+                        <Muted>{t('Generate AI Videos')}</Muted>
+                      </div>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* <Link href={RouterUrl.Business} className="py-1 px-2">
               <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
                 {t('Enterprise')}
               </Small>
@@ -157,96 +165,97 @@ export function Header() {
                 {t('Pricing')}
               </Small>
             </Link> */}
-          </div>
-        )}
-      </div>
-
-      {/* Right: Actions */}
-      <div className="flex h-5 items-center gap-3">
-        {isDesktop && (
-          <>
-            <div className="flex items-center gap-2">
-              <Link href={RouterUrl.Business} className="py-1 px-2">
-                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
-                  {t('Enterprise')}
-                </Small>
-              </Link>
-
-              <Link href={RouterUrl.Store} className="py-1 px-2">
-                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
-                  {t('Pricing')}
-                </Small>
-              </Link>
             </div>
-            <Separator orientation="vertical" />
-          </>
-        )}
+          )}
+        </div>
 
-        {isDesktop && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              {/* <Button variant="ghost" className="p-2 text-muted-foreground">
+        {/* Right: Actions */}
+        <div className="flex h-5 items-center gap-3">
+          {isDesktop && (
+            <>
+              <div className="flex items-center gap-2">
+                <Link href={RouterUrl.Business} className="py-1 px-2">
+                  <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                    {t('Enterprise')}
+                  </Small>
+                </Link>
+
+                <Link href={RouterUrl.Store} className="py-1 px-2">
+                  <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                    {t('Pricing')}
+                  </Small>
+                </Link>
+              </div>
+              <Separator orientation="vertical" />
+            </>
+          )}
+
+          {isDesktop && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                {/* <Button variant="ghost" className="p-2 text-muted-foreground">
                 <IconWorld />
                 English
               </Button> */}
-              <Button
-                variant="ghost"
-                className="text-muted-foreground font-normal text-base hover:text-foreground text-secondary-muted h-auto py-1 px-2 rounded-lg focus-visible:ring-0 focus-visible:outline-none"
-              >
-                <IconWorld />
-                {LOCALES.find((l) => l.value === locale)?.label}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="p-3">
-              {LOCALES.map((l) => (
-                <DropdownMenuItem
-                  key={l.value}
-                  onClick={() => switchLocale(l.value)}
-                  className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ' text-muted-foreground'}`}
+                <Button
+                  variant="ghost"
+                  className="text-muted-foreground font-normal text-base hover:text-foreground text-secondary-muted h-auto py-1 px-2 rounded-lg focus-visible:ring-0 focus-visible:outline-none"
                 >
-                  {l.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+                  <IconWorld />
+                  {LOCALES.find((l) => l.value === locale)?.label}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="p-3">
+                {LOCALES.map((l) => (
+                  <DropdownMenuItem
+                    key={l.value}
+                    onClick={() => switchLocale(l.value)}
+                    className={`font-bold cursor-pointer${locale === l.value ? ' text-primary focus:text-primary' : ' text-muted-foreground'}`}
+                  >
+                    {l.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
 
-        {isAuth && (
-          <>
-            <Badge className="h-8 flex gap-1 cursor-pointer border-primary">
-              <IconCurrencyEthereum size={18} />
-              <span className="font-bold text-sm">1,000</span>
-            </Badge>
-            <Button
-              variant="outline"
-              size="icon"
-              className="relative h-8 bg-transparent"
-              onClick={() => setIsOpen(true)}
-            >
-              <IconShoppingCart />
-              {items.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-                  {items.length}
-                </span>
-              )}
-            </Button>
+          {isAuth && (
+            <>
+              <Badge className="h-8 flex gap-1 cursor-pointer border-primary">
+                <IconCurrencyEthereum size={18} />
+                <span className="font-bold text-sm">1,000</span>
+              </Badge>
+              <Button
+                variant="outline"
+                size="icon"
+                className="relative h-8 bg-transparent"
+                onClick={() => setIsOpen(true)}
+              >
+                <IconShoppingCart />
+                {items.length > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                    {items.length}
+                  </span>
+                )}
+              </Button>
 
-            {isDesktop && <UserMenu />}
-          </>
-        )}
+              {isDesktop && <UserMenu />}
+            </>
+          )}
 
-        {!isAuth && (
-          <>
-            <Button variant="secondary" size="sm" onClick={openLogin}>
-              Login
-            </Button>
-            <Button variant="default" size="sm" onClick={openSignup}>
-              Sign up
-            </Button>
-          </>
-        )}
+          {!isAuth && (
+            <>
+              <Button variant="secondary" size="sm" onClick={openLogin}>
+                Login
+              </Button>
+              <Button variant="default" size="sm" onClick={openSignup}>
+                Sign up
+              </Button>
+            </>
+          )}
 
-        {(isMobile || isTablet) && <HeaderMenu />}
+          {(isMobile || isTablet) && <HeaderMenu />}
+        </div>
       </div>
     </header>
   );

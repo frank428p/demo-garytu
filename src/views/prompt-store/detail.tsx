@@ -55,7 +55,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const inCart = cartData?.data?.some((item) => item.item.uuid === id) ?? false;
 
   return (
-    <div className="flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start pt-4">
+    <div className="container flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start pt-4">
       {/* Image slider */}
       <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-18">
         {prompt ? (

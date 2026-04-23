@@ -1,6 +1,6 @@
 export const RouterUrl = {
   Explore: '/toolkit/explore',
-  Store: '/toolkit/store',
+  Store: '/store',
   Assets: '/toolkit/assets',
   Generate: '/toolkit/generate',
   ImageGenerate: '/toolkit/image-generate',
