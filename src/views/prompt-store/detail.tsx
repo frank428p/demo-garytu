@@ -55,17 +55,22 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const inCart = cartData?.data?.some((item) => item.item.uuid === id) ?? false;
 
   return (
-    <div className="container flex flex-col gap-4 lg:gap-12 lg:flex-row lg:items-start pt-4">
+    <div className="container flex flex-col gap-4 lg:gap-12 pt-4">
       {/* Image slider */}
-      <div className="min-w-0 lg:flex-[5] lg:sticky lg:top-18">
-        {prompt ? (
+      <div className="min-w-0 lg:flex-[5] lg:top-18">
+        {prompt && (
+          <ThumbnailSlider
+            mediaType={prompt?.media_type ?? 'IMAGE'}
+            files={prompt?.files}
+          />
+        )}
+        {/* {prompt ? (
           <ThumbnailSlider
             mediaType={prompt.media_type ?? 'IMAGE'}
             files={prompt.files}
           />
         ) : (
           <>
-            {/* Mobile skeleton */}
             <div className="space-y-2 md:hidden">
               <Skeleton className="aspect-square w-full rounded-3xl" />
               <div className="overflow-hidden flex gap-2">
@@ -74,7 +79,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 <Skeleton className="aspect-square w-24 h-24 rounded-xl" />
               </div>
             </div>
-            {/* Desktop skeleton */}
+
             <div
               className="hidden md:grid gap-4"
               style={{ gridTemplateColumns: '5rem minmax(0, 1fr)' }}
@@ -87,7 +92,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               <Skeleton className="aspect-square w-full rounded-3xl" />
             </div>
           </>
-        )}
+        )} */}
       </div>
 
       {/* Info panel */}
