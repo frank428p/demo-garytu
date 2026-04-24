@@ -379,7 +379,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
         </div>
         {/* category panel */}
         <div className="w-[480px] shrink-0 flex flex-col hidden lg:flex">
-          <div className="py-3">
+          <div className="pb-3">
             <Muted className="font-medium">Recommended</Muted>
           </div>
           <div className="h-px bg-border" />
