@@ -4,7 +4,10 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { promptsApi } from '@/@core/api/prompts';
 import type { FeaturedPromptsParams, PromptsListParams, PromptsPaginationParams } from '@/@core/types/prompt';
 
-export function usePromptsList(params: Omit<PromptsListParams, 'page'> = {}) {
+export function usePromptsList(
+  params: Omit<PromptsListParams, 'page'> = {},
+  options?: { enabled?: boolean },
+) {
   return useInfiniteQuery({
     queryKey: ['prompts', params],
     queryFn: ({ pageParam = 1 }) =>
@@ -15,6 +18,7 @@ export function usePromptsList(params: Omit<PromptsListParams, 'page'> = {}) {
       return meta.page < meta.total_pages ? meta.page + 1 : undefined;
     },
     initialPageParam: 1,
+    enabled: options?.enabled ?? true,
   });
 }
 

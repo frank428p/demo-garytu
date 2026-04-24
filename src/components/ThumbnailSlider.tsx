@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import type { Swiper as SwiperType } from 'swiper';
 import {
@@ -108,15 +108,23 @@ function ThumbnailSliderInner({
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const mainSwiperProps = {
-    modules: [FreeMode, Thumbs],
-    spaceBetween: 10,
-    thumbs: { swiper: thumbsSwiper },
-    onSlideChange: (swiper: SwiperType) => setActiveIndex(swiper.activeIndex),
-    noSwipingSelector: '[data-media-player]',
-  };
+  const handleSlideChange = useCallback(
+    (swiper: SwiperType) => setActiveIndex(swiper.activeIndex),
+    [],
+  );
 
-  const renderSlides = (rounded: string) =>
+  const mainSwiperProps = useMemo(
+    () => ({
+      modules: [FreeMode, Thumbs],
+      spaceBetween: 10,
+      thumbs: { swiper: thumbsSwiper },
+      onSlideChange: handleSlideChange,
+      noSwipingSelector: '[data-media-player]',
+    }),
+    [thumbsSwiper, handleSlideChange],
+  );
+
+  const renderSlides = () =>
     files.map((item, index) => (
       <SwiperSlide key={index} className="!h-full">
         {mediaType === 'VIDEO' ? (
@@ -193,7 +201,7 @@ function ThumbnailSliderInner({
           >
             <PhotoProvider>
               <Swiper {...mainSwiperProps} className="rounded-lg h-full">
-                {renderSlides('!rounded-xl')}
+                {renderSlides()}
               </Swiper>
             </PhotoProvider>
           </div>
@@ -204,7 +212,7 @@ function ThumbnailSliderInner({
           <div className="aspect-video">
             <PhotoProvider>
               <Swiper {...mainSwiperProps} className="rounded-lg h-full">
-                {renderSlides('!rounded-xl')}
+                {renderSlides()}
               </Swiper>
             </PhotoProvider>
           </div>

@@ -19,7 +19,11 @@ import {
 } from '@tabler/icons-react';
 import { ThumbnailSlider } from '@/components/ThumbnailSlider';
 import { useCart } from '@/@core/provider/cartContext';
-import { usePrompt, useToggleFavorite } from '@/@core/useQuery/usePrompts';
+import {
+  usePrompt,
+  useToggleFavorite,
+  usePromptsList,
+} from '@/@core/useQuery/usePrompts';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRequireAuth } from '@/@core/provider/authContext';
 import {
@@ -29,11 +33,14 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { useCartItems } from '@/@core/useQuery/useCart';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Tag } from '@/components/ui/tag';
 import { useTranslations } from 'next-intl';
+import { Muted } from '@/components/ui/typography';
+import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 
 type PromptDetailViewProps = {
   id: string;
@@ -44,6 +51,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const { data, isPending: isPromptPending } = usePrompt(id);
   const prompt = data?.data;
   const [pdfOpen, setPdfOpen] = useState(false);
+  const { isMobile } = useBreakpoint();
 
   const router = useRouter();
   const requireAuthWithDialog = useRequireAuth(false);
@@ -53,6 +61,15 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const { addItem, isAddingToCart } = useCart();
   const { data: cartData, isFetching: isCartFetching } = useCartItems();
   const inCart = cartData?.data?.some((item) => item.item.uuid === id) ?? false;
+
+  const categoryCode = prompt?.category?.code;
+  const { data: categoryData } = usePromptsList(
+    { category: categoryCode, page_size: 10 },
+    { enabled: !!categoryCode },
+  );
+  const relatedPrompts =
+    categoryData?.pages[0]?.data?.filter((p) => p.uuid !== id).slice(0, 10) ??
+    [];
 
   return (
     <div className="container flex flex-col gap-4">
@@ -104,7 +121,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             {/* Category badges */}
             <div className="flex flex-wrap items-center gap-2">
               {prompt?.media_type ? (
-                <Tag>
+                <Tag variant="primary">
                   <div className="flex items-center gap-1">
                     {prompt?.media_type === 'VIDEO' ? (
                       <>
@@ -124,7 +141,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               )}
 
               {prompt?.category ? (
-                <Tag variant="default">{prompt?.category?.name}</Tag>
+                <Tag variant="primary">{prompt?.category?.name}</Tag>
               ) : (
                 <Skeleton className="h-4 w-[48px]" />
               )}
@@ -151,7 +168,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
               </div>
 
               {/* Price */}
-              <div className="flex items-center gap-2.5">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5">
                 {prompt ? (
                   <span className="text-md lg:text-lg font-normal">
                     NT$&nbsp;{prompt?.price?.toLocaleString()}
@@ -159,9 +176,127 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 ) : (
                   <Skeleton className="h-8 w-1/3" />
                 )}
-                {/* <span className="text-sm text-muted-foreground line-through">
-            NT$&nbsp;2,000
-          </span> */}
+
+                {/* CTA buttons */}
+                <div className="flex flex-row gap-2.5">
+                  {prompt ? (
+                    <>
+                      {prompt?.user_state?.purchased ? (
+                        <>
+                          <Button
+                            size="sm"
+                            className="px-4 md:px-8 md:w-[120px] font-semibold"
+                            onClick={() => setPdfOpen(true)}
+                          >
+                            {t('Open PDF')}
+                          </Button>
+                          {prompt?.zip?.url && (
+                            <Button
+                              size="sm"
+                              className="px-4 md:px-8 font-semibold"
+                              onClick={async () => {
+                                const token =
+                                  document.cookie.match(
+                                    /(?:^|;\s*)access_token=([^;]+)/,
+                                  )?.[1] ?? '';
+                                const res = await fetch(prompt.zip.url, {
+                                  headers: token
+                                    ? { Authorization: `Bearer ${token}` }
+                                    : {},
+                                });
+                                const blob = await res.blob();
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `${prompt.name ?? 'media'}.zip`;
+                                a.click();
+                                URL.revokeObjectURL(url);
+                              }}
+                            >
+                              <IconDownload />
+                              <span className="hidden min-[410px]:inline">
+                                {t('Media Pack')}
+                              </span>
+                            </Button>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            size="sm"
+                            className="px-4 md:px-8 md:w-[120px] font-semibold"
+                            onClick={() => {
+                              if (!requireAuthWithDialog()) return;
+                              if (prompt?.uuid)
+                                router.push(`/checkout/${prompt.uuid}`);
+                            }}
+                          >
+                            {t('Buy Now')}
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="px-4 md:px-8 md:w-[120px]"
+                            disabled={
+                              inCart ||
+                              isAddingToCart ||
+                              isPromptPending ||
+                              isCartFetching
+                            }
+                            onClick={() => {
+                              if (!requireAuthWithDialog()) return;
+                              addItem(id);
+                            }}
+                          >
+                            {inCart ? t('Added to Cart') : t('Add to Cart')}
+                          </Button>
+                        </>
+                      )}
+
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className={cn(
+                          'rounded-md !h-8 !w-8',
+                          isBookmarked && 'border-primary',
+                        )}
+                        onClick={() => {
+                          if (!requireAuthWithDialog()) return;
+                          if (isBookmarked) removeFavorite.mutate();
+                          else addFavorite.mutate();
+                        }}
+                      >
+                        {isBookmarked ? (
+                          <IconBookmarkFilled
+                            size={18}
+                            color="var(--primary)"
+                          />
+                        ) : (
+                          <IconBookmark
+                            size={18}
+                            color="var(--muted-foreground)"
+                          />
+                        )}
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="rounded-md h-8 w-8"
+                        onClick={() => {
+                          navigator.clipboard.writeText(window.location.href);
+                          toast.success('Share link copied!', {
+                            position: 'top-center',
+                          });
+                        }}
+                      >
+                        <IconShare3 size={18} color="var(--muted-foreground)" />
+                      </Button>
+                    </>
+                  ) : (
+                    <Skeleton className="h-10 w-[160px]"></Skeleton>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -209,121 +344,6 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
 
           <div className="h-px bg-border" />
 
-          {/* CTA buttons */}
-          <div className="flex flex-row gap-2.5 mb-8">
-            {prompt ? (
-              <>
-                {prompt?.user_state?.purchased ? (
-                  <>
-                    <Button
-                      size="lg"
-                      className="px-4 md:px-8 md:w-[160px] font-semibold"
-                      onClick={() => setPdfOpen(true)}
-                    >
-                      {t('Open PDF')}
-                    </Button>
-                    {prompt?.zip?.url && (
-                      <Button
-                        size="lg"
-                        className="px-4 md:px-8 font-semibold"
-                        onClick={async () => {
-                          const token =
-                            document.cookie.match(
-                              /(?:^|;\s*)access_token=([^;]+)/,
-                            )?.[1] ?? '';
-                          const res = await fetch(prompt.zip.url, {
-                            headers: token
-                              ? { Authorization: `Bearer ${token}` }
-                              : {},
-                          });
-                          const blob = await res.blob();
-                          const url = URL.createObjectURL(blob);
-                          const a = document.createElement('a');
-                          a.href = url;
-                          a.download = `${prompt.name ?? 'media'}.zip`;
-                          a.click();
-                          URL.revokeObjectURL(url);
-                        }}
-                      >
-                        <IconDownload />
-                        <span className="hidden min-[410px]:inline">
-                          {t('Media Pack')}
-                        </span>
-                      </Button>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      size="lg"
-                      className="px-4 md:px-8 md:w-[160px] font-semibold"
-                      onClick={() => {
-                        if (!requireAuthWithDialog()) return;
-                        if (prompt?.uuid)
-                          router.push(`/checkout/${prompt.uuid}`);
-                      }}
-                    >
-                      {t('Buy Now')}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="lg"
-                      className="px-4 md:px-8 md:w-[160px]"
-                      disabled={
-                        inCart ||
-                        isAddingToCart ||
-                        isPromptPending ||
-                        isCartFetching
-                      }
-                      onClick={() => {
-                        if (!requireAuthWithDialog()) return;
-                        addItem(id);
-                      }}
-                    >
-                      {inCart ? t('Added to Cart') : t('Add to Cart')}
-                    </Button>
-                  </>
-                )}
-
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={cn(
-                    'rounded-lg !h-10 !w-10',
-                    isBookmarked && 'border-primary',
-                  )}
-                  onClick={() => {
-                    if (!requireAuthWithDialog()) return;
-                    if (isBookmarked) removeFavorite.mutate();
-                    else addFavorite.mutate();
-                  }}
-                >
-                  {isBookmarked ? (
-                    <IconBookmarkFilled size={18} color="var(--primary)" />
-                  ) : (
-                    <IconBookmark size={18} color="var(--muted-foreground)" />
-                  )}
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-lg h-10 w-10"
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    toast.success('Share link copied!', {
-                      position: 'top-center',
-                    });
-                  }}
-                >
-                  <IconShare3 size={18} color="var(--muted-foreground)" />
-                </Button>
-              </>
-            ) : (
-              <Skeleton className="h-10 w-[160px]"></Skeleton>
-            )}
-          </div>
-
           <PdfViewerDialog
             open={pdfOpen}
             onOpenChange={setPdfOpen}
@@ -357,7 +377,40 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             </AccordionItem>
           </Accordion>
         </div>
-        <div className="w-[480px] shrink-0"></div>
+        {/* category panel */}
+        <div className="w-[480px] shrink-0 flex flex-col hidden lg:flex">
+          <div className="py-3">
+            <Muted className="font-medium">Recommended</Muted>
+          </div>
+          <div className="h-px bg-border" />
+
+          <div className="py-4 flex flex-col gap-4">
+            {relatedPrompts.map((item) => (
+              <Link
+                key={item.uuid}
+                href={`/store/${item.uuid}`}
+                className="flex gap-3 rounded-xl group transition-colors"
+              >
+                <div className="relative w-32 aspect-video rounded-lg overflow-hidden shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.cover?.thumbnail_url ?? item.cover?.url}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex flex-col justify-center gap-1 min-w-0">
+                  <span className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary">
+                    {item.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    NT${item.price.toLocaleString()}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
