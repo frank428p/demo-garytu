@@ -7,11 +7,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <CartDrawer />
       {children}
-      {/* <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto px-3">{children}</main>
-      </div> */}
     </>
   );
 }

@@ -205,161 +205,158 @@ const PromptStoreView = () => {
         </div>
       </section>
 
-      <div className="container">
-        {/* Collection */}
-        <section className="pb-4 pt-8 flex flex-col items-stretch gap-6 md:flex-row">
+      {/* Collection */}
+      <section className="pb-4 pt-8 flex flex-col items-stretch gap-6 md:flex-row">
+        <div
+          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
+          style={{
+            backgroundImage: `url(/images/bg-collection.avif)`,
+            WebkitBackgroundSize: 'cover',
+          }}
+        >
+          <h2 className="text-3xl font-bold leading-snug">
+            Curated Collections
+          </h2>
+          <p className="text-sm leading-relaxed">
+            Handpicked prompt collections crafted by top AI artists. Each set is
+            designed to elevate your creative workflow instantly.
+          </p>
+        </div>
+        <div className="w-full min-w-0">
+          <CollectionSlider items={collectionItems} />
+        </div>
+      </section>
+
+      {/* Submissions */}
+      <section className="pb-16">
+        {/* Filter bar */}
+        <div className="">
+          <div className="flex items-center gap-2 pb-3">
+            {/* Media Type trigger */}
+            <Button
+              variant="ghost"
+              className={cn(
+                'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
+                mediaTypeOpen &&
+                  'bg-accent text-foreground hover:text-foreground',
+                selectedMediaType &&
+                  'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
+              )}
+              onClick={() => {
+                setMediaTypeOpen((v) => !v);
+                setStyleOpen(false);
+              }}
+            >
+              {t('Media Type')}
+            </Button>
+
+            {/* Style trigger */}
+            <Button
+              variant="ghost"
+              className={cn(
+                'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
+                styleOpen && 'bg-accent text-foreground hover:text-foreground',
+                selectedStyle &&
+                  'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
+              )}
+              onClick={() => {
+                setStyleOpen((v) => !v);
+                setMediaTypeOpen(false);
+              }}
+            >
+              {t('Style')}
+            </Button>
+          </div>
+
+          {/* Media Type panel */}
           <div
-            className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
-            style={{
-              backgroundImage: `url(/images/bg-collection.avif)`,
-              WebkitBackgroundSize: 'cover',
-            }}
+            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${mediaTypeOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
           >
-            <h2 className="text-3xl font-bold leading-snug">
-              Curated Collections
-            </h2>
-            <p className="text-sm leading-relaxed">
-              Handpicked prompt collections crafted by top AI artists. Each set
-              is designed to elevate your creative workflow instantly.
-            </p>
-          </div>
-          <div className="w-full min-w-0">
-            <CollectionSlider items={collectionItems} />
-          </div>
-        </section>
-
-        {/* Submissions */}
-        <section className="pb-16">
-          {/* Filter bar */}
-          <div className="">
-            <div className="flex items-center gap-2 pb-3">
-              {/* Media Type trigger */}
-              <Button
-                variant="ghost"
-                className={cn(
-                  'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
-                  mediaTypeOpen &&
-                    'bg-accent text-foreground hover:text-foreground',
-                  selectedMediaType &&
-                    'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
-                )}
-                onClick={() => {
-                  setMediaTypeOpen((v) => !v);
-                  setStyleOpen(false);
-                }}
+            <div className="overflow-hidden">
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                size="sm"
+                value={selectedMediaType}
+                onValueChange={setSelectedMediaType}
+                className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
               >
-                {t('Media Type')}
-              </Button>
-
-              {/* Style trigger */}
-              <Button
-                variant="ghost"
-                className={cn(
-                  'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
-                  styleOpen &&
-                    'bg-accent text-foreground hover:text-foreground',
-                  selectedStyle &&
-                    'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
-                )}
-                onClick={() => {
-                  setStyleOpen((v) => !v);
-                  setMediaTypeOpen(false);
-                }}
-              >
-                {t('Style')}
-              </Button>
-            </div>
-
-            {/* Media Type panel */}
-            <div
-              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${mediaTypeOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
-            >
-              <div className="overflow-hidden">
-                <ToggleGroup
-                  type="single"
-                  variant="outline"
-                  size="sm"
-                  value={selectedMediaType}
-                  onValueChange={setSelectedMediaType}
-                  className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
-                >
-                  {(
-                    [
-                      { code: 'IMAGE', name: t('Image') },
-                      { code: 'VIDEO', name: t('Video') },
-                    ] as { code: MediaType; name: string }[]
-                  ).map((type) => (
-                    <ToggleGroupItem
-                      className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
-                      key={type.code}
-                      value={type.code}
-                    >
-                      {type.name}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </div>
-            </div>
-
-            {/* Style panel */}
-            <div
-              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${styleOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
-            >
-              <div className="overflow-hidden">
-                <ToggleGroup
-                  type="single"
-                  variant="outline"
-                  size="sm"
-                  value={selectedStyle}
-                  onValueChange={setSelectedStyle}
-                  className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
-                >
-                  {categories.map((category) => (
-                    <ToggleGroupItem
-                      className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
-                      key={category.code}
-                      value={category.code}
-                    >
-                      {category.name}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </div>
+                {(
+                  [
+                    { code: 'IMAGE', name: t('Image') },
+                    { code: 'VIDEO', name: t('Video') },
+                  ] as { code: MediaType; name: string }[]
+                ).map((type) => (
+                  <ToggleGroupItem
+                    className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
+                    key={type.code}
+                    value={type.code}
+                  >
+                    {type.name}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
-            {items.map((prompt) => (
-              <MediaCard key={prompt?.uuid} prompt={prompt} />
+          {/* Style panel */}
+          <div
+            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${styleOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+          >
+            <div className="overflow-hidden">
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                size="sm"
+                value={selectedStyle}
+                onValueChange={setSelectedStyle}
+                className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
+              >
+                {categories.map((category) => (
+                  <ToggleGroupItem
+                    className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
+                    key={category.code}
+                    value={category.code}
+                  >
+                    {category.name}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
+          {items.map((prompt) => (
+            <MediaCard key={prompt?.uuid} prompt={prompt} />
+          ))}
+        </div>
+
+        <div ref={sentinelRef} className="h-1" />
+
+        {loading && (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 mt-3">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex flex-col rounded-xl overflow-hidden bg-background p-1"
+              >
+                <Skeleton className="w-full aspect-video rounded-xl" />
+                <div className="flex flex-col px-3 pt-2 pb-1 gap-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              </div>
             ))}
           </div>
+        )}
 
-          <div ref={sentinelRef} className="h-1" />
-
-          {loading && (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 mt-3">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col rounded-xl overflow-hidden bg-background p-1"
-                >
-                  <Skeleton className="w-full aspect-video rounded-xl" />
-                  <div className="flex flex-col px-3 pt-2 pb-1 gap-2">
-                    <Skeleton className="h-4 w-3/4" />
-                    <Skeleton className="h-3 w-1/2" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {!hasNextPage && items.length > 0 && (
-            <p className="text-center text-sm text-muted-foreground mt-8">
-              You&apos;ve reached the end
-            </p>
-          )}
-        </section>
-      </div>
+        {!hasNextPage && items.length > 0 && (
+          <p className="text-center text-sm text-muted-foreground mt-8">
+            You&apos;ve reached the end
+          </p>
+        )}
+      </section>
     </div>
   );
 };
