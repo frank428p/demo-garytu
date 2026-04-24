@@ -177,7 +177,7 @@ const PromptStoreView = () => {
   return (
     <div className="min-h-screen lg:rounded-tl-[32px] lg:rounded-tr-[32px] overflow-hidden">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
+      {/* <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
         <div
           className="absolute inset-0 opacity-[0.15]"
           style={DOT_PATTERN_STYLE}
@@ -203,7 +203,7 @@ const PromptStoreView = () => {
             Elevate your generation workflow instantly.
           </p>
         </div>
-      </section>
+      </section> */}
 
       {/* Collection */}
       <section className="pb-4 pt-8 flex flex-col items-stretch gap-6 md:flex-row">
