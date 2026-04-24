@@ -93,11 +93,10 @@ export function Footer() {
 
         <Separator />
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between py-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center py-4">
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} GaryTu AI. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">Made with ♥ in Taiwan</p>
         </div>
       </div>
     </footer>
