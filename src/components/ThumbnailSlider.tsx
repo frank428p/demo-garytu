@@ -30,6 +30,32 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
+function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function VideoDurationBadge({ src }: { src: string }) {
+  const [duration, setDuration] = useState<number | null>(null);
+  return (
+    <>
+      {/* preload="metadata" only fetches headers, not full video */}
+      <video
+        src={src}
+        preload="metadata"
+        className="hidden"
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+      />
+      {duration != null && (
+        <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 py-0.5 text-[10px] font-medium text-white leading-none">
+          {formatDuration(duration)}
+        </span>
+      )}
+    </>
+  );
+}
+
 function VideoPlayController({ isActive }: { isActive: boolean }) {
   const remote = useMediaRemote();
   const canPlay = useMediaState('canPlay');
@@ -165,11 +191,11 @@ function ThumbnailSliderInner({
     <div className="w-full max-w-full overflow-hidden [&_.swiper-button-next]:text-white [&_.swiper-button-next]:w-6 [&_.swiper-button-next]:h-6 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:w-6 [&_.swiper-button-prev]:h-6 [&_.swiper-button-next:after]:text-2xl [&_.swiper-button-prev:after]:text-2xl">
       {!isMobile ? (
         <div
-          className="relative grid gap-6 h-[min(56.25vw,520px)] max-h-[520px]"
-          style={{ gridTemplateColumns: '200px minmax(0, 1fr)' }}
+          className="grid gap-6 h-[min(56.25vw,520px)] max-h-[520px]"
+          style={{ gridTemplateColumns: '100px minmax(0, 1fr)' }}
         >
           {/* 左側縮圖：absolute 貼滿父容器高度 */}
-          <div className="absolute top-0 left-0 w-50 h-full overflow-hidden">
+          <div className="w-25 h-full">
             <Swiper
               onSwiper={setThumbsSwiper}
               modules={[FreeMode, Thumbs]}
@@ -178,17 +204,25 @@ function ThumbnailSliderInner({
               slidesPerView="auto"
               freeMode
               watchSlidesProgress
-              style={{ height: '100%' }}
-              className="rounded-xl "
+              style={{
+                height: '100%',
+                overflowX: 'visible',
+                overflowY: 'clip',
+              }}
+              className=""
             >
               {files.map((item, index) => (
-                <SwiperSlide key={index} className="!h-auto cursor-pointer ">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.thumbnail_url}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="block w-full rounded-lg object-cover aspect-video opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
-                  />
+                <SwiperSlide key={index} className="!h-auto z-5">
+                  <div className="thumb-card">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.thumbnail_url}
+                      alt={`Thumbnail ${index + 1}`}
+                    />
+                    {mediaType === 'VIDEO' && (
+                      <VideoDurationBadge src={item.url} />
+                    )}
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -200,7 +234,10 @@ function ThumbnailSliderInner({
             style={{ gridColumn: 2 }}
           >
             <PhotoProvider>
-              <Swiper {...mainSwiperProps} className="rounded-lg h-full">
+              <Swiper
+                {...mainSwiperProps}
+                className="rounded-lg h-full border border-border border-[2px]"
+              >
                 {renderSlides()}
               </Swiper>
             </PhotoProvider>
@@ -229,12 +266,17 @@ function ThumbnailSliderInner({
           >
             {files.map((item, index) => (
               <SwiperSlide key={index} className="cursor-pointer">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.thumbnail_url}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="block w-full h-20 rounded-md object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
-                />
+                <div className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.thumbnail_url}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="block w-full h-20 rounded-md object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
+                  />
+                  {mediaType === 'VIDEO' && (
+                    <VideoDurationBadge src={item.url} />
+                  )}
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>

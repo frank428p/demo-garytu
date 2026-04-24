@@ -76,12 +76,13 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
       {/* Image slider */}
       <div className="">
         {prompt && (
-          <div className="p-6 border border-border rounded-lg media-card">
-            <ThumbnailSlider
-              mediaType={prompt?.media_type ?? 'IMAGE'}
-              files={prompt?.files}
-            />
-          </div>
+          // <div className="p-6 border border-border rounded-lg media-card">
+
+          // </div>
+          <ThumbnailSlider
+            mediaType={prompt?.media_type ?? 'IMAGE'}
+            files={prompt?.files}
+          />
         )}
         {/* {prompt ? (
           <ThumbnailSlider
