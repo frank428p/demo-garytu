@@ -406,7 +406,15 @@ body {
   transform: translateX(2px);
   border-color: var(--ring);
 }
-
+.thumb-card.no-slide:hover {
+  transform: none;
+}
+.swiper-slide-thumb-active .thumb-card {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 1px var(--primary),
+    0 8px 24px -6px var(--primary-glow);
+}
 .thumb-card img {
   display: block;
   width: 100%;

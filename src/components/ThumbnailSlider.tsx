@@ -192,10 +192,10 @@ function ThumbnailSliderInner({
       {!isMobile ? (
         <div
           className="grid gap-6 h-[min(56.25vw,520px)] max-h-[520px]"
-          style={{ gridTemplateColumns: '100px minmax(0, 1fr)' }}
+          style={{ gridTemplateColumns: '120px minmax(0, 1fr)' }}
         >
           {/* 左側縮圖：absolute 貼滿父容器高度 */}
-          <div className="w-25 h-full">
+          <div className="w-30 h-full">
             <Swiper
               onSwiper={setThumbsSwiper}
               modules={[FreeMode, Thumbs]}
@@ -212,7 +212,7 @@ function ThumbnailSliderInner({
               className=""
             >
               {files.map((item, index) => (
-                <SwiperSlide key={index} className="!h-auto z-5">
+                <SwiperSlide key={index} className="!h-auto z-5 mt-[2px]">
                   <div className="thumb-card">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -248,7 +248,10 @@ function ThumbnailSliderInner({
           {/* 主圖 */}
           <div className="aspect-video">
             <PhotoProvider>
-              <Swiper {...mainSwiperProps} className="rounded-lg h-full">
+              <Swiper
+                {...mainSwiperProps}
+                className="rounded-lg h-full border border-border border-[2px]"
+              >
                 {renderSlides()}
               </Swiper>
             </PhotoProvider>
@@ -262,16 +265,17 @@ function ThumbnailSliderInner({
             slidesPerView={4}
             freeMode
             watchSlidesProgress
-            className="w-full rounded-xl"
+            className="w-full"
           >
             {files.map((item, index) => (
-              <SwiperSlide key={index} className="cursor-pointer">
-                <div className="relative">
+              <SwiperSlide key={index} className="mt-[2px]">
+                {/* <div className="border border-border border-[2px] rounded-md overflow-hidden cursor-pointer hover:border-ring [.swiper-slide-thumb-active_&]:border-primary"> */}
+                <div className="thumb-card no-slide">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={item.thumbnail_url}
                     alt={`Thumbnail ${index + 1}`}
-                    className="block w-full h-20 rounded-md object-cover aspect-square opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
+                    className="w-full h-20 object-cover opacity-50 [.swiper-slide-thumb-active_&]:opacity-100"
                   />
                   {mediaType === 'VIDEO' && (
                     <VideoDurationBadge src={item.url} />
