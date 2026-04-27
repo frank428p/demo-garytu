@@ -107,16 +107,16 @@ export function HeaderMenu() {
 
               <Separator className="my-2" />
 
-              <DrawerPrimitive.Close asChild>
-                <Link href={RouterUrl.Explore} className={navLinkClass}>
-                  {t('Explore')}
-                </Link>
-              </DrawerPrimitive.Close>
-
               {/* Prompt Store */}
               <DrawerPrimitive.Close asChild>
                 <Link href={RouterUrl.Store} className={navLinkClass}>
                   {t('Prompt Store')}
+                </Link>
+              </DrawerPrimitive.Close>
+
+              <DrawerPrimitive.Close asChild>
+                <Link href={RouterUrl.Explore} className={navLinkClass}>
+                  {t('Explore')}
                 </Link>
               </DrawerPrimitive.Close>
 

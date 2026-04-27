@@ -80,15 +80,15 @@ export function Header() {
 
           {isDesktop && (
             <div className="flex items-center gap-2">
-              <Link href={RouterUrl.Explore} className="py-1 px-2">
-                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
-                  {t('Explore')}
-                </Small>
-              </Link>
-
               <Link href={RouterUrl.Store} className="py-1 px-2">
                 <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
                   {t('Prompt Store')}
+                </Small>
+              </Link>
+
+              <Link href={RouterUrl.Explore} className="py-1 px-2">
+                <Small className="font-medium text-base hover:text-foreground text-secondary-muted">
+                  {t('Explore')}
                 </Small>
               </Link>
 

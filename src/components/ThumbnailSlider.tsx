@@ -191,28 +191,32 @@ function ThumbnailSliderInner({
     <div className="w-full max-w-full overflow-hidden [&_.swiper-button-next]:text-white [&_.swiper-button-next]:w-6 [&_.swiper-button-next]:h-6 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:w-6 [&_.swiper-button-prev]:h-6 [&_.swiper-button-next:after]:text-2xl [&_.swiper-button-prev:after]:text-2xl">
       {!isMobile ? (
         <div
-          className="grid gap-6 h-[min(56.25vw,520px)] max-h-[520px]"
-          style={{ gridTemplateColumns: '120px minmax(0, 1fr)' }}
+          className="grid gap-4 h-[min(56.25vw,520px)] max-h-[520px]"
+          style={{
+            gridTemplateColumns: '120px minmax(0, 1fr)',
+            gridTemplateRows: '1fr',
+          }}
         >
-          {/* 左側縮圖：absolute 貼滿父容器高度 */}
-          <div className="w-30 h-full">
+          {/* 左側縮圖 */}
+          <div className="w-30 min-h-0 h-full">
             <Swiper
-              onSwiper={setThumbsSwiper}
+              onSwiper={(swiper) => {
+                setThumbsSwiper(swiper);
+                setTimeout(() => swiper.update(), 0);
+              }}
               modules={[FreeMode, Thumbs]}
               direction="vertical"
               spaceBetween={8}
               slidesPerView="auto"
               freeMode
+              grabCursor
               watchSlidesProgress
-              style={{
-                height: '100%',
-                overflowX: 'visible',
-                overflowY: 'clip',
-              }}
-              className=""
+              observer
+              observeParents
+              style={{ height: '100%', paddingRight: '8px' }}
             >
               {files.map((item, index) => (
-                <SwiperSlide key={index} className="!h-auto z-5 mt-[2px]">
+                <SwiperSlide key={index} className="!h-auto my-[2px]">
                   <div className="thumb-card">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

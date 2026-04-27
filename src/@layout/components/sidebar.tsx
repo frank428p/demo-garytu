@@ -4,14 +4,13 @@ import { usePathname } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import {
   ExploreNav,
-  StoreNav,
   AssetsNav,
   ImageGenerateNav,
   VideoGenerateNav,
 } from '../constants';
 import { SidebarNavLink } from './sidebar-nav-link';
 
-const mainNav = [ExploreNav, StoreNav, AssetsNav];
+const mainNav = [ExploreNav, AssetsNav];
 const generateNav = [ImageGenerateNav, VideoGenerateNav];
 // const otherNav = [EnterpriseNav];
 
@@ -37,18 +36,6 @@ export function Sidebar() {
             isActive={pathname.startsWith(item.url)}
           />
         ))}
-
-        {/* <Separator /> */}
-
-        {/* {otherNav.map((item) => (
-          <SidebarNavLink
-            key={item.url}
-            item={item}
-            isActive={pathname.startsWith(item.url)}
-          />
-        ))} */}
-
-        {/* <div className="flex-1" /> */}
       </nav>
     </aside>
   );
