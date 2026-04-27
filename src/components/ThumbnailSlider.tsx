@@ -15,6 +15,8 @@ import {
   DefaultVideoLayout,
 } from '@vidstack/react/player/layouts/default';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 import 'react-photo-view/dist/react-photo-view.css';
 import '@vidstack/react/player/styles/base.css';
 import '@vidstack/react/player/styles/default/theme.css';
@@ -52,6 +54,22 @@ function VideoDurationBadge({ src }: { src: string }) {
           {formatDuration(duration)}
         </span>
       )}
+    </>
+  );
+}
+
+function ThumbImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        style={loaded ? undefined : { opacity: 0 }}
+      />
     </>
   );
 }
@@ -218,8 +236,7 @@ function ThumbnailSliderInner({
               {files.map((item, index) => (
                 <SwiperSlide key={index} className="!h-auto my-[2px]">
                   <div className="thumb-card">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <ThumbImage
                       src={item.thumbnail_url}
                       alt={`Thumbnail ${index + 1}`}
                     />
