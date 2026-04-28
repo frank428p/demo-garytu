@@ -55,7 +55,10 @@ function QuantitySelector() {
 const VideoGenerate = () => {
   return (
     <div className="bg-card/60 rounded-3xl flex flex-col max-h-[calc(100vh-56px-64px)] lg:max-h-[calc(100vh-56px-12px)]">
-      <ScrollArea className="flex flex-col px-2.5 pt-4 overflow-y-auto flex-1 min-h-0">
+      <ScrollArea
+        hideScrollbar
+        className="flex flex-col px-2.5 pt-4 overflow-y-auto flex-1 min-h-0"
+      >
         <div className="flex flex-col gap-2 px-1.5">
           <div className="flex flex-col gap-2">
             <StyleSelector />

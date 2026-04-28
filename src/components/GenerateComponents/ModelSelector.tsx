@@ -73,7 +73,7 @@ export function ModelSelector() {
         <PopoverContent
           side="right"
           align="start"
-          className="p-3 w-125 flex flex-col gap-2 rounded-xl mb-4 ml-1 top-[10px]"
+          className="p-3 w-100 flex flex-col gap-2 rounded-xl mb-4 ml-1 top-[10px]"
         >
           <H4 className="text-base px-2">Model</H4>
           {modelList}
