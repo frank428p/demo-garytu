@@ -299,7 +299,7 @@ export function StyleSelector() {
   return (
     <Drawer>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-      <DrawerContent className="max-h-[50vh]">
+      <DrawerContent className="max-h-[50vh] bg-card">
         <DrawerHeader>
           <Alert className="w-full bg-accent">
             <IconInfoCircle size={24} />
