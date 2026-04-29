@@ -116,7 +116,7 @@ const VideoGenerate = () => {
                     <div className="flex flex-col items-start flex-1">
                       <TinyMuted className="py-1">Motion</TinyMuted>
                       <div className="flex items-center gap-1 h-4">
-                        <Small className="leading-5">Off</Small>
+                        <Small className="leading-5">Auto</Small>
                       </div>
                     </div>
                   </div>

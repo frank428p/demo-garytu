@@ -280,7 +280,7 @@ export function StyleSelector() {
           className="min-w-[580px] w-[40vw] rounded-xl mb-4 ml-1 p-0 focus:outline-none"
         >
           <div className="p-4">
-            <Alert className="w-full bg-accent">
+            <Alert className="w-full bg-secondary">
               <IconInfoCircle size={24} />
               <AlertTitle>
                 Selecting General will generate results based on your prompt and
@@ -309,7 +309,7 @@ export function StyleSelector() {
             </AlertTitle>
           </Alert>
         </DrawerHeader>
-        <ScrollArea className="max-h-[50vh] h-150 p-3">
+        <ScrollArea className="max-h-[50vh] h-150 p-3 pt-0 pb-8">
           <StyleGrid />
         </ScrollArea>
       </DrawerContent>

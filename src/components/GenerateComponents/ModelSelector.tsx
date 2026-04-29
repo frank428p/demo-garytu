@@ -87,9 +87,9 @@ export function ModelSelector() {
     <Drawer>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader>
+        {/* <DrawerHeader>
           <DrawerTitle>Model</DrawerTitle>
-        </DrawerHeader>
+        </DrawerHeader> */}
         <div className="p-3 pb-8">{modelList}</div>
       </DrawerContent>
     </Drawer>

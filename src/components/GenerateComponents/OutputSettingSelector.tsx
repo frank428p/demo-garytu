@@ -141,9 +141,9 @@ export function OutputSettingSelector() {
     <Drawer>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader>
+        {/* <DrawerHeader>
           <DrawerTitle>Output</DrawerTitle>
-        </DrawerHeader>
+        </DrawerHeader> */}
         <div className="p-3 pb-8">{content}</div>
       </DrawerContent>
     </Drawer>
