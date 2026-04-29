@@ -40,8 +40,8 @@ export default function UserLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex min-h-[calc(100vh-56px)]">
-      <aside className="sticky top-14 h-[calc(100vh-56px)] hidden md:flex md:w-14 lg:w-56 shrink-0 flex-col bg-background md:p-2 lg:p-4">
+    <div className="flex container min-h-[calc(100vh-56px)]">
+      <aside className="sticky top-14 h-[calc(100vh-56px)] hidden md:flex md:w-14 lg:w-56 shrink-0 flex-col bg-background md:p-2 lg:p-4 !pl-0">
         <nav className="flex flex-col gap-1">
           {userNav.map((item) => {
             const Icon = item.icon;
@@ -65,7 +65,7 @@ export default function UserLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
       </aside>
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 justify-items-center">
+      <main className="flex-1 overflow-y-auto py-4 md:p-6 justify-items-center">
         <div className="max-w-3xl w-full">{children}</div>
       </main>
     </div>
