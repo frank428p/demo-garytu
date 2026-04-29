@@ -72,7 +72,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
     [];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="container with-top with-bottom flex flex-col gap-4">
       {/* Image slider */}
       <div className="">
         {prompt && (

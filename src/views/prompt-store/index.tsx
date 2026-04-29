@@ -175,7 +175,7 @@ const PromptStoreView = () => {
   const loading = isLoading || isFetchingNextPage;
 
   return (
-    <div className="min-h-screen lg:rounded-tl-[32px] lg:rounded-tr-[32px] overflow-hidden">
+    <div className="min-h-screen overflow-hidden">
       {/* Hero */}
       {/* <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
         <div
@@ -206,7 +206,7 @@ const PromptStoreView = () => {
       </section> */}
 
       {/* Collection */}
-      <section className="pb-4 pt-8 flex flex-col items-stretch gap-6 md:flex-row">
+      <section className="container with-top pb-4 flex flex-col items-stretch gap-6 md:flex-row">
         <div
           className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
           style={{
@@ -228,7 +228,7 @@ const PromptStoreView = () => {
       </section>
 
       {/* Submissions */}
-      <section className="pb-16">
+      <section className="container with-bottom">
         {/* Filter bar */}
         <div className="">
           <div className="flex items-center gap-2 pb-3">
