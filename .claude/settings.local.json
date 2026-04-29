@@ -9,7 +9,8 @@
       "WebFetch(domain:wavespeed.ai)",
       "WebFetch(domain:drinkpouch.com)",
       "WebFetch(domain:higgsfield.ai)",
-      "Bash(curl -s https://higgsfield.ai/original-series/mork/episode-1)"
+      "Bash(curl -s https://higgsfield.ai/original-series/mork/episode-1)",
+      "WebFetch(domain:www.shadcn.io)"
     ]
   }
 }

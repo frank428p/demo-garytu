@@ -5,13 +5,9 @@ import { useAtomValue } from 'jotai';
 import { webConfigAtom } from '@/@core/store/configAtoms';
 import Image from 'next/image';
 import Link from 'next/link';
-import { H2, Muted, Small } from '@/components/ui/typography';
-import {
-  IconBookmarkFilled,
-  IconChevronDown,
-  IconPhoto,
-  IconVideo,
-} from '@tabler/icons-react';
+import { Small } from '@/components/ui/typography';
+import { IconSearch } from '@tabler/icons-react';
+import { LightRays } from '@/components/ui/light-rays';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   useFeaturedPrompts,
@@ -127,12 +123,74 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
   );
 }
 
-// ─── PromptStoreView ──────────────────────────────────────────────────────────
+function StoreHero() {
+  return (
+    <section
+      className="relative overflow-hidden pb-6"
+      style={{
+        marginTop: 'calc(-1 * var(--header-height))',
+        paddingTop: 'var(--header-height)',
+      }}
+    >
+      {/* LightRays WebGL background */}
+      <div className="absolute inset-0">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={0.6}
+          lightSpread={0.8}
+          rayLength={1.8}
+          fadeDistance={0.9}
+          saturation={0}
+          followMouse={true}
+          mouseInfluence={0.08}
+        />
+      </div>
 
-const DOT_PATTERN_STYLE = {
-  backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-  backgroundSize: '28px 28px',
-} as const;
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
+
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 pt-12 pb-10 max-w-3xl mx-auto gap-5">
+        {/* Headline */}
+        <h1
+          className="text-[36px] md:text-[52px] lg:text-[62px] font-black tracking-tight leading-[1.06]"
+          style={{
+            animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 80ms both',
+          }}
+        >
+          The Art of
+          <br />
+          <span
+            className="text-transparent bg-clip-text"
+            style={{
+              backgroundImage:
+                'linear-gradient(110deg, var(--primary) 0%, oklch(0.65 0.22 40) 35%, oklch(0.58 0.20 18) 65%, var(--primary) 100%)',
+              backgroundSize: '250% 250%',
+              animation: 'hero-shimmer 6s ease infinite',
+            }}
+          >
+            AI Prompts
+          </span>
+        </h1>
+
+        {/* Subtitle */}
+        <p
+          className="text-muted-foreground text-sm md:text-base max-w-md leading-relaxed"
+          style={{
+            animation:
+              'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 160ms both',
+          }}
+        >
+          Curated prompt collections crafted by top AI artists. Instantly
+          elevate your image and video generation workflow.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+// ─── PromptStoreView ──────────────────────────────────────────────────────────
 
 const PromptStoreView = () => {
   const t = useTranslations('common');
@@ -175,189 +233,164 @@ const PromptStoreView = () => {
   const loading = isLoading || isFetchingNextPage;
 
   return (
-    <div className="min-h-screen overflow-hidden">
-      {/* Hero */}
-      {/* <section className="relative overflow-hidden bg-background py-18 md:py-12 lg:rounded-tl-[32px] lg:rounded-tr-[32px]">
-        <div
-          className="absolute inset-0 opacity-[0.15]"
-          style={DOT_PATTERN_STYLE}
-        />
-
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="aurora-1 absolute -top-20 -left-20 w-[250px] h-[250px] md:w-[300px] md:h-[300px] lg:w-[500px] lg:h-[500px] rounded-full bg-primary/40 blur-[70px]" />
-          <div className="aurora-2 absolute -bottom-20 -right-10 w-[210px] h-[210px] md:w-[260px] md:h-[260px] lg:w-[420px] lg:h-[420px] rounded-full bg-primary/35 blur-[80px]" />
-          <div className="aurora-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] md:w-[200px] md:h-[200px] lg:w-[300px] lg:h-[300px] rounded-full bg-primary/25 blur-[50px]" />
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto">
-          <h1 className="text-[32px] md:text-[42px] font-black tracking-tight leading-[1.05] mb-6">
-            The Art of
-            <br />
-            <span className="text-primary">AI Prompts</span>
-          </h1>
-
-          <p className="text-muted-foreground text-md md:text-lg max-w-xl leading-relaxed">
-            Curated prompt packages crafted by top AI artists and creators.
-            Elevate your generation workflow instantly.
-          </p>
-        </div>
-      </section> */}
-
-      {/* Collection */}
-      <section className="container with-top pb-4 flex flex-col items-stretch gap-6 md:flex-row">
-        <div
-          className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
-          style={{
-            backgroundImage: `url(/images/bg-collection.avif)`,
-            WebkitBackgroundSize: 'cover',
-          }}
-        >
-          <h2 className="text-3xl font-bold leading-snug">
-            Curated Collections
-          </h2>
-          <p className="text-sm leading-relaxed">
-            Handpicked prompt collections crafted by top AI artists. Each set is
-            designed to elevate your creative workflow instantly.
-          </p>
-        </div>
-        <div className="w-full min-w-0">
-          <CollectionSlider items={collectionItems} />
-        </div>
-      </section>
-
-      {/* Submissions */}
-      <section className="container with-bottom">
-        {/* Filter bar */}
-        <div className="">
-          <div className="flex items-center gap-2 pb-3">
-            {/* Media Type trigger */}
-            <Button
-              variant="ghost"
-              className={cn(
-                'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
-                mediaTypeOpen &&
-                  'bg-accent text-foreground hover:text-foreground',
-                selectedMediaType &&
-                  'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
-              )}
-              onClick={() => {
-                setMediaTypeOpen((v) => !v);
-                setStyleOpen(false);
-              }}
-            >
-              {t('Media Type')}
-            </Button>
-
-            {/* Style trigger */}
-            <Button
-              variant="ghost"
-              className={cn(
-                'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
-                styleOpen && 'bg-accent text-foreground hover:text-foreground',
-                selectedStyle &&
-                  'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
-              )}
-              onClick={() => {
-                setStyleOpen((v) => !v);
-                setMediaTypeOpen(false);
-              }}
-            >
-              {t('Style')}
-            </Button>
-          </div>
-
-          {/* Media Type panel */}
+    <>
+      <StoreHero />
+      <div className="min-h-screen overflow-hidden">
+        {/* Collection */}
+        <section className="container with-top pb-4 flex flex-col items-stretch gap-6 md:flex-row">
           <div
-            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${mediaTypeOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+            className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
+            style={{
+              backgroundImage: `url(/images/bg-collection.avif)`,
+              WebkitBackgroundSize: 'cover',
+            }}
           >
-            <div className="overflow-hidden">
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                size="sm"
-                value={selectedMediaType}
-                onValueChange={setSelectedMediaType}
-                className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
-              >
-                {(
-                  [
-                    { code: 'IMAGE', name: t('Image') },
-                    { code: 'VIDEO', name: t('Video') },
-                  ] as { code: MediaType; name: string }[]
-                ).map((type) => (
-                  <ToggleGroupItem
-                    className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
-                    key={type.code}
-                    value={type.code}
-                  >
-                    {type.name}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
+            <h2 className="text-3xl font-bold leading-snug">
+              Curated Collections
+            </h2>
+            <p className="text-sm leading-relaxed">
+              Handpicked prompt collections crafted by top AI artists. Each set
+              is designed to elevate your creative workflow instantly.
+            </p>
           </div>
-
-          {/* Style panel */}
-          <div
-            className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${styleOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
-          >
-            <div className="overflow-hidden">
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                size="sm"
-                value={selectedStyle}
-                onValueChange={setSelectedStyle}
-                className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
-              >
-                {categories.map((category) => (
-                  <ToggleGroupItem
-                    className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
-                    key={category.code}
-                    value={category.code}
-                  >
-                    {category.name}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
+          <div className="w-full min-w-0">
+            <CollectionSlider items={collectionItems} />
           </div>
-        </div>
+        </section>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
-          {items.map((prompt) => (
-            <MediaCard key={prompt?.uuid} prompt={prompt} />
-          ))}
-        </div>
-
-        <div ref={sentinelRef} className="h-1" />
-
-        {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 mt-3">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex flex-col rounded-xl overflow-hidden bg-background p-1"
+        {/* Submissions */}
+        <section className="container with-bottom">
+          {/* Filter bar */}
+          <div className="">
+            <div className="flex items-center gap-2 pb-3">
+              {/* Media Type trigger */}
+              <Button
+                variant="ghost"
+                className={cn(
+                  'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
+                  mediaTypeOpen &&
+                    'bg-accent text-foreground hover:text-foreground',
+                  selectedMediaType &&
+                    'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
+                )}
+                onClick={() => {
+                  setMediaTypeOpen((v) => !v);
+                  setStyleOpen(false);
+                }}
               >
-                <Skeleton className="w-full aspect-video rounded-xl" />
-                <div className="flex flex-col px-3 pt-2 pb-1 gap-2">
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-3 w-1/2" />
-                </div>
+                {t('Media Type')}
+              </Button>
+
+              {/* Style trigger */}
+              <Button
+                variant="ghost"
+                className={cn(
+                  'text-xs !px-3.5 !py-1.5 h-auto text-muted-foreground hover:text-foreground relative',
+                  styleOpen &&
+                    'bg-accent text-foreground hover:text-foreground',
+                  selectedStyle &&
+                    'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary',
+                )}
+                onClick={() => {
+                  setStyleOpen((v) => !v);
+                  setMediaTypeOpen(false);
+                }}
+              >
+                {t('Style')}
+              </Button>
+            </div>
+
+            {/* Media Type panel */}
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${mediaTypeOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+            >
+              <div className="overflow-hidden">
+                <ToggleGroup
+                  type="single"
+                  variant="outline"
+                  size="sm"
+                  value={selectedMediaType}
+                  onValueChange={setSelectedMediaType}
+                  className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
+                >
+                  {(
+                    [
+                      { code: 'IMAGE', name: t('Image') },
+                      { code: 'VIDEO', name: t('Video') },
+                    ] as { code: MediaType; name: string }[]
+                  ).map((type) => (
+                    <ToggleGroupItem
+                      className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
+                      key={type.code}
+                      value={type.code}
+                    >
+                      {type.name}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
               </div>
+            </div>
+
+            {/* Style panel */}
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${styleOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+            >
+              <div className="overflow-hidden">
+                <ToggleGroup
+                  type="single"
+                  variant="outline"
+                  size="sm"
+                  value={selectedStyle}
+                  onValueChange={setSelectedStyle}
+                  className="flex-wrap justify-start gap-1.5 pt-1 pb-4"
+                >
+                  {categories.map((category) => (
+                    <ToggleGroupItem
+                      className="rounded-full py-1.5 px-3 h-auto text-xs bg-card border-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary"
+                      key={category.code}
+                      value={category.code}
+                    >
+                      {category.name}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
+            {items.map((prompt) => (
+              <MediaCard key={prompt?.uuid} prompt={prompt} />
             ))}
           </div>
-        )}
 
-        {!hasNextPage && items.length > 0 && (
-          <p className="text-center text-sm text-muted-foreground mt-8">
-            You&apos;ve reached the end
-          </p>
-        )}
-      </section>
-    </div>
+          <div ref={sentinelRef} className="h-1" />
+
+          {loading && (
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 mt-3">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col rounded-xl overflow-hidden bg-background p-1"
+                >
+                  <Skeleton className="w-full aspect-video rounded-xl" />
+                  <div className="flex flex-col px-3 pt-2 pb-1 gap-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!hasNextPage && items.length > 0 && (
+            <p className="text-center text-sm text-muted-foreground mt-8">
+              You&apos;ve reached the end
+            </p>
+          )}
+        </section>
+      </div>
+    </>
   );
 };
 

@@ -29,11 +29,16 @@ import { Badge } from '@/components/ui/badge';
 import { useTranslations } from 'next-intl';
 import { useLocaleSwitcher, LOCALES } from '@/@core/hooks/useLocaleSwitcher';
 import { useLayout } from '@/@core/hooks/useLayout';
+import { usePathname } from 'next/navigation';
 
 export function Header() {
   const t = useTranslations('common');
   const { isFullContainer } = useLayout();
-  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isStorePage = pathname.split('/').pop() === 'store';
+  const [scrolled, setScrolled] = useState(() =>
+    typeof window !== 'undefined' ? window.scrollY > 0 : false,
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 0);
@@ -63,7 +68,11 @@ export function Header() {
     <header
       className={cn(
         'sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center  transition-all duration-300',
-        scrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-background',
+        scrolled
+          ? 'bg-background/80 backdrop-blur-md'
+          : isStorePage
+            ? 'bg-transparent'
+            : 'bg-background',
       )}
     >
       <div

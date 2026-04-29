@@ -7,6 +7,9 @@
   --animate-style-selector-out: style-selector-out 0.18s ease-in both;
   --animate-collapsible-down: collapsible-down 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-collapsible-up: collapsible-up 0.18s ease-in;
+  --animate-marquee-left: marquee-left 32s linear infinite;
+  --animate-marquee-right: marquee-right 26s linear infinite;
+  --animate-hero-fade-up: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes collapsible-down {
@@ -310,6 +313,38 @@ body {
    導致 react-photo-view 的 portal 繼承後箭頭無法點擊，
    點擊穿透到 dialog backdrop 而觸發關閉。
    此規則讓 PhotoView portal 恢復可互動狀態。 */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-gradient-text {
+  background: linear-gradient(
+    110deg,
+    var(--primary) 0%,
+    oklch(0.65 0.22 40) 35%,
+    oklch(0.58 0.20 18) 65%,
+    var(--primary) 100%
+  );
+  background-size: 250% 250%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: hero-shimmer 6s ease infinite;
+}
+
 @keyframes aurora-drift-1 {
   0%,
   100% {
