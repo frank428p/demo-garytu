@@ -18,7 +18,7 @@ function ScrollArea({
 }) {
   return (
     <ScrollAreaPrimitive.Root
-      className={cn('size-full min-h-0', className)}
+      className={cn('size-full min-h-0 focus:outline-none', className)}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport

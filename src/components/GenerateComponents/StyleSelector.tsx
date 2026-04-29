@@ -288,7 +288,7 @@ export function StyleSelector() {
               </AlertTitle>
             </Alert>
           </div>
-          <ScrollArea className="max-h-[calc(100vh-200px)] h-150 px-4 pb-4 pt-0 focus:outline-none">
+          <ScrollArea className="max-h-[calc(100vh-200px)] h-150 px-4 pb-4 pt-0">
             <StyleGrid />
           </ScrollArea>
         </PopoverContent>
