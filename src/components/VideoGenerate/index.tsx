@@ -4,14 +4,10 @@ import { Button } from '../ui/button';
 import {
   IconSparkles2Filled,
   IconChevronDown,
-  IconCamera,
-  IconRun,
   IconMinus,
   IconPlus,
-  IconChevronRight,
 } from '@tabler/icons-react';
 import { useState } from 'react';
-import { Small, TinyMuted } from '../ui/typography';
 import {
   Collapsible,
   CollapsibleContent,
@@ -26,6 +22,8 @@ import { AudioSelector } from '../GenerateComponents/AudioSelector';
 import { OutputSettingSelector } from '../GenerateComponents/OutputSettingSelector';
 import { FrameUploader } from '../GenerateComponents/FrameUploader';
 import { ScrollArea } from '../ui/scroll-area';
+import { MovementSelector } from '../GenerateComponents/MovementSelector';
+import { MotionSelector } from '../GenerateComponents/MotionSelector';
 
 const MAX = 4;
 
@@ -93,35 +91,8 @@ const VideoGenerate = () => {
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="flex flex-col items-start gap-2 p-2 pt-0 text-sm">
-                <div className="flex w-full justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
-                  <div className="flex gap-2 flex-1">
-                    <div className="p-3 rounded-xl bg-ring/20">
-                      <IconCamera className="!h-6 !w-6" />
-                    </div>
-                    <div className="flex flex-col items-start flex-1">
-                      <TinyMuted className="py-1">Movement</TinyMuted>
-                      <div className="flex items-center gap-1 h-4">
-                        <Small className="leading-5">Auto</Small>
-                      </div>
-                    </div>
-                  </div>
-                  <IconChevronRight size={16} />
-                </div>
-
-                <div className="flex w-full justify-between h-auto rounded-xl p-2 bg-secondary items-center hover:bg-secondary/80 transition-colors cursor-pointer">
-                  <div className="flex gap-2 flex-1">
-                    <div className="p-3 rounded-xl bg-ring/20">
-                      <IconRun className="!h-6 !w-6" />
-                    </div>
-                    <div className="flex flex-col items-start flex-1">
-                      <TinyMuted className="py-1">Motion</TinyMuted>
-                      <div className="flex items-center gap-1 h-4">
-                        <Small className="leading-5">Auto</Small>
-                      </div>
-                    </div>
-                  </div>
-                  <IconChevronRight size={16} />
-                </div>
+                <MovementSelector />
+                <MotionSelector />
               </CollapsibleContent>
             </Collapsible>
           </div>
