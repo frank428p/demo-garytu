@@ -195,7 +195,7 @@ const STYLES: Style[] = [
 
 function StyleCard({ style }: { style: Style }) {
   return (
-    <div className="relative cursor-pointer rounded-xl overflow-hidden aspect-[3/4] group ring-2 ring-transparent hover:ring-white/40 transition-all duration-200">
+    <div className="relative cursor-pointer rounded-xl overflow-hidden aspect-[3/4] group ring-2 ring-transparent hover:ring-ring transition-all duration-200">
       <video
         src={style.src}
         loop
