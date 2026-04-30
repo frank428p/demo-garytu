@@ -103,7 +103,8 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
     return () => ro.disconnect();
   }, []);
 
-  const { isTablet, isDesktop, isXlDesktop, is2XlDesktop } = useBreakpoint();
+  const { isMobile, isTablet, isDesktop, isXlDesktop, is2XlDesktop } =
+    useBreakpoint();
 
   const VISIBLE = useMemo(() => {
     if (is2XlDesktop) return 5;
@@ -294,9 +295,9 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
       <button
         aria-label="Previous"
         className={cn(
-          'absolute cursor-pointer left-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/20',
+          'absolute cursor-pointer left-[-16px] md:left-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-7 md:size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/20',
           'transition-[opacity,transform] duration-300 ease-in-out',
-          containerHovered && startIndex > 0
+          (containerHovered || isMobile) && startIndex > 0
             ? 'opacity-100'
             : 'opacity-0 pointer-events-none',
         )}
@@ -309,15 +310,15 @@ export function CollectionSlider({ items }: { items: Prompt[] }) {
       <button
         aria-label="Next"
         className={cn(
-          'absolute cursor-pointer right-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/20',
+          'absolute cursor-pointer right-[-16px] md:right-[-20px] top-1/2 -translate-y-1/2 z-100 flex items-center justify-center size-7 md:size-10 rounded-full bg-accent/30 backdrop-blur-sm text-white hover:bg-secondary/20',
           'transition-[opacity,transform] duration-300 ease-in-out',
-          containerHovered && startIndex < maxStart
+          (containerHovered || isMobile) && startIndex < maxStart
             ? 'opacity-100'
             : 'opacity-0 pointer-events-none',
         )}
         onClick={() => navigate('next')}
       >
-        <IconChevronRight size={20} />
+        <IconChevronRight size={isMobile ? 16 : 20} />
       </button>
     </div>
   );

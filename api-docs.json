@@ -59,6 +59,43 @@
         "tags": ["Auth"]
       }
     },
+    "/auth/register/resend": {
+      "post": {
+        "operationId": "AuthController_resendEmailRegistration",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRegisterResendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RestResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "null", "nullable": true }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "summary": "Resend email registration OTP",
+        "tags": ["Auth"]
+      }
+    },
     "/auth/register/verify": {
       "post": {
         "operationId": "AuthController_verifyEmailRegistration",
@@ -202,6 +239,43 @@
           }
         },
         "summary": "Send forgot password OTP",
+        "tags": ["Auth"]
+      }
+    },
+    "/auth/forgot-password/resend": {
+      "post": {
+        "operationId": "AuthController_resendForgotPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordResendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RestResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "null", "nullable": true }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "summary": "Resend forgot password OTP",
         "tags": ["Auth"]
       }
     },
@@ -1982,6 +2056,13 @@
         },
         "required": ["email", "password"]
       },
+      "EmailRegisterResendRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "test@gmail.com" }
+        },
+        "required": ["email"]
+      },
       "EmailRegisterVerifyRequest": {
         "type": "object",
         "properties": {
@@ -2014,6 +2095,13 @@
         "required": ["token"]
       },
       "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "test@gmail.com" }
+        },
+        "required": ["email"]
+      },
+      "ForgotPasswordResendRequest": {
         "type": "object",
         "properties": {
           "email": { "type": "string", "example": "test@gmail.com" }
