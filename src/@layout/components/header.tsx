@@ -34,8 +34,6 @@ import { usePathname } from 'next/navigation';
 export function Header() {
   const t = useTranslations('common');
   const { isFullContainer } = useLayout();
-  const pathname = usePathname();
-  const isStorePage = pathname.split('/').pop() === 'store';
   const [scrolled, setScrolled] = useState(() =>
     typeof window !== 'undefined' ? window.scrollY > 0 : false,
   );
@@ -68,11 +66,7 @@ export function Header() {
     <header
       className={cn(
         'sticky top-0 left-0 right-0 z-50 flex h-13 md:h-14 items-center  transition-all duration-300',
-        scrolled
-          ? 'bg-background/80 backdrop-blur-md'
-          : isStorePage
-            ? 'bg-transparent'
-            : 'bg-background',
+        scrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-background',
       )}
     >
       <div

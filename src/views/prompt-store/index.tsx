@@ -123,73 +123,6 @@ function MediaCard({ prompt }: { prompt: Prompt }) {
   );
 }
 
-function StoreHero() {
-  return (
-    <section
-      className="relative overflow-hidden pb-6"
-      style={{
-        marginTop: 'calc(-1 * var(--header-height))',
-        paddingTop: 'var(--header-height)',
-      }}
-    >
-      {/* LightRays WebGL background */}
-      <div className="absolute inset-0">
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#ffffff"
-          raysSpeed={0.7}
-          lightSpread={0.8}
-          rayLength={2.5}
-          fadeDistance={2}
-          saturation={0}
-          followMouse={false}
-          mouseInfluence={0.08}
-        />
-      </div>
-
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
-
-      {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 pt-12 pb-10 max-w-3xl mx-auto gap-5">
-        {/* Headline */}
-        <h1
-          className="text-[36px] md:text-[52px] lg:text-[62px] font-black tracking-tight leading-[1.06]"
-          style={{
-            animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 80ms both',
-          }}
-        >
-          The Art of
-          <br />
-          <span
-            className="text-transparent bg-clip-text"
-            style={{
-              backgroundImage:
-                'linear-gradient(110deg, var(--primary) 0%, oklch(0.65 0.22 40) 35%, oklch(0.58 0.20 18) 65%, var(--primary) 100%)',
-              backgroundSize: '250% 250%',
-              animation: 'hero-shimmer 6s ease infinite',
-            }}
-          >
-            AI Prompts
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className="text-muted-foreground text-sm md:text-base max-w-md leading-relaxed"
-          style={{
-            animation:
-              'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 160ms both',
-          }}
-        >
-          Curated prompt collections crafted by top AI artists. Instantly
-          elevate your image and video generation workflow.
-        </p>
-      </div>
-    </section>
-  );
-}
-
 // ─── PromptStoreView ──────────────────────────────────────────────────────────
 
 const PromptStoreView = () => {
@@ -234,7 +167,6 @@ const PromptStoreView = () => {
 
   return (
     <>
-      <StoreHero />
       <div className="min-h-screen overflow-hidden">
         {/* Collection */}
         <section className="container with-top pb-4 flex flex-col items-stretch gap-6 md:flex-row">
