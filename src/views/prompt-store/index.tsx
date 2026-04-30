@@ -137,12 +137,12 @@ function StoreHero() {
         <LightRays
           raysOrigin="top-center"
           raysColor="#ffffff"
-          raysSpeed={0.6}
+          raysSpeed={0.7}
           lightSpread={0.8}
-          rayLength={1.8}
-          fadeDistance={0.9}
+          rayLength={2.5}
+          fadeDistance={2}
           saturation={0}
-          followMouse={true}
+          followMouse={false}
           mouseInfluence={0.08}
         />
       </div>

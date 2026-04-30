@@ -41,8 +41,8 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
 
   return (
     <Link
-      href={`/toolkit/store/${prompt.uuid}`}
-      className="media-item group flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3 hover:border-border hover:bg-secondary/50 transition-all duration-200"
+      href={`/store/${prompt.uuid}`}
+      className="media-item group flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3 hover:border-border hover:bg-card/80 transition-all duration-200"
     >
       <div className="media-thumb relative shrink-0 w-20 md:w-24 aspect-video overflow-hidden rounded-xl">
         {!imgLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
@@ -60,11 +60,8 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
       </div>
 
       <div className="flex flex-col gap-1 min-w-0 flex-1">
-        <span className="text-sm md:text-[15px] font-semibold text-foreground leading-snug line-clamp-1 group-hover:text-primary transition-colors duration-200">
-          {prompt.name}
-        </span>
-        <div className="flex items-center gap-1.5">
-          <Tag>
+        <div className="flex items-center gap-1.5 -ml-[2px]">
+          <Tag variant="primary">
             <div className="flex items-center gap-1">
               {prompt?.media_type === 'VIDEO' ? (
                 <>
@@ -80,9 +77,12 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
             </div>
           </Tag>
           {prompt?.category && (
-            <Tag variant="default">{prompt?.category?.name}</Tag>
+            <Tag variant="primary">{prompt?.category?.name}</Tag>
           )}
         </div>
+        <span className="text-sm md:text-[15px] font-semibold text-foreground leading-snug line-clamp-1">
+          {prompt.name}
+        </span>
       </div>
 
       <IconExternalLink className="size-4 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200" />

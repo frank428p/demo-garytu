@@ -138,7 +138,7 @@ export function CartDrawer() {
                     {/* Tags row */}
                     <div className="flex items-center gap-1.5 ml-[-4px]">
                       {/* Media type */}
-                      <Tag className="gap-1">
+                      <Tag className="gap-1" variant="primary">
                         {item?.item?.media_type === 'VIDEO' ? (
                           <>
                             <IconVideo size={12} />
