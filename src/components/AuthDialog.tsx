@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { useAuth } from '@/@core/provider/authContext';
 import {
   useEmailLogin,
@@ -24,6 +25,8 @@ import {
   useVerifyEmailRegister,
   useForgotPassword,
   useVerifyForgotPassword,
+  useResendEmailRegister,
+  useResendForgotPassword,
 } from '@/@core/useQuery/useAuth';
 import { useTranslations } from 'next-intl';
 import { ApiError } from '@/@core/api/fetchClient';
@@ -181,7 +184,13 @@ function OtpInput({
 
 // ─── Login ────────────────────────────────────────────────────────────────────
 
-function LoginView({ onSwitchToSignup, onForgotPassword }: { onSwitchToSignup: () => void; onForgotPassword: () => void }) {
+function LoginView({
+  onSwitchToSignup,
+  onForgotPassword,
+}: {
+  onSwitchToSignup: () => void;
+  onForgotPassword: () => void;
+}) {
   const tError = useTranslations('error');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -309,7 +318,13 @@ function LoginView({ onSwitchToSignup, onForgotPassword }: { onSwitchToSignup: (
 
 // ─── Forgot Password ──────────────────────────────────────────────────────────
 
-function ForgotPasswordEmailView({ onNext, onBack }: { onNext: (email: string) => void; onBack: () => void }) {
+function ForgotPasswordEmailView({
+  onNext,
+  onBack,
+}: {
+  onNext: (email: string) => void;
+  onBack: () => void;
+}) {
   const tError = useTranslations('error');
   const [email, setEmail] = useState('');
   const [formError, setFormError] = useState('');
@@ -344,7 +359,7 @@ function ForgotPasswordEmailView({ onNext, onBack }: { onNext: (email: string) =
         <button
           type="button"
           onClick={onBack}
-          className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors"
+          className="rounded-md p-1 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
         >
           <IconArrowLeft size={18} />
         </button>
@@ -352,7 +367,8 @@ function ForgotPasswordEmailView({ onNext, onBack }: { onNext: (email: string) =
       </div>
 
       <DialogDescription>
-        Enter your email address and we&apos;ll send you a verification code to reset your password.
+        Enter your email address and we&apos;ll send you a verification code to
+        reset your password.
       </DialogDescription>
 
       <Input
@@ -370,7 +386,12 @@ function ForgotPasswordEmailView({ onNext, onBack }: { onNext: (email: string) =
         </div>
       )}
 
-      <Button className="w-full" type="button" onClick={handleSubmit} disabled={isPending}>
+      <Button
+        className="w-full"
+        type="button"
+        onClick={handleSubmit}
+        disabled={isPending}
+      >
         {isPending ? 'Sending…' : 'Send verification code'}
       </Button>
     </div>
@@ -392,7 +413,27 @@ function ForgotPasswordOtpView({
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
   const [error, setError] = useState('');
+  const [cooldown, setCooldown] = useState(60);
   const { mutate: verify, isPending } = useVerifyForgotPassword();
+  const { mutate: resend, isPending: isResending } = useResendForgotPassword();
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
+
+  const handleResend = () => {
+    resend(
+      { email },
+      {
+        onSuccess: () => setCooldown(60),
+        onError: (err) => {
+          if (err instanceof ApiError) setError(tError(err.code.toString()));
+        },
+      },
+    );
+  };
 
   const isFull = otp.every((d) => d !== '');
 
@@ -445,7 +486,8 @@ function ForgotPasswordOtpView({
 
       <DialogDescription>
         Enter the 6-digit code sent to{' '}
-        <span className="font-medium text-foreground">{email}</span> and your new password.
+        <span className="font-medium text-foreground">{email}</span> and your
+        new password.
       </DialogDescription>
 
       <OtpInput value={otp} onChange={setOtp} />
@@ -478,6 +520,22 @@ function ForgotPasswordOtpView({
       >
         {isPending ? 'Resetting…' : 'Reset password'}
       </Button>
+
+      <button
+        type="button"
+        disabled={cooldown > 0 || isResending}
+        onClick={handleResend}
+        className={cn(
+          'text-sm font-medium cursor-pointer text-center w-full hover:underline disabled:cursor-not-allowed',
+          cooldown > 0 ? 'text-muted-foreground' : 'text-foreground',
+        )}
+      >
+        {isResending
+          ? 'Sending…'
+          : cooldown > 0
+            ? `Resend in ${cooldown}s`
+            : 'Resend code'}
+      </button>
     </div>
   );
 }
@@ -486,9 +544,14 @@ function ForgotPasswordOtpView({
 
 type SignupData = { email: string; password: string };
 
-function SignupMethodView({ onNext, onSwitchToLogin }: { onNext: (data: SignupData) => void; onSwitchToLogin: () => void }) {
+function SignupMethodView({
+  onNext,
+  onSwitchToLogin,
+}: {
+  onNext: (data: SignupData) => void;
+  onSwitchToLogin: () => void;
+}) {
   const tError = useTranslations('error');
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -612,11 +675,29 @@ function SignupOtpView({
 }) {
   const [otp, setOtp] = useState(Array(6).fill(''));
   const [error, setError] = useState('');
+  const [cooldown, setCooldown] = useState(60);
   const { mutate: verify, isPending: isVerifying } = useVerifyEmailRegister();
   const { mutate: login, isPending: isLoggingIn } = useEmailLogin();
+  const { mutate: resend, isPending: isResending } = useResendEmailRegister();
 
   const isPending = isVerifying || isLoggingIn;
   const isFull = otp.every((d) => d !== '');
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
+
+  const handleResend = () => {
+    resend(
+      { email: signupData.email },
+      {
+        onSuccess: () => setCooldown(60),
+        onError: () => setError('Failed to resend. Please try again.'),
+      },
+    );
+  };
 
   const handleVerify = () => {
     setError('');
@@ -669,15 +750,21 @@ function SignupOtpView({
         {isPending ? 'Verifying…' : 'Verify & complete sign up'}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Didn&apos;t receive it?{' '}
-        <button
-          type="button"
-          className="font-medium text-foreground underline-offset-4 hover:underline"
-        >
-          Resend code
-        </button>
-      </p>
+      <button
+        type="button"
+        disabled={cooldown > 0 || isResending}
+        onClick={handleResend}
+        className={cn(
+          'text-sm font-medium cursor-pointer text-center w-full hover:underline disabled:cursor-not-allowed',
+          cooldown > 0 ? 'text-muted-foreground' : 'text-foreground',
+        )}
+      >
+        {isResending
+          ? 'Sending…'
+          : cooldown > 0
+            ? `Resend in ${cooldown}s`
+            : 'Resend code'}
+      </button>
     </div>
   );
 }

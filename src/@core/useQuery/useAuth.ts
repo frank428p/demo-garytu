@@ -87,6 +87,18 @@ export function useVerifyForgotPassword() {
   });
 }
 
+export function useResendEmailRegister() {
+  return useMutation({
+    mutationFn: (data: { email: string }) => authApi.resendEmailRegister(data),
+  });
+}
+
+export function useResendForgotPassword() {
+  return useMutation({
+    mutationFn: (data: { email: string }) => authApi.resendForgotPassword(data),
+  });
+}
+
 export function useLogout() {
   return () => {
     window.dispatchEvent(new CustomEvent('auth-error'));

@@ -45,4 +45,16 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  resendEmailRegister: (data: { email: string }) =>
+    apiFetch<ApiResponse<null>>('/auth/register/resend', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  resendForgotPassword: (data: { email: string }) =>
+    apiFetch<ApiResponse<null>>('/auth/forgot-password/resend', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 };
