@@ -125,7 +125,7 @@ export function CartDrawer() {
               {items.map((item) => (
                 <Link
                   key={item?.id}
-                  href={`/toolkit/store/${item?.item?.uuid}`}
+                  href={`/store/${item?.item?.uuid}`}
                   onClick={() => setIsOpen(false)}
                   className="group relative flex items-center gap-3.5 rounded-2xl p-3 transition-all duration-200 hover:bg-white/[0.04]"
                 >
