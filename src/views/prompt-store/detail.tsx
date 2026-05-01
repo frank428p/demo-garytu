@@ -16,6 +16,8 @@ import {
   IconPhoto,
   IconCurrencyEthereum,
   IconDownload,
+  IconFileTypePdf,
+  IconFileTypeZip,
 } from '@tabler/icons-react';
 import { ThumbnailSlider } from '@/components/ThumbnailSlider';
 import { useCart } from '@/@core/provider/cartContext';
@@ -32,14 +34,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { useCartItems } from '@/@core/useQuery/useCart';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Tag } from '@/components/ui/tag';
 import { useTranslations } from 'next-intl';
-import { Muted } from '@/components/ui/typography';
+import { Body, Muted, Small, TinyMuted } from '@/components/ui/typography';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
 
 type PromptDetailViewProps = {
@@ -58,9 +59,8 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
   const requireAuth = useRequireAuth(true);
   const isBookmarked = requireAuth() && prompt?.user_state?.is_favorite;
   const { add: addFavorite, remove: removeFavorite } = useToggleFavorite(id);
-  const { addItem, isAddingToCart } = useCart();
-  const { data: cartData, isFetching: isCartFetching } = useCartItems();
-  const inCart = cartData?.data?.some((item) => item.item.uuid === id) ?? false;
+  const { addItem, isAddingToCart, items: cartItems } = useCart();
+  const inCart = cartItems.some((item) => item.item.uuid === id);
 
   const categoryCode = prompt?.category?.code;
   const { data: categoryData } = usePromptsList(
@@ -239,10 +239,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                             size="sm"
                             className="px-4 md:px-8 md:w-[120px]"
                             disabled={
-                              inCart ||
-                              isAddingToCart ||
-                              isPromptPending ||
-                              isCartFetching
+                              inCart || isAddingToCart || isPromptPending
                             }
                             onClick={() => {
                               if (!requireAuthWithDialog()) return;
@@ -311,29 +308,101 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             <Skeleton className="h-8 w-full" />
           )}
 
-          <div className="h-px bg-border" />
+          {/* <div className="h-px bg-border" /> */}
+
+          <div className="flex flex-wrap flex-col md:flex-row gap-3 md:gap-6 pt-4">
+            <div className="rounded-xl flex flex-col gap-2">
+              <p className="text-[13px] font-semibold text-foreground w-full">
+                {/* uppercase tracking-[0.22em]  */}
+                Package Includes
+              </p>
+
+              <div className="flex flex-col md:flex-row gap-3 w-full bg-card p-2 rounded-xl">
+                <div className="bg-secondary rounded-xl py-2 px-3 flex gap-3 items-center justify-between">
+                  <div className="flex gap-3">
+                    <div className="flex items-center">
+                      <span className="text-2xl font-semibold leading-none">
+                        50
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <Body className="font-semibold">Prompt library</Body>
+                      <TinyMuted>Hand-picked prompts, ready to use</TinyMuted>
+                    </div>
+                  </div>
+                  <IconFileTypePdf size={28} />
+                </div>
+
+                <div className="bg-secondary rounded-xl py-2 px-3 flex gap-3 items-center justify-between">
+                  <div className="flex gap-3">
+                    <div className="flex items-center">
+                      <span className="text-2xl font-semibold leading-none">
+                        50
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <Body className="font-semibold">Media asset pack</Body>
+                      <TinyMuted>High-res visuals & source files</TinyMuted>
+                    </div>
+                  </div>
+                  <IconFileTypeZip size={28} />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-xl flex flex-col gap-2">
+              <p className="text-[13px] font-semibold text-foreground">
+                Compatible with
+              </p>
+
+              <div className="flex gap-3 flex-1 bg-card py-2 px-2 rounded-xl">
+                <div className="flex items-center gap-4 bg-secondary rounded-xl py-2 px-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    width={28}
+                    height={28}
+                    src="/images/fake/adobe-ai.png"
+                    alt="Adobe Illustrator"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    width={28}
+                    height={28}
+                    src="/images/fake/adobe-ps.png"
+                    alt="Adobe Photoshop"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    width={28}
+                    height={28}
+                    src="/images/fake/adobe-id.png"
+                    alt="Adobe InDesign"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Compatible with */}
-          <div className="space-y-2.5">
+          {/* <div className="space-y-2.5">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {t('Compatible with')}
             </p>
             <div className="flex items-center gap-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+     
               <img
                 width={22}
                 height={22}
                 src="/images/fake/adobe-ai.png"
                 alt="Adobe Illustrator"
               />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+
               <img
                 width={22}
                 height={22}
                 src="/images/fake/adobe-ps.png"
                 alt="Adobe Photoshop"
               />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 width={22}
                 height={22}
@@ -341,7 +410,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 alt="Adobe InDesign"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="h-px bg-border" />
 
