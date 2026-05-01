@@ -321,31 +321,39 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                 <div className="bg-secondary rounded-xl py-2 px-3 flex gap-3 items-center justify-between">
                   <div className="flex gap-3">
                     <div className="flex items-center">
-                      <span className="text-2xl font-semibold leading-none">
+                      <span className="text-2xl font-semibold leading-none text-primary">
                         50
                       </span>
                     </div>
                     <div className="flex flex-col">
-                      <Body className="font-semibold">Prompt library</Body>
-                      <TinyMuted>Hand-picked prompts, ready to use</TinyMuted>
+                      <Body className="font-semibold text-[13px]">
+                        Prompt library
+                      </Body>
+                      <TinyMuted className="text-[11px]">
+                        Hand-picked prompts, ready to use
+                      </TinyMuted>
                     </div>
                   </div>
-                  <IconFileTypePdf size={28} />
+                  <IconFileTypePdf size={28} color="var(--muted-foreground)" />
                 </div>
 
                 <div className="bg-secondary rounded-xl py-2 px-3 flex gap-3 items-center justify-between">
                   <div className="flex gap-3">
                     <div className="flex items-center">
-                      <span className="text-2xl font-semibold leading-none">
+                      <span className="text-2xl font-semibold leading-none text-primary">
                         50
                       </span>
                     </div>
                     <div className="flex flex-col">
-                      <Body className="font-semibold">Media asset pack</Body>
-                      <TinyMuted>High-res visuals & source files</TinyMuted>
+                      <Body className="font-semibold text-[13px]">
+                        Media asset pack
+                      </Body>
+                      <TinyMuted className="text-[11px]">
+                        High-res visuals & source files
+                      </TinyMuted>
                     </div>
                   </div>
-                  <IconFileTypeZip size={28} />
+                  <IconFileTypeZip size={28} color="var(--muted-foreground)" />
                 </div>
               </div>
             </div>
