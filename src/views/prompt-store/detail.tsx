@@ -216,7 +216,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
                             >
                               <IconDownload />
                               <span className="hidden min-[410px]:inline">
-                                {t('Media Pack')}
+                                {t('Media Assets')}
                               </span>
                             </Button>
                           )}
@@ -420,7 +420,7 @@ const PromptStoreDetailView = ({ id }: PromptDetailViewProps) => {
             </div>
           </div> */}
 
-          <div className="h-px bg-border" />
+          {/* <div className="h-px bg-border" /> */}
 
           <PdfViewerDialog
             open={pdfOpen}
