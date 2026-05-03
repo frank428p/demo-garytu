@@ -34,10 +34,11 @@ type DialogContentProps = React.ComponentPropsWithoutRef<
   typeof DialogPrimitive.Content
 > & {
   variant?: 'default' | 'outline';
+  topLeftAction?: React.ReactNode;
 };
 
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ className, children, variant = 'default', ...props }, ref) => {
+  ({ className, children, variant = 'default', topLeftAction, ...props }, ref) => {
     const closeRef = React.useRef<HTMLButtonElement>(null);
     const { isMobile } = useBreakpoint();
 
@@ -73,6 +74,16 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
                 style={{ overflow: 'visible' }}
                 {...props}
               >
+                {topLeftAction && (
+                  <div
+                    className={cn(
+                      'absolute top-2 -left-11 z-10',
+                      isMobile && 'left-0 -top-10',
+                    )}
+                  >
+                    {topLeftAction}
+                  </div>
+                )}
                 <DialogPrimitive.Close asChild ref={closeRef}>
                   <Button
                     variant="ghost"
@@ -99,6 +110,11 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
                 )}
                 {...props}
               >
+                {topLeftAction && (
+                  <div className="absolute left-[6px] top-[6px]">
+                    {topLeftAction}
+                  </div>
+                )}
                 {children}
                 <DialogPrimitive.Close asChild ref={closeRef}>
                   <Button

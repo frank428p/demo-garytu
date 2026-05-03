@@ -1,12 +1,14 @@
 import { type ReactNode } from 'react';
-import ToolkitLayout from '@/@layout/ToolkitLayout';
+import { FooterLayout } from '@/@layout/FooterLayout';
 
-type ToolkitRootLayoutProps = {
+type LayoutProps = {
   children: ReactNode;
 };
 
-export default function ToolkitRootLayout({
-  children,
-}: ToolkitRootLayoutProps) {
-  return <ToolkitLayout>{children}</ToolkitLayout>;
+export default function Layout({ children }: LayoutProps) {
+  return (
+    <>
+      <FooterLayout>{children}</FooterLayout>
+    </>
+  );
 }

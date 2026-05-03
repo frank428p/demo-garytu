@@ -56,7 +56,7 @@ function GoogleButton({ label }: { label: string }) {
   return (
     <Button
       variant="outline"
-      className="w-full gap-2 bg-card"
+      className="w-full gap-2 bg-card h-12"
       type="button"
       onClick={handleClick}
     >
@@ -320,10 +320,8 @@ function LoginView({
 
 function ForgotPasswordEmailView({
   onNext,
-  onBack,
 }: {
   onNext: (email: string) => void;
-  onBack: () => void;
 }) {
   const tError = useTranslations('error');
   const [email, setEmail] = useState('');
@@ -355,21 +353,15 @@ function ForgotPasswordEmailView({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-md p-1 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <IconArrowLeft size={18} />
-        </button>
-        <DialogTitle className="text-lg">Forgot password</DialogTitle>
-      </div>
-
-      <DialogDescription>
-        Enter your email address and we&apos;ll send you a verification code to
-        reset your password.
-      </DialogDescription>
+      <DialogHeader>
+        <DialogTitle className="text-center text-lg">
+          Forgot password
+        </DialogTitle>
+        <DialogDescription className="text-center">
+          Enter your email address and we&apos;ll send you a verification code
+          to reset your password.
+        </DialogDescription>
+      </DialogHeader>
 
       <Input
         type="email"
@@ -400,11 +392,9 @@ function ForgotPasswordEmailView({
 
 function ForgotPasswordOtpView({
   email,
-  onBack,
   onDone,
 }: {
   email: string;
-  onBack: () => void;
   onDone: () => void;
 }) {
   const tError = useTranslations('error');
@@ -473,22 +463,16 @@ function ForgotPasswordOtpView({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <IconArrowLeft size={18} />
-        </button>
-        <DialogTitle className="text-lg">Reset password</DialogTitle>
-      </div>
-
-      <DialogDescription>
-        Enter the 6-digit code sent to{' '}
-        <span className="font-medium text-foreground">{email}</span> and your
-        new password.
-      </DialogDescription>
+      <DialogHeader>
+        <DialogTitle className="text-center text-lg">
+          Reset password
+        </DialogTitle>
+        <DialogDescription className="text-center">
+          Enter the 6-digit code sent to{' '}
+          <span className="font-medium text-foreground">{email}</span> and your
+          new password.
+        </DialogDescription>
+      </DialogHeader>
 
       <OtpInput value={otp} onChange={setOtp} />
 
@@ -666,11 +650,9 @@ function SignupMethodView({
 
 function SignupOtpView({
   signupData,
-  onBack,
   onDone,
 }: {
   signupData: SignupData;
-  onBack: () => void;
   onDone: () => void;
 }) {
   const [otp, setOtp] = useState(Array(6).fill(''));
@@ -720,22 +702,18 @@ function SignupOtpView({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-md p-1 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <IconArrowLeft size={18} />
-        </button>
-        <DialogTitle className="text-lg">Verify your email</DialogTitle>
-      </div>
-
-      <DialogDescription>
-        We sent a 6-digit code to{' '}
-        <span className="font-medium text-foreground">{signupData.email}</span>.
-        Please enter it below.
-      </DialogDescription>
+      <DialogHeader>
+        <DialogTitle className="text-center text-lg">
+          Verify your email
+        </DialogTitle>
+        <DialogDescription className="text-center">
+          We sent a 6-digit code to{' '}
+          <span className="font-medium text-foreground">
+            {signupData.email}
+          </span>
+          . Please enter it below.
+        </DialogDescription>
+      </DialogHeader>
 
       <OtpInput value={otp} onChange={setOtp} />
 
@@ -797,9 +775,30 @@ export function AuthDialog() {
     setSignupStep('method');
   };
 
+  const backAction =
+    authMode === 'login' && loginStep === 'forgot-email'
+      ? () => setLoginStep('login')
+      : authMode === 'login' && loginStep === 'forgot-otp'
+        ? () => setLoginStep('forgot-email')
+        : authMode === 'signup' && signupStep === 'otp'
+          ? () => setSignupStep('method')
+          : undefined;
+
+  const topLeftAction = backAction ? (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={backAction}
+      className="rounded-lg"
+    >
+      <IconArrowLeft size={18} />
+      <span className="sr-only">Back</span>
+    </Button>
+  ) : undefined;
+
   return (
     <Dialog open={authMode !== null} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[460px]">
+      <DialogContent className="w-[460px]" topLeftAction={topLeftAction}>
         {authMode === 'login' && loginStep === 'login' && (
           <LoginView
             onSwitchToSignup={handleSwitchToSignup}
@@ -813,14 +812,12 @@ export function AuthDialog() {
               setForgotEmail(email);
               setLoginStep('forgot-otp');
             }}
-            onBack={() => setLoginStep('login')}
           />
         )}
 
         {authMode === 'login' && loginStep === 'forgot-otp' && (
           <ForgotPasswordOtpView
             email={forgotEmail}
-            onBack={() => setLoginStep('forgot-email')}
             onDone={() => {
               closeAuth();
               setLoginStep('login');
@@ -842,7 +839,6 @@ export function AuthDialog() {
         {authMode === 'signup' && signupStep === 'otp' && (
           <SignupOtpView
             signupData={signupData}
-            onBack={() => setSignupStep('method')}
             onDone={() => {
               closeAuth();
               setSignupStep('method');
