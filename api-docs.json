@@ -1881,6 +1881,44 @@
         "tags": ["Order"]
       }
     },
+    "/orders/checkout/session": {
+      "post": {
+        "operationId": "OrderController_syncOrderByCheckoutSession",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutSessionOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RestResponse" },
+                    {
+                      "properties": {
+                        "data": { "$ref": "#/components/schemas/OrderResponse" }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "user-token": [] }],
+        "summary": "Sync and get order detail by Stripe Checkout Session ID",
+        "tags": ["Order"]
+      }
+    },
     "/orders/{uuid}": {
       "get": {
         "operationId": "OrderController_getOrder",
@@ -1997,6 +2035,59 @@
         "security": [{ "admin-token": [] }],
         "summary": "Get current admin profile",
         "tags": ["CMS Admins"]
+      }
+    },
+    "/webhooks/kling/{token}": {
+      "post": {
+        "operationId": "KlingWebhookController_handleCallback",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "summary": "Kling webhook receiver",
+        "tags": ["KlingWebhook"]
+      }
+    },
+    "/toolkit/video-generate/models": {
+      "get": {
+        "operationId": "ToolkitController_listVideoGenerateModels",
+        "parameters": [
+          {
+            "name": "X-Locale",
+            "in": "header",
+            "description": "Locale header. Defaults to en.",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RestResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/VideoModelListResponse"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "summary": "List enabled video generation models",
+        "tags": ["Toolkit"]
       }
     }
   },
@@ -2824,6 +2915,13 @@
           "items"
         ]
       },
+      "CheckoutSessionOrderRequest": {
+        "type": "object",
+        "properties": {
+          "session_id": { "type": "string", "example": "cs_test_xxx" }
+        },
+        "required": ["session_id"]
+      },
       "AdminLoginResponse": {
         "type": "object",
         "properties": { "access_token": { "type": "string" } },
@@ -2847,6 +2945,36 @@
           "enabled": { "type": "boolean" }
         },
         "required": ["id", "username", "name", "role", "enabled"]
+      },
+      "VideoModelResponse": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string" },
+          "model_code": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "object", "nullable": true },
+          "sort_order": { "type": "number" },
+          "capabilities": { "type": "object" },
+          "parameter_schema": { "type": "object" }
+        },
+        "required": [
+          "provider",
+          "model_code",
+          "name",
+          "sort_order",
+          "capabilities",
+          "parameter_schema"
+        ]
+      },
+      "VideoModelListResponse": {
+        "type": "object",
+        "properties": {
+          "models": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/VideoModelResponse" }
+          }
+        },
+        "required": ["models"]
       }
     }
   }
