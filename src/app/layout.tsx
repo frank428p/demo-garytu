@@ -6,6 +6,7 @@ import { MainLayout } from '@/@layout/MainLayout';
 import { InitProvider } from '@/@core/provider/initContext';
 import { AuthProvider } from '@/@core/provider/authContext';
 import { AuthDialog } from '@/components/AuthDialog';
+import { CartDrawer } from '@/components/CartDrawer';
 import { JotaiProvider } from '@/@core/provider/JotaiProvider';
 import { ReactQueryProvider } from '@/@core/provider/ReactQueryProvider';
 import { Toaster } from '@/components/ui/sonner';
@@ -45,6 +46,7 @@ export default async function RootLayout({
               <InitProvider>
                 <AuthProvider>
                   <MainLayout>{children}</MainLayout>
+                  <CartDrawer />
                   <Suspense><AuthDialog /></Suspense>
                   <Toaster />
                 </AuthProvider>
