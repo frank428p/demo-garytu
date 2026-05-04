@@ -12,9 +12,9 @@ export type OrderItem = {
 export type Order = {
   uuid: string;
   status: OrderStatus;
-  total: number;
+  amount: number;
   checkout_url?: string;
-  items: OrderItem[];
+  items: CartItem[];
   created_at: string;
 };
 

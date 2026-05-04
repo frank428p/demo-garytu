@@ -1,6 +1,6 @@
 'use client';
 
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ordersApi } from '@/@core/api/orders';
 import { CART_KEY } from './useCart';
 
@@ -38,5 +38,21 @@ export function useCheckoutDirect() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ORDERS_KEY });
     },
+  });
+}
+
+export function useOrder(uuid: string | null) {
+  return useQuery({
+    queryKey: ['order', uuid],
+    queryFn: () => ordersApi.getByUuid(uuid!),
+    enabled: !!uuid,
+  });
+}
+
+export function useCheckoutSession(sessionId: string | null) {
+  return useQuery({
+    queryKey: ['checkout-session', sessionId],
+    queryFn: () => ordersApi.checkoutSession(sessionId!),
+    enabled: !!sessionId,
   });
 }

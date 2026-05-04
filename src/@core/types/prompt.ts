@@ -1,10 +1,10 @@
 import { Tag } from './config';
-import { MediaType } from './index';
+import { MediaType, FileType } from './index';
 
 export type PromptFile = {
   uuid: string;
   category: string;
-  file_type: MediaType;
+  file_type: FileType;
   position: number;
   url: string;
   thumbnail_url: string;

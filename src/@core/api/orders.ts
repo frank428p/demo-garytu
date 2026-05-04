@@ -22,4 +22,13 @@ export const ordersApi = {
       `/orders/checkout/prompts/${uuid}`,
       { method: 'POST' },
     ),
+
+  getByUuid: (uuid: string) =>
+    apiFetch<ApiResponse<Order>>(`/orders/${uuid}`),
+
+  checkoutSession: (session_id: string) =>
+    apiFetch<ApiResponse<Order>>('/orders/checkout/session', {
+      method: 'POST',
+      body: JSON.stringify({ session_id }),
+    }),
 };

@@ -3,7 +3,7 @@ import { Footer } from './components/footer';
 export function FooterLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="container pb-6 lg:pb-8">{children}</div>
+      <main className="container flex-1 pb-6 lg:pb-8">{children}</main>
       <Footer />
     </>
   );
