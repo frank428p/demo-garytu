@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -14,6 +15,8 @@ import {
 } from '@tabler/icons-react';
 import { useCheckoutSession, useOrder } from '@/@core/useQuery/useOrders';
 import { Tag } from '@/components/ui/tag';
+import { Skeleton } from '@/components/ui/skeleton';
+import { formatDate } from '@/lib/date';
 
 const CheckoutSuccessPage = () => {
   const searchParams = useSearchParams();
@@ -21,7 +24,7 @@ const CheckoutSuccessPage = () => {
   const orderUUID = searchParams.get('order_uuid') || null;
 
   const { data: sessionData } = useCheckoutSession(sessionId);
-  const { data: orderData } = useOrder(orderUUID);
+  const { data: orderData, isLoading } = useOrder(orderUUID);
 
   return (
     <>
@@ -107,42 +110,71 @@ const CheckoutSuccessPage = () => {
                     <p className="text-xs font-semibold text-muted-foreground">
                       Order Id
                     </p>
-                    <p className="text-xs font-semibold text-foreground">
-                      {orderData?.data?.uuid}
-                    </p>
+                    {isLoading ? (
+                      <Skeleton className="h-3 w-32" />
+                    ) : (
+                      <p className="text-xs font-semibold text-foreground">
+                        {orderData?.data?.uuid}
+                      </p>
+                    )}
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-xs font-semibold text-muted-foreground">
                       Total Amount
                     </p>
-                    <p className="text-xs font-semibold text-foreground">
-                      NT$&nbsp;{orderData?.data?.amount?.toLocaleString()}
-                    </p>
+                    {isLoading ? (
+                      <Skeleton className="h-3 w-20" />
+                    ) : (
+                      <p className="text-xs font-semibold text-foreground">
+                        NT$&nbsp;{orderData?.data?.amount?.toLocaleString()}
+                      </p>
+                    )}
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-xs font-semibold text-muted-foreground">
                       Date
                     </p>
-                    <p className="text-xs font-semibold text-foreground">
-                      {orderData?.data?.created_at}
-                    </p>
+                    {isLoading ? (
+                      <Skeleton className="h-3 w-24" />
+                    ) : (
+                      <p className="text-xs font-semibold text-foreground">
+                        {formatDate(orderData?.data?.created_at ?? '')}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className="divider-line w-full border-t border-border" />
 
                 <div className="flex flex-col gap-3 py-4">
-                  {orderData?.data?.items.map((item, index) => {
-                    return (
+                  {isLoading ? (
+                    <>
+                      {[0, 1, 2].map((i) => (
+                        <div key={i} className="flex justify-between items-center">
+                          <div className="flex gap-2">
+                            <Skeleton className="h-10 w-10 rounded-md shrink-0" />
+                            <div className="flex flex-col gap-2 justify-center">
+                              <Skeleton className="h-3 w-12" />
+                              <Skeleton className="h-3 w-28" />
+                            </div>
+                          </div>
+                          <Skeleton className="h-3 w-16" />
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    orderData?.data?.items.map((item, index) => (
                       <div
                         key={`order_item_${index}`}
                         className="flex justify-between items-center"
                       >
                         <div className="flex gap-2">
                           <div className="h-10 w-10 shrink-0 rounded-md overflow-hidden">
-                            <img
+                            <Image
                               src={item.item.cover.thumbnail_url}
-                              alt=""
+                              alt={item.item.name}
+                              width={40}
+                              height={40}
                               className="h-full w-full object-cover"
                             />
                           </div>
@@ -168,13 +200,12 @@ const CheckoutSuccessPage = () => {
                             </p>
                           </div>
                         </div>
-
                         <p className="text-xs font-semibold text-foreground">
                           NT$&nbsp;{item.item.price?.toLocaleString()}
                         </p>
                       </div>
-                    );
-                  })}
+                    ))
+                  )}
                 </div>
               </div>
 
