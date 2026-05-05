@@ -41,6 +41,13 @@ export function useCheckoutDirect() {
   });
 }
 
+export function useOrdersPaginated(page: number, pageSize = 10) {
+  return useQuery({
+    queryKey: [...ORDERS_KEY, 'paginated', page, pageSize],
+    queryFn: () => ordersApi.list({ page, page_size: pageSize }),
+  });
+}
+
 export function useOrder(uuid: string | null) {
   return useQuery({
     queryKey: ['order', uuid],

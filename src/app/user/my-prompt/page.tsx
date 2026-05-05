@@ -6,15 +6,7 @@ import Link from 'next/link';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import { PaginationControls } from '@/components/ui/pagination-controls';
 import {
   usePurchasedPrompts,
   useFavoritePrompts,
@@ -23,18 +15,6 @@ import type { Prompt } from '@/@core/types/prompt';
 import { IconExternalLink, IconPhoto, IconVideo } from '@tabler/icons-react';
 import { Tag } from '@/components/ui/tag';
 import { cn } from '@/lib/utils';
-
-function getPageItems(current: number, total: number): (number | 'ellipsis')[] {
-  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-  const items: (number | 'ellipsis')[] = [1];
-  if (current > 3) items.push('ellipsis');
-  const start = Math.max(2, current - 1);
-  const end = Math.min(total - 1, current + 1);
-  for (let i = start; i <= end; i++) items.push(i);
-  if (current < total - 2) items.push('ellipsis');
-  items.push(total);
-  return items;
-}
 
 function PromptCard({ prompt }: { prompt: Prompt }) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -97,7 +77,7 @@ function PromptGrid({
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFetchingNextPage, fetchNextPage } = fetchFn({
-    page_size: 10,
+    page_size: 5,
   });
 
   const currentItems = data?.pages[currentPage - 1]?.data ?? [];
@@ -152,62 +132,13 @@ function PromptGrid({
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <Pagination className="mt-6 flex justify-end">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage > 1) goToPage(currentPage - 1);
-                }}
-                className={
-                  currentPage === 1 || loading
-                    ? 'pointer-events-none opacity-50'
-                    : ''
-                }
-              />
-            </PaginationItem>
-
-            {getPageItems(currentPage, totalPages).map((item, i) =>
-              item === 'ellipsis' ? (
-                <PaginationItem key={`ellipsis-${i}`}>
-                  <PaginationEllipsis />
-                </PaginationItem>
-              ) : (
-                <PaginationItem key={item}>
-                  <PaginationLink
-                    href="#"
-                    isActive={item === currentPage}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (item !== currentPage) goToPage(item);
-                    }}
-                  >
-                    {item}
-                  </PaginationLink>
-                </PaginationItem>
-              ),
-            )}
-
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage < totalPages) goToPage(currentPage + 1);
-                }}
-                className={
-                  currentPage === totalPages || loading
-                    ? 'pointer-events-none opacity-50'
-                    : ''
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
+      <PaginationControls
+        page={currentPage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+        isLoading={loading}
+        className="mt-6 flex justify-end"
+      />
     </div>
   );
 }
@@ -220,7 +151,7 @@ export default function MyPromptPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold">My Prompt</h1>
         <p className="text-muted-foreground mt-1">
-          {"Prompts you've purchased and saved."}
+          {"Prompts you've purchased and bookmarked."}
         </p>
       </div>
 
@@ -228,7 +159,7 @@ export default function MyPromptPage() {
         <div className="border-b border-border">
           <TabsList variant="underline">
             <TabsTab value="tab-1">Purchased</TabsTab>
-            <TabsTab value="tab-2">Favorite</TabsTab>
+            <TabsTab value="tab-2">Bookmarked</TabsTab>
           </TabsList>
         </div>
 

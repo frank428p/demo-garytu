@@ -15,6 +15,7 @@ export type Order = {
   amount: number;
   checkout_url?: string;
   items: CartItem[];
+  currency: string;
   created_at: string;
 };
 
