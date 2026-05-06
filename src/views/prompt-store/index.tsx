@@ -170,7 +170,7 @@ const PromptStoreView = () => {
       <div className="overflow-hidden">
         {/* Collection */}
         <section className="container pb-4 flex flex-col items-stretch gap-2 md:gap-6 md:flex-row">
-          <h2 className="text-xl font-bold leading-snug mt-3 md:hidden">
+          <h2 className="text-lg font-bold leading-snug mt-3 md:hidden">
             Curated Collections
           </h2>
           <div
