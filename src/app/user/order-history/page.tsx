@@ -82,7 +82,7 @@ export default function OrderHistoryPage() {
                     {[0, 1, 2].map((j) => (
                       <Skeleton
                         key={j}
-                        className="h-8 w-8 rounded-md border-2 border-ring shrink-0"
+                        className="h-8 w-8 rounded-md border-2 border-muted shrink-0"
                       />
                     ))}
                   </div>
@@ -153,7 +153,7 @@ export default function OrderHistoryPage() {
                         {preview.map((c, i) => (
                           <div
                             key={`${order.uuid}-preview-${i}`}
-                            className="h-8 w-8 rounded-md overflow-hidden border-1 border-ring shrink-0"
+                            className="h-8 w-8 rounded-md overflow-hidden border-1 border-muted shrink-0"
                             style={{ zIndex: preview.length - i }}
                           >
                             <Image
@@ -166,7 +166,7 @@ export default function OrderHistoryPage() {
                           </div>
                         ))}
                         {overflow > 0 && (
-                          <div className="h-8 w-8 rounded-md bg-muted flex items-center justify-center border-1 border-ring text-xs text-muted-foreground font-medium shrink-0">
+                          <div className="h-8 w-8 rounded-md bg-muted flex items-center justify-center border-1 border-muted text-xs text-muted-foreground font-medium shrink-0">
                             +{overflow}
                           </div>
                         )}
