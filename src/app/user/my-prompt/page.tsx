@@ -7,14 +7,21 @@ import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs';
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { EmptyState } from '@/components/ui/empty-state';
 import {
   usePurchasedPrompts,
   useFavoritePrompts,
 } from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
-import { IconExternalLink, IconPhoto, IconVideo } from '@tabler/icons-react';
+import {
+  IconArrowRight,
+  IconExternalLink,
+  IconPhoto,
+  IconVideo,
+} from '@tabler/icons-react';
 import { Tag } from '@/components/ui/tag';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 function PromptCard({ prompt }: { prompt: Prompt }) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -72,8 +79,10 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
 
 function PromptGrid({
   fetchFn,
+  emptyDescription,
 }: {
   fetchFn: typeof usePurchasedPrompts | typeof useFavoritePrompts;
+  emptyDescription?: string;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFetchingNextPage, fetchNextPage } = fetchFn({
@@ -118,9 +127,17 @@ function PromptGrid({
 
   if (!loading && currentItems.length === 0) {
     return (
-      <p className="py-16 text-center text-sm text-muted-foreground">
-        Nothing here yet.
-      </p>
+      <EmptyState
+        title="No prompts yet"
+        description={emptyDescription}
+        action={
+          <Button size={'sm'} asChild>
+            <Link href="/store">
+              Browse Store <IconArrowRight className="!size-3" />
+            </Link>
+          </Button>
+        }
+      />
     );
   }
 
@@ -165,12 +182,20 @@ export default function MyPromptPage() {
 
         <TabsPanel value="tab-1">
           {activeTab === 'tab-1' && (
-            <PromptGrid fetchFn={usePurchasedPrompts} />
+            <PromptGrid
+              fetchFn={usePurchasedPrompts}
+              emptyDescription="Your purchased prompts will appear here."
+            />
           )}
         </TabsPanel>
 
         <TabsPanel value="tab-2">
-          {activeTab === 'tab-2' && <PromptGrid fetchFn={useFavoritePrompts} />}
+          {activeTab === 'tab-2' && (
+            <PromptGrid
+              fetchFn={useFavoritePrompts}
+              emptyDescription="Your bookmarked prompts will appear here."
+            />
+          )}
         </TabsPanel>
       </Tabs>
     </div>

@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
+  IconArrowRight,
   IconChevronDown,
   IconChevronRight,
   IconPhoto,
@@ -15,6 +17,8 @@ import { formatDate } from '@/lib/date';
 import type { OrderStatus } from '@/@core/types/order';
 import { Tag } from '@/components/ui/tag';
 import { PaginationControls } from '@/components/ui/pagination-controls';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Button } from '@/components/ui/button';
 
 const statusConfig: Record<OrderStatus, { label: string; className: string }> =
   {
@@ -87,9 +91,17 @@ export default function OrderHistoryPage() {
             </div>
           ))
         ) : orders.length === 0 ? (
-          <div className="py-16 text-center text-sm text-muted-foreground">
-            No orders yet.
-          </div>
+          <EmptyState
+            title="No orders yet"
+            description="Your purchased packages will appear here."
+            action={
+              <Button size={'sm'} asChild>
+                <Link href="/store">
+                  Browse Store <IconArrowRight className="!size-3" />
+                </Link>
+              </Button>
+            }
+          />
         ) : (
           orders.map((order) => {
             const open = openId === order.uuid;
