@@ -51,9 +51,9 @@ export default function OrderHistoryPage() {
       </div>
 
       <div className="bg-card p-2 rounded-2xl">
-        <div className="bg-secondary rounded-2xl overflow-hidden">
+        <div className="bg-secondary/50 rounded-2xl overflow-hidden">
           {/* Header */}
-          <div className="bg-secondary grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center gap-x-4 px-4 py-3">
+          <div className="grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center gap-x-4 px-4 py-3">
             <span />
             <span className="text-xs font-medium text-muted-foreground">
               Order
@@ -115,11 +115,11 @@ export default function OrderHistoryPage() {
                 const overflow = order.items.length - 3;
 
                 return (
-                  <div key={order.uuid} className="border-t border-border">
+                  <div key={order.uuid} className="border-t border-border/50">
                     {/* Main row */}
                     <button
                       onClick={() => setOpenId(open ? null : order.uuid)}
-                      className="bg-secondary cursor-pointer grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center gap-x-4 w-full px-4 py-3 text-left hover:bg-white/5 transition-colors"
+                      className="cursor-pointer grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center gap-x-4 w-full px-4 py-3 text-left hover:bg-secondary-hover/50 transition-colors"
                     >
                       <span className="flex items-center justify-center text-muted-foreground">
                         {open ? (
@@ -248,7 +248,7 @@ export default function OrderHistoryPage() {
                   </div>
                 );
               })}
-              <div className="border-t border-border p-3">
+              <div className="border-t border-border/50 p-3">
                 <PaginationControls
                   page={page}
                   totalPages={totalPages}

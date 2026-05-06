@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs';
+import { Tabs, TabsPanel } from '@/components/ui/tabs';
 import { PaginationControls } from '@/components/ui/pagination-controls';
 import { EmptyState } from '@/components/ui/empty-state';
 import {
@@ -22,6 +22,7 @@ import {
 import { Tag } from '@/components/ui/tag';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 function PromptCard({ prompt }: { prompt: Prompt }) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -29,7 +30,7 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
   return (
     <Link
       href={`/store/${prompt.uuid}`}
-      className="media-item group flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3 hover:border-border hover:bg-card/80 transition-all duration-200"
+      className="media-item group flex flex-row items-center gap-4 px-4 py-3 hover:bg-secondary-hover/50 transition-colors duration-150"
     >
       <div className="media-thumb relative shrink-0 w-20 md:w-24 aspect-video overflow-hidden rounded-xl">
         {!imgLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
@@ -72,7 +73,7 @@ function PromptCard({ prompt }: { prompt: Prompt }) {
         </span>
       </div>
 
-      <IconExternalLink className="size-4 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+      <IconExternalLink className="size-5 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
     </Link>
   );
 }
@@ -142,20 +143,22 @@ function PromptGrid({
   }
 
   return (
-    <div className="pt-4">
-      <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
+    <div className="">
+      <div className="grid grid-cols-1 sm:grid-cols-1 divide-y divide-border/50">
         {currentItems.map((prompt) => (
           <PromptCard key={prompt.uuid} prompt={prompt} />
         ))}
       </div>
 
-      <PaginationControls
-        page={currentPage}
-        totalPages={totalPages}
-        onPageChange={goToPage}
-        isLoading={loading}
-        className="mt-6 flex justify-end"
-      />
+      <div className="border-t border-border/50 p-3">
+        <PaginationControls
+          page={currentPage}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+          isLoading={loading}
+          className="flex justify-end"
+        />
+      </div>
     </div>
   );
 }
@@ -172,32 +175,57 @@ export default function MyPromptPage() {
         </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <div className="border-b border-border">
-          <TabsList variant="underline">
-            <TabsTab value="tab-1">Purchased</TabsTab>
-            <TabsTab value="tab-2">Bookmarked</TabsTab>
-          </TabsList>
-        </div>
+      <div className="bg-card p-2 rounded-2xl">
+        <ToggleGroup
+          type="single"
+          variant="segmented"
+          size="sm"
+          value={activeTab}
+          onValueChange={(v) => {
+            if (v) setActiveTab(v);
+          }}
+          className="w-fit bg-card gap-2 p-0 mb-2"
+        >
+          <ToggleGroupItem
+            value="tab-1"
+            className="px-3 py-1 text-xs font-semibold h-6"
+          >
+            Purchased
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="tab-2"
+            className="px-3 py-1 text-xs font-semibold h-6"
+          >
+            Bookmarked
+          </ToggleGroupItem>
+        </ToggleGroup>
 
-        <TabsPanel value="tab-1">
-          {activeTab === 'tab-1' && (
-            <PromptGrid
-              fetchFn={usePurchasedPrompts}
-              emptyDescription="Your purchased prompts will appear here."
-            />
-          )}
-        </TabsPanel>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsPanel
+            value="tab-1"
+            className="bg-secondary/50 rounded-2xl overflow-hidden"
+          >
+            {activeTab === 'tab-1' && (
+              <PromptGrid
+                fetchFn={usePurchasedPrompts}
+                emptyDescription="Your purchased prompts will appear here."
+              />
+            )}
+          </TabsPanel>
 
-        <TabsPanel value="tab-2">
-          {activeTab === 'tab-2' && (
-            <PromptGrid
-              fetchFn={useFavoritePrompts}
-              emptyDescription="Your bookmarked prompts will appear here."
-            />
-          )}
-        </TabsPanel>
-      </Tabs>
+          <TabsPanel
+            value="tab-2"
+            className="bg-secondary/50 rounded-2xl overflow-hidden"
+          >
+            {activeTab === 'tab-2' && (
+              <PromptGrid
+                fetchFn={useFavoritePrompts}
+                emptyDescription="Your bookmarked prompts will appear here."
+              />
+            )}
+          </TabsPanel>
+        </Tabs>
+      </div>
     </div>
   );
 }
