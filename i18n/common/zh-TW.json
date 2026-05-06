@@ -30,5 +30,6 @@
   "Media Assets": "Media Assets",
   "Buy Now": "Buy Now",
   "Added to Cart": "Added to Cart",
-  "Add to Cart": "Add to Cart"
+  "Add to Cart": "Add to Cart",
+  "pageOf": "第 {page} 頁，共 {total} 頁"
 }
