@@ -74,7 +74,7 @@ function EmptyCart({ onClose }: { onClose: () => void }) {
       </div>
 
       <Link
-        href="/toolkit/store"
+        href="/store"
         onClick={onClose}
         className="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_oklch(0.51_0.17_28.14/0.4)] transition-all duration-300 hover:shadow-[0_0_36px_oklch(0.51_0.17_28.14/0.55)] hover:scale-105"
       >

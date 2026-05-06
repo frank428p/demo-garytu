@@ -169,7 +169,10 @@ const PromptStoreView = () => {
     <>
       <div className="overflow-hidden">
         {/* Collection */}
-        <section className="pb-4 flex flex-col items-stretch gap-6 md:flex-row">
+        <section className="container pb-4 flex flex-col items-stretch gap-2 md:gap-6 md:flex-row">
+          <h2 className="text-xl font-bold leading-snug mt-3 md:hidden">
+            Curated Collections
+          </h2>
           <div
             className="hidden md:flex flex-col justify-center gap-4 bg-card rounded-2xl w-1/4 min-w-[360px] max-w-[450px] shrink-0 px-4"
             style={{
@@ -191,7 +194,7 @@ const PromptStoreView = () => {
         </section>
 
         {/* Submissions */}
-        <section className="">
+        <section className="container">
           {/* Filter bar */}
           <div className="">
             <div className="flex items-center gap-2 pb-3">
