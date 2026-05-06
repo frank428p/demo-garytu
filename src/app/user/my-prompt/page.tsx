@@ -106,20 +106,18 @@ function PromptGrid({
 
   if (isLoading) {
     return (
-      <div className="pt-4 flex flex-col gap-3">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex flex-row items-center gap-4 rounded-2xl bg-card px-3 py-3"
-          >
+      <div className="divide-y divide-border">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex flex-row items-center gap-4 px-4 py-3">
             <Skeleton className="shrink-0 w-20 md:w-24 aspect-video rounded-xl" />
-            <div className="flex flex-col gap-2 flex-1 min-w-0">
-              <Skeleton className="h-4 w-2/3" />
+            <div className="flex flex-col gap-1 flex-1 min-w-0">
               <div className="flex gap-1.5">
                 <Skeleton className="h-4 w-10 rounded-md" />
                 <Skeleton className="h-4 w-14 rounded-md" />
               </div>
+              <Skeleton className="h-4 w-2/3" />
             </div>
+            <Skeleton className="size-5 shrink-0 rounded" />
           </div>
         ))}
       </div>

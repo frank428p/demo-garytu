@@ -70,7 +70,7 @@ export default function OrderHistoryPage() {
           </div>
 
           {isLoading ? (
-            [0, 1, 2].map((i) => (
+            [0, 1, 2, 3, 4].map((i) => (
               <div key={i} className="border-t border-border px-4 py-3">
                 <div className="grid grid-cols-[32px_1fr_auto] md:grid-cols-[32px_1fr_110px_76px_100px] items-center gap-x-4">
                   <Skeleton className="h-4 w-4 rounded" />
@@ -82,7 +82,7 @@ export default function OrderHistoryPage() {
                     {[0, 1, 2].map((j) => (
                       <Skeleton
                         key={j}
-                        className="h-8 w-8 rounded-md border-2 border-background shrink-0"
+                        className="h-8 w-8 rounded-md border-2 border-ring shrink-0"
                       />
                     ))}
                   </div>
