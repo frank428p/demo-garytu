@@ -131,7 +131,7 @@ export default function OrderHistoryPage() {
 
                       <div className="min-w-0">
                         <p className="text-sm font-medium font-mono truncate">
-                          {order.uuid}
+                          {order.display_id}
                         </p>
                         <div className="flex items-center gap-2 mt-0.5">
                           <p className="text-xs text-muted-foreground">

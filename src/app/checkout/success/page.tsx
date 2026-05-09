@@ -114,7 +114,7 @@ const CheckoutSuccessPage = () => {
                       <Skeleton className="h-3 w-32" />
                     ) : (
                       <p className="text-xs font-semibold text-foreground">
-                        {orderData?.data?.uuid}
+                        {orderData?.data?.display_id}
                       </p>
                     )}
                   </div>
@@ -150,7 +150,10 @@ const CheckoutSuccessPage = () => {
                   {isLoading ? (
                     <>
                       {[0, 1, 2].map((i) => (
-                        <div key={i} className="flex justify-between items-center">
+                        <div
+                          key={i}
+                          className="flex justify-between items-center"
+                        >
                           <div className="flex gap-2">
                             <Skeleton className="h-10 w-10 rounded-md shrink-0" />
                             <div className="flex flex-col gap-2 justify-center">

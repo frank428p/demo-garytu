@@ -11,6 +11,7 @@ export type OrderItem = {
 
 export type Order = {
   uuid: string;
+  display_id: string;
   status: OrderStatus;
   amount: number;
   checkout_url?: string;
