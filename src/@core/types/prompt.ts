@@ -1,5 +1,4 @@
-import { Tag } from './config';
-import { MediaType, FileType } from './index';
+import { Tag, MediaType, FileType } from './common';
 
 export type PromptFile = {
   uuid: string;

@@ -14,7 +14,7 @@ import {
   usePromptsList,
 } from '@/@core/useQuery/usePrompts';
 import type { Prompt } from '@/@core/types/prompt';
-import type { MediaType } from '@/@core/types';
+import type { MediaType } from '@/@core/types/common';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

@@ -7,7 +7,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import PromptDetailView from '@/views/explore/detail';
 import 'react-photo-album/masonry.css';
-import { AspectRatioType, MediaType } from '@/@core/types';
+import { AspectRatioType, MediaType } from '@/@core/types/common';
 import { photos } from './photos';
 
 type ExploreViewProps = {

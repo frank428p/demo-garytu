@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { MediaType, AspectRatioType } from '@/@core/types';
+import type { MediaType, AspectRatioType } from '@/@core/types/common';
 
 export interface PromptItem {
   id: string;

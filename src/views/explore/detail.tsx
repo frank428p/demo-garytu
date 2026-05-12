@@ -7,7 +7,7 @@ import {
   IconDownload,
 } from '@tabler/icons-react';
 // import ThumbnailSlider from '@/components/ThumbnailSlider';
-import { MediaType, AspectRatioType } from '@/@core/types';
+import { MediaType, AspectRatioType } from '@/@core/types/common';
 import { useMemo } from 'react';
 import { useCart } from '@/@core/provider/cartContext';
 import { useRouter } from 'next/navigation';

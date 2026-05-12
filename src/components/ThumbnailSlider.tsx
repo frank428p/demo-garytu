@@ -24,7 +24,7 @@ import '@vidstack/react/player/styles/default/layouts/video.css';
 import { FreeMode, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useBreakpoint } from '@/@core/hooks/useBreakpoint';
-import { MediaType } from '@/@core/types/index';
+import { MediaType } from '@/@core/types/common';
 import { PromptFile } from '@/@core/types/prompt';
 
 import 'swiper/css';
