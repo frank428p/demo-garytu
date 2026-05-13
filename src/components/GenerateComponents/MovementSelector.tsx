@@ -21,8 +21,8 @@ import type { CustomEffectSelector } from '@/@core/types/common';
 function MovementItem({ item }: { item: CustomEffectSelector }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleMouseEnter = () => videoRef.current?.play();
-  const handleMouseLeave = () => {
+  const play = () => videoRef.current?.play();
+  const stop = () => {
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
@@ -33,8 +33,10 @@ function MovementItem({ item }: { item: CustomEffectSelector }) {
     <ToggleGroupItem
       value={item.uuid}
       className="group flex flex-col gap-1.5 h-auto w-full p-0 bg-transparent hover:bg-transparent hover:text-foreground border-0 data-[state=on]:bg-transparent"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={play}
+      onMouseLeave={stop}
+      onTouchStart={play}
+      onTouchEnd={stop}
     >
       <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-muted ring-2 ring-transparent group-hover:ring-white/40 group-data-[state=on]:ring-primary group-data-[state=on]:group-hover:ring-primary transition-all duration-150">
         {item.cover?.url && (
