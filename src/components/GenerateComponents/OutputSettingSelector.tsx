@@ -85,11 +85,11 @@ export function OutputSettingSelector() {
         <Muted>Duration</Muted>
         <div className="w-full overflow-hidden rounded-sm">
           <SliderPrimitive.Root
-            min={MIN}
+            min={0}
             max={MAX}
             step={1}
             value={[duration]}
-            onValueChange={([v]) => setDuration(v)}
+            onValueChange={([v]) => setDuration(Math.max(MIN, v))}
             className="relative flex w-full touch-none select-none items-center"
           >
             <SliderPrimitive.Track className="relative h-10 w-full grow bg-secondary/40 cursor-pointer">
@@ -102,7 +102,6 @@ export function OutputSettingSelector() {
               className={cn(
                 'block h-10 w-[3px] rounded-none bg-foreground/50 focus-visible:outline-none disabled:pointer-events-none',
                 duration === MAX ? '!mr-[3px]' : '',
-                duration === MIN ? '!ml-[3px]' : '',
               )}
             />
           </SliderPrimitive.Root>
@@ -112,7 +111,7 @@ export function OutputSettingSelector() {
       <div className="flex flex-col gap-2">
         <Muted>Resolution</Muted>
         <ToggleGroup type="single" variant="segmented" defaultValue="16:9">
-          {(['720p', '1080p'] as const).map((resolution) => (
+          {(['720p', '1080p', '4K'] as const).map((resolution) => (
             <ToggleGroupItem key={resolution} value={resolution}>
               {resolution}
             </ToggleGroupItem>
