@@ -24,6 +24,7 @@ import { FrameUploader } from '../GenerateComponents/FrameUploader';
 import { ScrollArea } from '../ui/scroll-area';
 import { MovementSelector } from '../GenerateComponents/MovementSelector';
 import { MotionSelector } from '../GenerateComponents/MotionSelector';
+import { MediaUploadSelector } from '../GenerateComponents/MediaUploadSelector';
 
 const MAX = 4;
 
@@ -63,10 +64,11 @@ const VideoGenerate = () => {
             <ModelSelector />
           </div>
 
-          <div className="flex gap-2">
+          <MediaUploadSelector />
+          {/* <div className="flex gap-2">
             <FrameUploader label="Add a start frame" required />
             <FrameUploader label="Add an end frame" />
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-2">
             <PromptInput />
