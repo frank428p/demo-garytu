@@ -6,16 +6,22 @@ export function MediaUploadSelector() {
     <>
       <div className="flex flex-col gap-2 p-2 bg-card rounded-xl">
         <ToggleGroup type="single" variant="segmented" defaultValue="16:9">
-          {(['Elements', 'Frame'] as const).map((resolution) => (
+          {(['Elements', 'Frames'] as const).map((resolution) => (
             <ToggleGroupItem key={resolution} value={resolution}>
               {resolution}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <div className="flex gap-2">
+        <FrameUploader
+          label="Add consistent element"
+          description="Character, person or object"
+          required
+          multiple
+        />
+        {/* <div className="flex gap-2">
           <FrameUploader label="Add a start frame" required />
           <FrameUploader label="Add an end frame" />
-        </div>
+        </div> */}
       </div>
     </>
   );

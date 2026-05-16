@@ -1,29 +1,137 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { IconPhoto, IconX } from '@tabler/icons-react';
+import { IconPhoto, IconPlus, IconX } from '@tabler/icons-react';
 import { Tiny, TinyMuted } from '../ui/typography';
 import { cn } from '@/lib/utils';
 
 type Props = {
   label: string;
+  description?: string;
   required?: boolean;
+  multiple?: boolean;
+  maxFiles?: number;
 };
 
-export function FrameUploader({ label, required }: Props) {
+function MultiFrameUploader({
+  label,
+  description,
+  maxFiles = 6,
+}: {
+  label: string;
+  description?: string;
+  maxFiles?: number;
+}) {
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [dragging, setDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const addFiles = (files: FileList | null) => {
+    if (!files) return;
+    const remaining = maxFiles - previews.length;
+    const urls = Array.from(files)
+      .filter((f) => f.type.startsWith('image/'))
+      .slice(0, remaining)
+      .map((f) => URL.createObjectURL(f));
+    setPreviews((prev) => [...prev, ...urls]);
+  };
+
+  const remove = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+    if (inputRef.current) inputRef.current.value = '';
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragging(false);
+    addFiles(e.dataTransfer.files);
+  };
+
+  const isEmpty = previews.length === 0;
+  const canAddMore = previews.length < maxFiles;
+
+  return (
+    <div
+      className={cn(
+        'rounded-2xl overflow-hidden transition-colors',
+        isEmpty
+          ? cn(
+              'flex flex-col items-center justify-center gap-3 py-6 cursor-pointer',
+              'border border-dashed border-border bg-secondary hover:bg-secondary/80',
+              dragging && 'border-primary bg-primary/5',
+            )
+          : 'bg-secondary/40 p-5',
+      )}
+      onClick={isEmpty ? () => inputRef.current?.click() : undefined}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragging(true);
+      }}
+      onDragLeave={() => setDragging(false)}
+      onDrop={handleDrop}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => addFiles(e.target.files)}
+      />
+
+      {isEmpty ? (
+        <>
+          <div className="flex flex-col items-center justify-center gap-1.5">
+            <div className="rounded-full bg-ring/20 p-2">
+              <IconPhoto size={16} className="text-muted-foreground" />
+            </div>
+            <Tiny className="text-foreground font-medium">{label}</Tiny>
+            <Tiny className="text-muted-foreground font-medium">
+              {description}
+            </Tiny>
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-wrap gap-2 relative justify-center *:size-12 max-w-[160px] mx-auto">
+          {previews.map((src, i) => (
+            <div key={i} className="relative rounded-lg overflow-hidden">
+              <img
+                src={src}
+                alt={`${label} ${i + 1}`}
+                className="w-full h-full object-cover"
+              />
+              <button
+                onClick={(e) => remove(e, i)}
+                className="absolute top-1 right-1 rounded-full bg-black/50 p-0.5 hover:bg-black/70 transition-colors cursor-pointer"
+              >
+                <IconX size={12} className="text-white" />
+              </button>
+            </div>
+          ))}
+
+          {canAddMore && (
+            <div
+              onClick={() => inputRef.current?.click()}
+              className="rounded-lg bg-secondary hover:bg-secondary/80 flex items-center justify-center cursor-pointer transition-colors"
+            >
+              <IconPlus size={16} className="text-muted-foreground" />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SingleFrameUploader({ label }: { label: string }) {
   const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith('image/')) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFile(file);
+    setPreview(URL.createObjectURL(file));
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -60,7 +168,10 @@ export function FrameUploader({ label, required }: Props) {
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={handleChange}
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) handleFile(file);
+        }}
       />
 
       {preview ? (
@@ -76,9 +187,6 @@ export function FrameUploader({ label, required }: Props) {
           >
             <IconX size={12} className="text-white" />
           </button>
-          {/* <div className="absolute bottom-0 left-0 right-0 px-2 py-1 bg-gradient-to-t from-black/60 to-transparent">
-            <TinyMuted className="text-white/80">{label}</TinyMuted>
-          </div> */}
         </>
       ) : (
         <div className="flex flex-col items-center justify-center gap-1.5">
@@ -86,15 +194,6 @@ export function FrameUploader({ label, required }: Props) {
             <IconPhoto size={16} className="text-muted-foreground" />
           </div>
           <Tiny className="text-muted-foreground font-medium">{label}</Tiny>
-          {/* <Tiny className="text-muted-foreground font-medium">
-            Click or drag here
-          </Tiny> */}
-
-          {/* {required ? (
-            <TinyMuted>Required</TinyMuted>
-          ) : (
-            <TinyMuted>Optional</TinyMuted>
-          )} */}
         </div>
       )}
 
@@ -105,4 +204,22 @@ export function FrameUploader({ label, required }: Props) {
       )}
     </div>
   );
+}
+
+export function FrameUploader({
+  label,
+  description,
+  multiple = false,
+  maxFiles = 6,
+}: Props) {
+  if (multiple) {
+    return (
+      <MultiFrameUploader
+        label={label}
+        description={description}
+        maxFiles={maxFiles}
+      />
+    );
+  }
+  return <SingleFrameUploader label={label} />;
 }
