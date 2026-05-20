@@ -28,6 +28,7 @@ function StyleItem({ item }: { item: CustomEffectSelector }) {
       {item.cover?.url && (
         <video
           src={item.cover.url}
+          poster={item.cover.thumbnail_url}
           loop
           autoPlay
           muted
@@ -38,7 +39,7 @@ function StyleItem({ item }: { item: CustomEffectSelector }) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-2 text-left">
         <span className="text-white text-[14px] font-extrabold tracking-wide leading-tight">
-          {item.name}
+          {item.name.toUpperCase()}
         </span>
       </div>
     </ToggleGroupItem>

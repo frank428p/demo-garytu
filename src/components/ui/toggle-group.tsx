@@ -24,8 +24,8 @@ const ToggleGroup = React.forwardRef<
     className={cn(
       'flex items-center justify-center gap-1',
       variant === 'segmented' && 'w-full gap-0 rounded-lg bg-secondary/40 p-1',
-      className,
       'gap-1',
+      className,
     )}
     {...props}
   >

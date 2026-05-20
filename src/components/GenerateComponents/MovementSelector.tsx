@@ -43,6 +43,7 @@ function MovementItem({ item }: { item: CustomEffectSelector }) {
           <video
             ref={videoRef}
             src={item.cover.url}
+            poster={item.cover.thumbnail_url}
             muted
             loop
             playsInline
@@ -85,7 +86,7 @@ function MovementGrid({
       type="single"
       value={value}
       onValueChange={(v) => onChange(v)}
-      className="grid grid-cols-3 gap-2 p-0.5 items-start justify-start"
+      className="grid grid-cols-3 !gap-2 p-0.5 items-start justify-start"
     >
       {items.map((item) => (
         <MovementItem key={item.uuid} item={item} />
