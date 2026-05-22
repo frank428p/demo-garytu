@@ -82,7 +82,7 @@ const MOCK_DATA = [
   {
     uuid: 'mock-11',
     url: '/images/gallery/9-to-16_2.mp4',
-    thumbnail_url: '/images/gallery/9-to-16_2.mp4',
+    thumbnail_url: '/images/gallery/9-to-16-cover_2.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-18T18:00:00Z',
   },
@@ -241,21 +241,12 @@ function AssetCard({
       )}
       onClick={onToggle}
     >
-      {item.file_type === 'VIDEO' ? (
-        <video
-          src={item.thumbnail_url}
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={item.thumbnail_url}
-          alt=""
-          className="w-full h-full object-cover"
-        />
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.thumbnail_url}
+        alt=""
+        className="w-full h-full object-cover"
+      />
 
       <div
         className={cn(
