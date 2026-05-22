@@ -9,7 +9,9 @@ import { Checkbox } from '../ui/checkbox';
 import {
   IconArrowsDiagonal,
   IconArrowsDiagonalMinimize2,
+  IconFilterDown,
   IconPlayerPlayFilled,
+  IconStar,
 } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
@@ -307,7 +309,7 @@ function AssetCard({
 
 export function AssetsPanel() {
   const [filter, setFilter] = useState<FileTypeFilter>('All');
-  const [gridSize, setGridSize] = useState(1);
+  const [gridSize, setGridSize] = useState(2);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [objectFit, setObjectFit] = useState<'contain' | 'cover'>('contain');
 
@@ -372,30 +374,50 @@ export function AssetsPanel() {
           </ToggleGroup>
         </div>
 
-        <div className="flex flex-1 gap-1 items-center justify-end">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="w-7 h-7"
-            onClick={() =>
-              setObjectFit((v) => (v === 'contain' ? 'cover' : 'contain'))
-            }
-          >
-            {objectFit === 'contain' ? (
-              <IconArrowsDiagonalMinimize2 />
-            ) : (
-              <IconArrowsDiagonal />
-            )}
-          </Button>
-          <Slider
-            value={[gridSize]}
-            onValueChange={([v]) => setGridSize(v)}
-            max={4}
-            min={1}
-            step={1}
-            className="w-full max-w-[150px]"
-            size="sm"
-          />
+        <div className="flex flex-1 gap-3 items-center justify-end">
+          <div className="flex flex-row gap-2 flex-1 justify-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-8 h-8"
+              onClick={() =>
+                setObjectFit((v) => (v === 'contain' ? 'cover' : 'contain'))
+              }
+            >
+              {objectFit === 'contain' ? (
+                <IconArrowsDiagonalMinimize2 />
+              ) : (
+                <IconArrowsDiagonal />
+              )}
+            </Button>
+            <Slider
+              value={[gridSize]}
+              onValueChange={([v]) => setGridSize(v)}
+              max={4}
+              min={1}
+              step={1}
+              className="w-full max-w-[150px]"
+              size="sm"
+            />
+          </div>
+
+          <div className="flex flex-row gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              className="w-8 h-8 bg-transparent rounded-sm"
+            >
+              <IconFilterDown />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="icon"
+              className="w-8 h-8 bg-transparent rounded-sm"
+            >
+              <IconStar />
+            </Button>
+          </div>
         </div>
       </div>
 
