@@ -6,6 +6,7 @@ import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { Body, H4, Large, Tiny } from '../ui/typography';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
+import { IconPlayerPlayFilled } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 
 const MOCK_DATA = [
@@ -236,7 +237,7 @@ function AssetCard({
   return (
     <div
       className={cn(
-        'relative group aspect-square rounded-lg overflow-hidden cursor-pointer bg-muted ring-2 ring-transparent transition-[box-shadow] duration-150',
+        'relative group aspect-square rounded-lg overflow-hidden cursor-pointer bg-secondary ring-2 ring-transparent transition-[box-shadow] duration-150',
         selected && 'ring-foreground',
       )}
       onClick={onToggle}
@@ -245,8 +246,16 @@ function AssetCard({
       <img
         src={item.thumbnail_url}
         alt=""
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain"
       />
+
+      {item.file_type === 'VIDEO' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="rounded-full bg-background/20 backdrop-blur-[1px] p-2">
+            <IconPlayerPlayFilled className="size-4 text-white" />
+          </div>
+        </div>
+      )}
 
       <div
         className={cn(
