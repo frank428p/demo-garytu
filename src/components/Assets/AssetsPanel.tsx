@@ -6,8 +6,9 @@ import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { Body, H4, Large, Tiny } from '../ui/typography';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
-import { IconPlayerPlayFilled } from '@tabler/icons-react';
+import { IconArrowsDiagonal, IconPlayerPlayFilled } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
+import { Button } from '../ui/button';
 
 const MOCK_DATA = [
   {
@@ -225,15 +226,26 @@ const MOCK_DATA = [
 type AssetData = (typeof MOCK_DATA)[0];
 type FileTypeFilter = 'All' | 'Images' | 'Videos';
 
+const PLAY_ICON_SIZE: Record<number, { icon: string; pad: string }> = {
+  1: { icon: 'size-3', pad: 'p-1' },
+  2: { icon: 'size-4', pad: 'p-1.5' },
+  3: { icon: 'size-5', pad: 'p-2' },
+  4: { icon: 'size-6', pad: 'p-2.5' },
+};
+
 function AssetCard({
   item,
   selected,
   onToggle,
+  gridSize,
 }: {
   item: AssetData;
   selected: boolean;
   onToggle: () => void;
+  gridSize: number;
 }) {
+  const { icon, pad } = PLAY_ICON_SIZE[gridSize] ?? PLAY_ICON_SIZE[2];
+
   return (
     <div
       className={cn(
@@ -251,8 +263,13 @@ function AssetCard({
 
       {item.file_type === 'VIDEO' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="rounded-full bg-background/20 backdrop-blur-[1px] p-2">
-            <IconPlayerPlayFilled className="size-4 text-white" />
+          <div
+            className={cn(
+              'rounded-full bg-background/20 backdrop-blur-[1px]',
+              pad,
+            )}
+          >
+            <IconPlayerPlayFilled className={cn(icon, 'text-white')} />
           </div>
         </div>
       )}
@@ -345,7 +362,10 @@ export function AssetsPanel() {
           </ToggleGroup>
         </div>
 
-        <div className="flex flex-1 items-center justify-end">
+        <div className="flex flex-1 gap-1 items-center justify-end">
+          <Button variant="ghost" size="icon" className="w-7 h-7">
+            <IconArrowsDiagonal />
+          </Button>
           <Slider
             value={[gridSize]}
             onValueChange={([v]) => setGridSize(v)}
@@ -388,6 +408,7 @@ export function AssetsPanel() {
                   item={item}
                   selected={selected.has(item.uuid)}
                   onToggle={() => toggleSelect(item.uuid)}
+                  gridSize={gridSize}
                 />
               ))}
             </div>
