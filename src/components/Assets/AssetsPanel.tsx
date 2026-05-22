@@ -9,12 +9,14 @@ import { Checkbox } from '../ui/checkbox';
 import {
   IconArrowsDiagonal,
   IconArrowsDiagonalMinimize2,
+  IconCheck,
   IconFilterDown,
   IconPlayerPlayFilled,
   IconStar,
 } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 const MOCK_DATA = [
   {
@@ -312,6 +314,7 @@ export function AssetsPanel() {
   const [gridSize, setGridSize] = useState(2);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [objectFit, setObjectFit] = useState<'contain' | 'cover'>('contain');
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   const cols = 14 - gridSize * 2; // gridSize 1→12, 2→9, 3→6, 4→3
 
@@ -330,8 +333,10 @@ export function AssetsPanel() {
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(item);
     });
-    return Array.from(map.entries()).sort(([a], [b]) => b.localeCompare(a));
-  }, [filtered]);
+    return Array.from(map.entries()).sort(([a], [b]) =>
+      sortOrder === 'desc' ? b.localeCompare(a) : a.localeCompare(b),
+    );
+  }, [filtered, sortOrder]);
 
   const toggleSelect = (uuid: string) => {
     setSelected((prev) => {
@@ -402,13 +407,34 @@ export function AssetsPanel() {
           </div>
 
           <div className="flex flex-row gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-8 h-8 bg-transparent rounded-sm"
-            >
-              <IconFilterDown />
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="w-8 h-8 bg-transparent rounded-sm"
+                >
+                  <IconFilterDown />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-44 p-1">
+                {(
+                  [
+                    { value: 'desc', label: 'Newest first' },
+                    { value: 'asc', label: 'Oldest first' },
+                  ] as const
+                ).map(({ value, label }) => (
+                  <button
+                    key={value}
+                    onClick={() => setSortOrder(value)}
+                    className="flex w-full items-center cursor-pointer justify-between rounded-sm px-3 py-1.5 text-sm hover:bg-accent transition-colors"
+                  >
+                    {label}
+                    {sortOrder === value && <IconCheck className="size-3.5" />}
+                  </button>
+                ))}
+              </PopoverContent>
+            </Popover>
 
             <Button
               variant="outline"
