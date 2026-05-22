@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { Slider } from '../ui/slider';
@@ -11,6 +11,8 @@ import {
   IconArrowsDiagonalMinimize2,
   IconCheck,
   IconFilterDown,
+  IconHeart,
+  IconHeartFilled,
   IconPlayerPlayFilled,
   IconStar,
 } from '@tabler/icons-react';
@@ -25,6 +27,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/16-to-9-cover_1.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-20T14:30:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-2',
@@ -32,6 +35,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/1-to-1-cover_1.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-20T10:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-3',
@@ -39,6 +43,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/9-to-16-cover_1.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-20T09:15:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-4',
@@ -46,6 +51,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-01.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-20T08:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-5',
@@ -53,6 +59,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-02.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-20T07:30:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-6',
@@ -60,6 +67,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/16-to-9-cover_2.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-19T17:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-7',
@@ -67,6 +75,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/1-to-1-cover_2.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-19T15:30:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-8',
@@ -74,6 +83,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-03.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-19T13:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-9',
@@ -81,6 +91,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-04.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-19T11:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-10',
@@ -88,6 +99,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-05.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-19T09:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-11',
@@ -95,6 +107,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/9-to-16-cover_2.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-18T18:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-12',
@@ -102,6 +115,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-06.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-18T16:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-13',
@@ -109,6 +123,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-07.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-18T14:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-14',
@@ -116,6 +131,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-08.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-18T12:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-15',
@@ -123,6 +139,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-09.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-18T10:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-16',
@@ -130,6 +147,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-10.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-17T18:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-17',
@@ -137,6 +155,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-11.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-17T16:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-18',
@@ -144,6 +163,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-12.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-17T14:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-19',
@@ -151,6 +171,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-13.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-17T12:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-20',
@@ -158,6 +179,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-14.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-17T10:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-21',
@@ -165,6 +187,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-15.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-16T18:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-22',
@@ -172,6 +195,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-16.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-16T16:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-23',
@@ -179,6 +203,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-17.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-16T14:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-24',
@@ -186,6 +211,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-18.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-16T12:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-25',
@@ -193,6 +219,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-19.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-16T10:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-26',
@@ -200,6 +227,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-20.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-15T18:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-27',
@@ -207,6 +235,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-03.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-15T16:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-28',
@@ -214,6 +243,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-06.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-15T14:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-29',
@@ -221,6 +251,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-09.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-15T12:00:00Z',
+    is_favorite: false,
   },
   {
     uuid: 'mock-30',
@@ -228,6 +259,7 @@ const MOCK_DATA = [
     thumbnail_url: '/images/gallery/img-12.jpg',
     file_type: 'IMAGE',
     created_time: '2026-05-15T10:00:00Z',
+    is_favorite: false,
   },
 ];
 
@@ -247,22 +279,25 @@ function AssetCard({
   onToggle,
   gridSize,
   objectFit,
+  isFavorite,
+  onToggleFavorite,
 }: {
   item: AssetData;
   selected: boolean;
   onToggle: () => void;
   gridSize: number;
   objectFit: 'contain' | 'cover';
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }) {
   const { icon, pad } = PLAY_ICON_SIZE[gridSize] ?? PLAY_ICON_SIZE[2];
 
   return (
     <div
       className={cn(
-        'relative group aspect-square rounded-lg overflow-hidden cursor-pointer bg-secondary ring-2 ring-transparent transition-[box-shadow] duration-150',
+        'relative group aspect-square rounded-lg overflow-hidden bg-secondary ring-2 ring-transparent transition-[box-shadow] duration-150',
         selected && 'ring-foreground',
       )}
-      onClick={onToggle}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -296,14 +331,35 @@ function AssetCard({
 
       <div
         className={cn(
-          'absolute top-1.5 left-1.5 transition-opacity duration-150 pointer-events-none',
+          'absolute top-1.5 left-1.5 transition-opacity duration-150 cursor-pointer',
           selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggle();
+        }}
       >
         <Checkbox
           checked={selected}
-          className="bg-transparent border-foreground/60 size-5"
+          className="bg-transparent border-foreground/60 size-5 pointer-events-none"
         />
+      </div>
+
+      <div
+        className={cn(
+          'absolute bottom-1.5 left-1.5 cursor-pointer transition-opacity duration-150',
+          isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+        )}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleFavorite();
+        }}
+      >
+        {isFavorite ? (
+          <IconHeartFilled className="size-6 text-primary drop-shadow" />
+        ) : (
+          <IconHeart className="size-6 text-foreground/60 drop-shadow" />
+        )}
       </div>
     </div>
   );
@@ -313,18 +369,21 @@ export function AssetsPanel() {
   const [filter, setFilter] = useState<FileTypeFilter>('All');
   const [gridSize, setGridSize] = useState(2);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [objectFit, setObjectFit] = useState<'contain' | 'cover'>('contain');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
-  const cols = 14 - gridSize * 2; // gridSize 1→12, 2→9, 3→6, 4→3
+  const cols = 14 - gridSize * 2; // gridSize 1??2, 2??, 3??, 4??
 
   const filtered = useMemo(() => {
-    if (filter === 'Images')
-      return MOCK_DATA.filter((d) => d.file_type === 'IMAGE');
-    if (filter === 'Videos')
-      return MOCK_DATA.filter((d) => d.file_type === 'VIDEO');
-    return MOCK_DATA;
-  }, [filter]);
+    let data = MOCK_DATA;
+    if (filter === 'Images') data = data.filter((d) => d.file_type === 'IMAGE');
+    else if (filter === 'Videos')
+      data = data.filter((d) => d.file_type === 'VIDEO');
+    if (showFavoritesOnly) data = data.filter((d) => favorites.has(d.uuid));
+    return data;
+  }, [filter, showFavoritesOnly, favorites]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, AssetData[]>();
@@ -340,6 +399,15 @@ export function AssetsPanel() {
 
   const toggleSelect = (uuid: string) => {
     setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(uuid)) next.delete(uuid);
+      else next.add(uuid);
+      return next;
+    });
+  };
+
+  const toggleFavorite = (uuid: string) => {
+    setFavorites((prev) => {
       const next = new Set(prev);
       if (next.has(uuid)) next.delete(uuid);
       else next.add(uuid);
@@ -439,9 +507,14 @@ export function AssetsPanel() {
             <Button
               variant="outline"
               size="icon"
-              className="w-8 h-8 bg-transparent rounded-sm"
+              className="w-8 h-8 rounded-sm bg-transparent"
+              onClick={() => setShowFavoritesOnly((v) => !v)}
             >
-              <IconStar />
+              {showFavoritesOnly ? (
+                <IconHeartFilled className="text-primary" />
+              ) : (
+                <IconHeart />
+              )}
             </Button>
           </div>
         </div>
@@ -480,6 +553,8 @@ export function AssetsPanel() {
                   onToggle={() => toggleSelect(item.uuid)}
                   gridSize={gridSize}
                   objectFit={objectFit}
+                  isFavorite={favorites.has(item.uuid)}
+                  onToggleFavorite={() => toggleFavorite(item.uuid)}
                 />
               ))}
             </div>
