@@ -394,6 +394,7 @@ export function AssetsPanel() {
             min={1}
             step={1}
             className="w-full max-w-[150px]"
+            size="sm"
           />
         </div>
       </div>
