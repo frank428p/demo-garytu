@@ -295,7 +295,7 @@ function AssetCard({
   return (
     <div
       className={cn(
-        'relative group aspect-square rounded-lg overflow-hidden bg-secondary ring-2 ring-transparent transition-[box-shadow] duration-150',
+        'relative group aspect-square rounded-2xl overflow-hidden bg-secondary ring-3 ring-transparent transition-[box-shadow] duration-150',
         selected && 'ring-foreground',
       )}
     >
@@ -331,7 +331,7 @@ function AssetCard({
 
       <div
         className={cn(
-          'absolute top-1.5 left-1.5 transition-opacity duration-150 cursor-pointer',
+          'absolute top-2.5 left-2.5 transition-opacity duration-150 cursor-pointer',
           selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
         onClick={(e) => {
@@ -347,7 +347,7 @@ function AssetCard({
 
       <div
         className={cn(
-          'absolute bottom-1.5 left-1.5 cursor-pointer transition-opacity duration-150',
+          'absolute bottom-2.5 left-2.5 cursor-pointer transition-opacity duration-150',
           isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
         onClick={(e) => {
