@@ -6,7 +6,11 @@ import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { Body, H4, Large, Tiny } from '../ui/typography';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
-import { IconArrowsDiagonal, IconPlayerPlayFilled } from '@tabler/icons-react';
+import {
+  IconArrowsDiagonal,
+  IconArrowsDiagonalMinimize2,
+  IconPlayerPlayFilled,
+} from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
 
@@ -238,11 +242,13 @@ function AssetCard({
   selected,
   onToggle,
   gridSize,
+  objectFit,
 }: {
   item: AssetData;
   selected: boolean;
   onToggle: () => void;
   gridSize: number;
+  objectFit: 'contain' | 'cover';
 }) {
   const { icon, pad } = PLAY_ICON_SIZE[gridSize] ?? PLAY_ICON_SIZE[2];
 
@@ -258,7 +264,10 @@ function AssetCard({
       <img
         src={item.thumbnail_url}
         alt=""
-        className="w-full h-full object-contain"
+        className={cn(
+          'w-full h-full',
+          objectFit === 'cover' ? 'object-cover' : 'object-contain',
+        )}
       />
 
       {item.file_type === 'VIDEO' && (
@@ -300,6 +309,7 @@ export function AssetsPanel() {
   const [filter, setFilter] = useState<FileTypeFilter>('All');
   const [gridSize, setGridSize] = useState(1);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [objectFit, setObjectFit] = useState<'contain' | 'cover'>('contain');
 
   const cols = 14 - gridSize * 2; // gridSize 1→12, 2→9, 3→6, 4→3
 
@@ -363,8 +373,19 @@ export function AssetsPanel() {
         </div>
 
         <div className="flex flex-1 gap-1 items-center justify-end">
-          <Button variant="ghost" size="icon" className="w-7 h-7">
-            <IconArrowsDiagonal />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-7 h-7"
+            onClick={() =>
+              setObjectFit((v) => (v === 'contain' ? 'cover' : 'contain'))
+            }
+          >
+            {objectFit === 'contain' ? (
+              <IconArrowsDiagonalMinimize2 />
+            ) : (
+              <IconArrowsDiagonal />
+            )}
           </Button>
           <Slider
             value={[gridSize]}
@@ -409,6 +430,7 @@ export function AssetsPanel() {
                   selected={selected.has(item.uuid)}
                   onToggle={() => toggleSelect(item.uuid)}
                   gridSize={gridSize}
+                  objectFit={objectFit}
                 />
               ))}
             </div>
