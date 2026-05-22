@@ -12,21 +12,21 @@ const MOCK_DATA = [
   {
     uuid: 'mock-1',
     url: '/images/gallery/16-to-9_1.mp4',
-    thumbnail_url: '/images/gallery/16-to-9_1.mp4',
+    thumbnail_url: '/images/gallery/16-to-9-cover_1.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-20T14:30:00Z',
   },
   {
     uuid: 'mock-2',
     url: '/images/gallery/1-to-1_1.mp4',
-    thumbnail_url: '/images/gallery/1-to-1_1.mp4',
+    thumbnail_url: '/images/gallery/1-to-1-cover_1.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-20T10:00:00Z',
   },
   {
     uuid: 'mock-3',
     url: '/images/gallery/9-to-16_1.mp4',
-    thumbnail_url: '/images/gallery/9-to-16_1.mp4',
+    thumbnail_url: '/images/gallery/9-to-16-cover_1.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-20T09:15:00Z',
   },
@@ -47,14 +47,14 @@ const MOCK_DATA = [
   {
     uuid: 'mock-6',
     url: '/images/gallery/16-to-9_2.mp4',
-    thumbnail_url: '/images/gallery/16-to-9_2.mp4',
+    thumbnail_url: '/images/gallery/16-to-9-cover_2.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-19T17:00:00Z',
   },
   {
     uuid: 'mock-7',
     url: '/images/gallery/1-to-1_2.mp4',
-    thumbnail_url: '/images/gallery/1-to-1_2.mp4',
+    thumbnail_url: '/images/gallery/1-to-1-cover_2.avif',
     file_type: 'VIDEO',
     created_time: '2026-05-19T15:30:00Z',
   },
@@ -243,14 +243,18 @@ function AssetCard({
     >
       {item.file_type === 'VIDEO' ? (
         <video
-          src={item.url}
+          src={item.thumbnail_url}
           muted
           playsInline
           className="w-full h-full object-cover"
         />
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.url} alt="" className="w-full h-full object-cover" />
+        <img
+          src={item.thumbnail_url}
+          alt=""
+          className="w-full h-full object-cover"
+        />
       )}
 
       <div
@@ -268,7 +272,7 @@ function AssetCard({
       >
         <Checkbox
           checked={selected}
-          className="bg-black/30 border-white/80 backdrop-blur-sm size-5"
+          className="bg-transparent border-foreground/60 size-5"
         />
       </div>
     </div>
@@ -309,6 +313,19 @@ export function AssetsPanel() {
     });
   };
 
+  const toggleSelectGroup = (uuids: string[]) => {
+    const allSelected = uuids.every((uuid) => selected.has(uuid));
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allSelected) {
+        uuids.forEach((uuid) => next.delete(uuid));
+      } else {
+        uuids.forEach((uuid) => next.add(uuid));
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="bg-card/60 rounded-xl max-h-[calc(100vh-56px-12px)] h-full flex flex-col">
       <div className="flex items-center justify-between px-4 py-3 shrink-0">
@@ -343,9 +360,24 @@ export function AssetsPanel() {
       <div className="overflow-y-auto flex-1 px-4 pb-4 space-y-6">
         {grouped.map(([dateKey, items]) => (
           <div key={dateKey}>
-            <Body className="text-foreground font-bold mb-2 block">
-              {formatDate(dateKey)}
-            </Body>
+            <div
+              className="flex w-fit items-center gap-2 mb-3 cursor-pointer select-none"
+              onClick={() => toggleSelectGroup(items.map((i) => i.uuid))}
+            >
+              <Checkbox
+                className="size-5 pointer-events-none"
+                checked={
+                  items.every((i) => selected.has(i.uuid))
+                    ? true
+                    : items.some((i) => selected.has(i.uuid))
+                      ? 'indeterminate'
+                      : false
+                }
+              />
+              <Body className="text-foreground font-bold">
+                {formatDate(dateKey)}
+              </Body>
+            </div>
             <div
               className="grid gap-3"
               style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
