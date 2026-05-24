@@ -537,3 +537,21 @@ body {
 .swiper-slide-thumb-active .thumb-card::before {
   opacity: 1;
 }
+
+.btn-spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.btn-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.28) 0%, transparent 80%);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.btn-spotlight:hover::before {
+  opacity: 1;
+}

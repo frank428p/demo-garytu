@@ -538,23 +538,24 @@ export function AssetsPanel() {
                 {selected.size} selected
               </span>
             </div>
-            <Button size="default" variant="secondary" className="gap-1.5">
+            <Button size="default" variant="secondary" className="btn-spotlight gap-1.5">
               <IconDownload />
               Download
             </Button>
-            <Button size="default" variant="secondary" className="gap-1.5">
+            <Button size="default" variant="secondary" className="btn-spotlight gap-1.5">
               <IconFolderUp />
               Add to Folder
             </Button>
-            <Button size="icon" variant="secondary">
+            <Button size="icon" variant="secondary" className="btn-spotlight">
               <IconHeart />
             </Button>
-            <Button size="icon" variant="secondary">
+            <Button size="icon" variant="secondary" className="btn-spotlight">
               <IconTrash />
             </Button>
             <Button
               size="icon"
               variant="ghost"
+              className="btn-spotlight"
               onClick={() => setSelected(new Set())}
             >
               <IconX />
