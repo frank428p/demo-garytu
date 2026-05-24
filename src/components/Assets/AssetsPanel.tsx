@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useMemo } from 'react';
+import { MinimumImageStack } from '@/components/MinimumImageStack';
 import { Slider } from '../ui/slider';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { Body, H4, Large, Tiny } from '../ui/typography';
@@ -533,16 +534,35 @@ export function AssetsPanel() {
           )}
         >
           <div className="flex items-center gap-1 bg-popover rounded-xl px-1.5 py-2 shadow-lg">
-            <div className="px-2">
+            <div className="px-2 flex items-center gap-2">
+              {(() => {
+                const thumbs = MOCK_DATA.filter((d) => selected.has(d.uuid))
+                  .slice(0, 3)
+                  .map((d) => d.thumbnail_url) as
+                  | [string]
+                  | [string, string]
+                  | [string, string, string];
+                return thumbs.length > 0 ? (
+                  <MinimumImageStack images={thumbs} size={28} />
+                ) : null;
+              })()}
               <span className="text-sm font-medium whitespace-nowrap">
                 {selected.size} selected
               </span>
             </div>
-            <Button size="default" variant="secondary" className="btn-spotlight gap-1.5">
+            <Button
+              size="default"
+              variant="secondary"
+              className="btn-spotlight gap-1.5"
+            >
               <IconDownload />
               Download
             </Button>
-            <Button size="default" variant="secondary" className="btn-spotlight gap-1.5">
+            <Button
+              size="default"
+              variant="secondary"
+              className="btn-spotlight gap-1.5"
+            >
               <IconFolderUp />
               Add to Folder
             </Button>
