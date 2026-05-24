@@ -543,7 +543,7 @@ export function AssetsPanel() {
               : 'opacity-0 translate-y-[calc(100%+1rem)]',
           )}
         >
-          <div className="flex items-center gap-1 bg-popover rounded-xl px-1.5 py-2 shadow-lg">
+          <div className="flex items-center gap-1 px-1.5 py-2 shadow-lg  bg-popover/60 backdrop-blur-xl rounded-xl">
             <div className="px-2 flex items-center gap-2">
               {(() => {
                 const thumbs = MOCK_DATA.filter((d) => selected.has(d.uuid))
