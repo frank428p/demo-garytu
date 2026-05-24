@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { MinimumImageStack } from '@/components/MinimumImageStack';
 import { Slider } from '../ui/slider';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
-import { Body, H4, Large, Tiny } from '../ui/typography';
+import { Body, H4, Large, Small, Tiny, TinyMuted } from '../ui/typography';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
 import {
@@ -19,6 +19,7 @@ import {
   IconFolderUp,
   IconX,
   IconTrash,
+  IconFolderFilled,
 } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
@@ -265,6 +266,15 @@ const MOCK_DATA = [
     created_time: '2026-05-15T10:00:00Z',
     is_favorite: false,
   },
+];
+
+const MOCK_FOLDERS = [
+  { uuid: 'folder-1', name: 'New Folder' },
+  { uuid: 'folder-2', name: 'Folder 1' },
+  { uuid: 'folder-3', name: 'Folder 2' },
+  { uuid: 'folder-4', name: 'Folder 3' },
+  { uuid: 'folder-5', name: 'Folder 4' },
+  { uuid: 'folder-6', name: 'Folder 5' },
 ];
 
 type AssetData = (typeof MOCK_DATA)[0];
@@ -558,14 +568,39 @@ export function AssetsPanel() {
               <IconDownload />
               Download
             </Button>
-            <Button
-              size="default"
-              variant="secondary"
-              className="btn-spotlight gap-1.5"
-            >
-              <IconFolderUp />
-              Add to Folder
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  size="default"
+                  variant="secondary"
+                  className="btn-spotlight gap-1.5"
+                >
+                  <IconFolderUp />
+                  Add to Folder
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="top"
+                align="center"
+                className="w-52 overflow-hidden p-0 mb-2"
+              >
+                {MOCK_FOLDERS.map((folder) => (
+                  <label
+                    key={folder.uuid}
+                    className="flex cursor-pointer items-center justify-between px-3 py-3 text-sm hover:bg-accent transition-colors border-b border-border last:border-b-0"
+                  >
+                    <div className="flex gap-2 items-center">
+                      <IconFolderFilled className="text-primary" />
+                      <div className="flex flex-col gap-0.5">
+                        <Small className="font-semibold">{folder.name}</Small>
+                        <TinyMuted>0 assets</TinyMuted>
+                      </div>
+                    </div>
+                    <Checkbox />
+                  </label>
+                ))}
+              </PopoverContent>
+            </Popover>
             <Button size="icon" variant="secondary" className="btn-spotlight">
               <IconHeart />
             </Button>
@@ -584,7 +619,7 @@ export function AssetsPanel() {
         </div>
       </div>
 
-      <div className="overflow-y-auto flex-1 px-4 pb-4 space-y-6">
+      <div className="overflow-y-auto flex-1 px-4 pb-24 space-y-6">
         {grouped.map(([dateKey, items]) => (
           <div key={dateKey}>
             <div
