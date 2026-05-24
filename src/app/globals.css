@@ -3,9 +3,11 @@
 
 @theme {
   --breakpoint-3xl: 1920px;
-  --animate-style-selector-in: style-selector-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-style-selector-in: style-selector-in 0.28s
+    cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-style-selector-out: style-selector-out 0.18s ease-in both;
-  --animate-collapsible-down: collapsible-down 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-collapsible-down: collapsible-down 0.2s
+    cubic-bezier(0.16, 1, 0.3, 1);
   --animate-collapsible-up: collapsible-up 0.18s ease-in;
   --animate-marquee-left: marquee-left 32s linear infinite;
   --animate-marquee-right: marquee-right 26s linear infinite;
@@ -13,23 +15,47 @@
 }
 
 @keyframes collapsible-down {
-  from { height: 0; opacity: 0; }
-  to { height: var(--radix-collapsible-content-height); opacity: 1; }
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
 }
 
 @keyframes collapsible-up {
-  from { height: var(--radix-collapsible-content-height); opacity: 1; }
-  to { height: 0; opacity: 0; }
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
 }
 
 @keyframes style-selector-in {
-  from { opacity: 0; transform: translateX(-14px) scale(0.96); }
-  to { opacity: 1; transform: translateX(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateX(-14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
 @keyframes style-selector-out {
-  from { opacity: 1; transform: translateX(0) scale(1); }
-  to { opacity: 0; transform: translateX(-10px) scale(0.97); }
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.97);
+  }
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -317,20 +343,39 @@ body {
    點擊穿透到 dialog backdrop 而觸發關閉。
    此規則讓 PhotoView portal 恢復可互動狀態。 */
 @keyframes marquee-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 @keyframes marquee-right {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 @keyframes hero-fade-up {
-  from { opacity: 0; transform: translateY(22px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes hero-shimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .hero-gradient-text {
@@ -338,7 +383,7 @@ body {
     110deg,
     var(--primary) 0%,
     oklch(0.65 0.22 40) 35%,
-    oklch(0.58 0.20 18) 65%,
+    oklch(0.58 0.2 18) 65%,
     var(--primary) 100%
   );
   background-size: 250% 250%;

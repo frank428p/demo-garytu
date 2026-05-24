@@ -14,7 +14,10 @@ import {
   IconHeart,
   IconHeartFilled,
   IconPlayerPlayFilled,
-  IconStar,
+  IconDownload,
+  IconFolderUp,
+  IconX,
+  IconTrash,
 } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
@@ -429,7 +432,7 @@ export function AssetsPanel() {
   };
 
   return (
-    <div className="bg-card/60 rounded-xl max-h-[calc(100vh-56px-12px)] h-full flex flex-col">
+    <div className="relative overflow-hidden bg-card/60 rounded-xl max-h-[calc(100vh-56px-12px)] h-full flex flex-col">
       <div className="flex items-center justify-between px-4 py-3 shrink-0">
         <div className="flex">
           <ToggleGroup
@@ -515,6 +518,46 @@ export function AssetsPanel() {
               ) : (
                 <IconHeart />
               )}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+        <div
+          className={cn(
+            'transition-[transform,opacity] duration-[400ms] ease-[ease]',
+            selected.size > 0
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : 'opacity-0 translate-y-[calc(100%+1rem)]',
+          )}
+        >
+          <div className="flex items-center gap-1 bg-popover rounded-xl px-1.5 py-2 shadow-lg">
+            <div className="px-2">
+              <span className="text-sm font-medium whitespace-nowrap">
+                {selected.size} selected
+              </span>
+            </div>
+            <Button size="default" variant="secondary" className="gap-1.5">
+              <IconDownload />
+              Download
+            </Button>
+            <Button size="default" variant="secondary" className="gap-1.5">
+              <IconFolderUp />
+              Add to Folder
+            </Button>
+            <Button size="icon" variant="secondary">
+              <IconHeart />
+            </Button>
+            <Button size="icon" variant="secondary">
+              <IconTrash />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setSelected(new Set())}
+            >
+              <IconX />
             </Button>
           </div>
         </div>
