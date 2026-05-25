@@ -21,7 +21,18 @@ import {
   IconTrash,
   IconFolderFilled,
   IconDots,
+  IconEye,
+  IconArrowUpRight,
 } from '@tabler/icons-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -291,21 +302,35 @@ const PLAY_ICON_SIZE: Record<number, { icon: string; pad: string }> = {
 function AssetCard({
   item,
   selected,
+  anySelected,
   onToggle,
   gridSize,
   objectFit,
   isFavorite,
   onToggleFavorite,
+  collisionBoundary,
 }: {
   item: AssetData;
   selected: boolean;
+  anySelected: boolean;
   onToggle: () => void;
   gridSize: number;
   objectFit: 'contain' | 'cover';
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  collisionBoundary?: Element | null;
 }) {
+  const [checkedFolders, setCheckedFolders] = useState<Set<string>>(new Set());
   const { icon, pad } = PLAY_ICON_SIZE[gridSize] ?? PLAY_ICON_SIZE[2];
+
+  const toggleFolder = (uuid: string) => {
+    setCheckedFolders((prev) => {
+      const next = new Set(prev);
+      if (next.has(uuid)) next.delete(uuid);
+      else next.add(uuid);
+      return next;
+    });
+  };
 
   return (
     <div
@@ -379,16 +404,70 @@ function AssetCard({
 
       <div
         className={cn(
-          'absolute top-2.5 right-2.5 transition-opacity duration-150 cursor-pointer opacity-0 group-hover:opacity-100',
+          'absolute top-2.5 right-2.5 transition-opacity duration-150',
+          anySelected ? 'opacity-0' : 'opacity-0 group-hover:opacity-100',
         )}
+        onClick={(e) => e.stopPropagation()}
       >
-        <IconDots className="size-6 text-foreground/60 drop-shadow transition-colors hover:text-foreground" />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <IconDots className="size-6 text-foreground/60 drop-shadow transition-colors hover:text-foreground cursor-pointer" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="bottom"
+            align="start"
+            collisionBoundary={collisionBoundary ?? undefined}
+            collisionPadding={8}
+          >
+            <DropdownMenuItem>
+              <IconArrowUpRight />
+              Open
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <IconFolderUp />
+                Add to Folder
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="overflow-hidden p-0 w-[200px] border-border">
+                {MOCK_FOLDERS.map((folder) => (
+                  <DropdownMenuItem
+                    key={folder.uuid}
+                    className="justify-between rounded-none px-3 py-3 border-b border-border last:border-b-0"
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={() => toggleFolder(folder.uuid)}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <IconFolderFilled className="text-primary" />
+                      <div className="flex flex-col gap-0.5">
+                        <Small className="font-semibold">{folder.name}</Small>
+                        <TinyMuted>0 assets</TinyMuted>
+                      </div>
+                    </div>
+                    <Checkbox
+                      checked={checkedFolders.has(folder.uuid)}
+                      className="pointer-events-none"
+                    />
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuItem>
+              <IconDownload />
+              Download
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive focus:text-destructive">
+              <IconTrash />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
 }
 
 export function AssetsPanel() {
+  const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
   const [filter, setFilter] = useState<FileTypeFilter>('All');
   const [gridSize, setGridSize] = useState(2);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -452,7 +531,10 @@ export function AssetsPanel() {
   };
 
   return (
-    <div className="relative overflow-hidden bg-card/60 rounded-xl max-h-[calc(100vh-56px-12px)] h-full flex flex-col">
+    <div
+      ref={setPanelEl}
+      className="relative overflow-hidden bg-card/60 rounded-xl max-h-[calc(100vh-56px-12px)] h-full flex flex-col"
+    >
       <div className="flex items-center justify-between px-4 py-3 shrink-0">
         <div className="flex">
           <ToggleGroup
@@ -591,7 +673,7 @@ export function AssetsPanel() {
               <PopoverContent
                 side="top"
                 align="center"
-                className="w-52 overflow-hidden p-0 mb-2"
+                className="w-52 overflow-hidden p-0"
               >
                 {MOCK_FOLDERS.map((folder) => (
                   <label
@@ -666,11 +748,13 @@ export function AssetsPanel() {
                   key={item.uuid}
                   item={item}
                   selected={selected.has(item.uuid)}
+                  anySelected={selected.size > 0}
                   onToggle={() => toggleSelect(item.uuid)}
                   gridSize={gridSize}
                   objectFit={objectFit}
                   isFavorite={favorites.has(item.uuid)}
                   onToggleFavorite={() => toggleFavorite(item.uuid)}
+                  collisionBoundary={panelEl}
                 />
               ))}
             </div>
