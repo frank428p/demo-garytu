@@ -321,6 +321,7 @@ function AssetCard({
   collisionBoundary?: Element | null;
 }) {
   const [checkedFolders, setCheckedFolders] = useState<Set<string>>(new Set());
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { icon, pad } = PLAY_ICON_SIZE[gridSize] ?? PLAY_ICON_SIZE[2];
 
   const toggleFolder = (uuid: string) => {
@@ -365,14 +366,14 @@ function AssetCard({
       <div
         className={cn(
           'absolute inset-0 bg-black/25 transition-opacity duration-150',
-          selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+          selected || dropdownOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
       />
 
       <div
         className={cn(
           'group/cb absolute top-2.5 left-2.5 transition-opacity duration-150 cursor-pointer',
-          selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+          selected || dropdownOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
         onClick={(e) => {
           e.stopPropagation();
@@ -388,7 +389,7 @@ function AssetCard({
       <div
         className={cn(
           'absolute bottom-2.5 left-2.5 cursor-pointer transition-opacity duration-150',
-          isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+          isFavorite || dropdownOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
         onClick={(e) => {
           e.stopPropagation();
@@ -405,11 +406,11 @@ function AssetCard({
       <div
         className={cn(
           'absolute top-2.5 right-2.5 transition-opacity duration-150',
-          anySelected ? 'opacity-0' : 'opacity-0 group-hover:opacity-100',
+          anySelected ? 'opacity-0' : dropdownOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <DropdownMenu>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <IconDots className="size-6 text-foreground/60 drop-shadow transition-colors hover:text-foreground cursor-pointer" />
           </DropdownMenuTrigger>
