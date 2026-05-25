@@ -7,10 +7,11 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get('code');
   const state = req.nextUrl.searchParams.get('state');
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
   // Prevent open redirect: only allow relative paths
   const rawReturn = state ? decodeURIComponent(state) : '/';
   const returnTo = rawReturn.startsWith('/') ? rawReturn : '/';
-  const response = NextResponse.redirect(new URL(returnTo, req.nextUrl.origin));
+  const response = NextResponse.redirect(new URL(returnTo, baseUrl));
 
   if (!code) return response;
 
@@ -41,7 +42,7 @@ export async function GET(req: NextRequest) {
   const loginData = await loginRes.json();
 
   if (loginData?.code === 1008) {
-    const errorUrl = new URL(returnTo, req.nextUrl.origin);
+    const errorUrl = new URL(returnTo, baseUrl);
     errorUrl.searchParams.set('auth_error', 'email_conflict');
     return NextResponse.redirect(errorUrl);
   }
