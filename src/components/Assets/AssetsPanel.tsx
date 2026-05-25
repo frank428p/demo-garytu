@@ -20,6 +20,7 @@ import {
   IconX,
   IconTrash,
   IconFolderFilled,
+  IconDots,
 } from '@tabler/icons-react';
 import { formatDate } from '@/lib/date';
 import { Button } from '../ui/button';
@@ -345,7 +346,7 @@ function AssetCard({
 
       <div
         className={cn(
-          'absolute top-2.5 left-2.5 transition-opacity duration-150 cursor-pointer',
+          'group/cb absolute top-2.5 left-2.5 transition-opacity duration-150 cursor-pointer',
           selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
         )}
         onClick={(e) => {
@@ -355,7 +356,7 @@ function AssetCard({
       >
         <Checkbox
           checked={selected}
-          className="bg-transparent border-foreground/60 size-5 pointer-events-none"
+          className="bg-transparent border-foreground/60 size-5 pointer-events-none group-hover/cb:border-foreground"
         />
       </div>
 
@@ -372,8 +373,16 @@ function AssetCard({
         {isFavorite ? (
           <IconHeartFilled className="size-6 text-primary drop-shadow" />
         ) : (
-          <IconHeart className="size-6 text-foreground/60 drop-shadow" />
+          <IconHeart className="size-6 text-foreground/60 drop-shadow hover:text-foreground" />
         )}
+      </div>
+
+      <div
+        className={cn(
+          'absolute top-2.5 right-2.5 transition-opacity duration-150 cursor-pointer opacity-0 group-hover:opacity-100',
+        )}
+      >
+        <IconDots className="size-6 text-foreground/60 drop-shadow transition-colors hover:text-foreground" />
       </div>
     </div>
   );
@@ -543,7 +552,7 @@ export function AssetsPanel() {
               : 'opacity-0 translate-y-[calc(100%+1rem)]',
           )}
         >
-          <div className="flex items-center gap-1 px-1.5 py-2 shadow-lg  bg-popover/60 backdrop-blur-xl rounded-xl">
+          <div className="flex items-center gap-1.5 px-1.5 py-2 shadow-lg  bg-popover/60 backdrop-blur-xl rounded-xl">
             <div className="px-2 flex items-center gap-2">
               {(() => {
                 const thumbs = MOCK_DATA.filter((d) => selected.has(d.uuid))
@@ -563,7 +572,7 @@ export function AssetsPanel() {
             <Button
               size="default"
               variant="secondary"
-              className="btn-spotlight gap-1.5"
+              className="btn-spotlight gap-1.5 ring ring-border"
             >
               <IconDownload />
               Download
@@ -573,7 +582,7 @@ export function AssetsPanel() {
                 <Button
                   size="default"
                   variant="secondary"
-                  className="btn-spotlight gap-1.5"
+                  className="btn-spotlight gap-1.5 ring ring-border"
                 >
                   <IconFolderUp />
                   Add to Folder
@@ -601,10 +610,18 @@ export function AssetsPanel() {
                 ))}
               </PopoverContent>
             </Popover>
-            <Button size="icon" variant="secondary" className="btn-spotlight">
+            <Button
+              size="icon"
+              variant="secondary"
+              className="btn-spotlight ring ring-border"
+            >
               <IconHeart />
             </Button>
-            <Button size="icon" variant="secondary" className="btn-spotlight">
+            <Button
+              size="icon"
+              variant="secondary"
+              className="btn-spotlight ring ring-border"
+            >
               <IconTrash />
             </Button>
             <Button
