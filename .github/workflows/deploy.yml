@@ -1,0 +1,33 @@
+name: Deploy to staging
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging-nextjs
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: deploy
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd ~/garytuAI/garytuAI-nextjs
+            git fetch origin main
+            git reset --hard origin/main
+            cd ~/garytuAI/garytuAI-deploy
+            docker compose build nextjs
+            docker compose up -d nextjs
+            sleep 8
+            docker compose ps nextjs
